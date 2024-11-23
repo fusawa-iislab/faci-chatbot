@@ -1,0 +1,28 @@
+@import '../../assets/common/common.css';
+
+.participant-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+}
+
+.selected {
+    background-color: rgb(255, 255, 100);
+}
+
+.siloutte-image{
+    width: 100px;
+    padding: 5px;
+}
+
+.comment-wrapper {
+    padding: 2px;
+}
+
+.comment-text {
+    font-size: 12px;
+    width: 100px;
+    text-align: center;
+}
+

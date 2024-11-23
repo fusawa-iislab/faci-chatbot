@@ -1,0 +1,36 @@
+{
+    "title": "Tech Support Room",
+    "description": "A room for discussing climate change and its impacts.",
+    "personsdata": [
+        {
+            "type": "User",
+            "args": {
+                "name": "Dave"
+            }
+        },
+        {
+            "type": "ConvBot",
+            "args": {
+                "name": "Alice",
+                "background": "Customer service representative",
+                "persona": "Friendly and helpful"
+            }
+        },
+        {
+            "type": "ConvBot",
+            "args": {
+                "name": "Bob",
+                "background": "Technical support engineer",
+                "persona": "Calm and knowledgeable"
+            }
+        },
+        {
+            "type": "ConvBot",
+            "args": {
+                "name": "Charlie",
+                "background": "Network specialist",
+                "persona": "Analytical and precise"
+            }
+        }
+    ]
+}
