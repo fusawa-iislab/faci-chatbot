@@ -11,7 +11,7 @@ def send_front_chatroom(socket: SocketIO, chatroom: ChatRoom):
     if chatroom.user:
         socket.emit("user", {"name": chatroom.user.name, "id": chatroom.user.person_id})
 
-# when user inpput textdata
+# when user input textdata
 def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom):
     if 'text' not in data or "selectedID" not in data:
         socket.emit("log", {'content': '入力が正しくありません'})
@@ -35,7 +35,6 @@ def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom):
     
 # initialize chatroom setting from request
 def set_chatroom(chatroom: ChatRoom):
-    chatroom.reset()
     data=request.get_json()
     chatroom.init_setting_from_dict(data)
     send_front_chatroom(chatroom)

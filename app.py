@@ -36,7 +36,8 @@ def receive_chat_input(data):
 
 @app.route('/api/init_setting', methods=["POST"])
 def initialize_setting():
-    set_chatroom(ChatRoom.current_chatroom())
+    new_chatroom = ChatRoom.create_chatroom()
+    set_chatroom(new_chatroom)
     return jsonify({"message": "データが正常に処理されました"}), 200
 
 
