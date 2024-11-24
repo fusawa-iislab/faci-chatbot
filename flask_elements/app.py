@@ -1,20 +1,17 @@
-from flask import Flask, send_from_directory
-from flask_elements import app, app_socket
-
-
-from flask import request, jsonify
-from flask_socketio import emit
+from flask import Flask, send_from_directory, request, jsonify
+from flask_socketio import SocketIO, emit
 import os
 from dotenv import load_dotenv
-from group_setting.chatroom import ChatRoom, chatroom
-import sys
-import json
+from group_setting.chatroom import ChatRoom,chatroom
 
 load_dotenv()
 
+FRONTEND_PATH = os.getenv("FRONTEND_PATH")
 
-# initialize setting
-chatroom.reset()
+app = Flask(__name__, static_folder="../frontend/build", static_url_path="")
+app_socket = SocketIO(app, cors_allowed_origins="*")
+
+
 
 # ルートにアクセスしたときに、ビルドされたindex.htmlを返す
 @app.route('/')
@@ -26,9 +23,8 @@ def index():
 def serve_static(path):
     return send_from_directory(app.static_folder, path)
 
-
 def send_front_chatroom():
-    app_socket.emit("chatlog", [{"name":chatdata.person.name,"content": chatdata.content,"id":chatdata.id} for chatdata in chatroom.chatlog])
+    app_socket.emit("chatlog", [{"name": chatdata.person.name, "content": chatdata.content, "id": chatdata.id} for chatdata in chatroom.chatlog])
     app_socket.emit("participants", [{"name": p.name, "persona": p.persona, "background": p.background, "id": p.person_id} for p in chatroom.participantbots])
     if chatroom.user:
         app_socket.emit("user", {"name": chatroom.user.name, "id": chatroom.user.person_id})
@@ -49,17 +45,16 @@ def receive_chat_input(data):
         return 
     input_text = data['text']
     chatroom.add_chatdata(chatroom.user.person_id, input_text)
-    app_socket.emit("chatdata",{"name": chatroom.user.name, "content": input_text})
+    app_socket.emit("chatdata", {"name": chatroom.user.name, "content": input_text})
     if data["selectedID"] == 0:
-        return jsonify({"message": "データが正常に処理されました"}), 200
+        return
     selected_person = chatroom.find_person(data["selectedID"])
     if selected_person:
         response = selected_person.generate_response(chatroom)
         chatroom.add_chatdata(selected_person.person_id, response)
-        app_socket.emit("chatdata",{"name": selected_person.name, "content": response})
+        app_socket.emit("chatdata", {"name": selected_person.name, "content": response})
     else:
         raise NotImplementedError("personが見つかりません")
-    return jsonify({"message": "データが正常に処理されました"}), 200
 
 @app.route('/api/init_setting', methods=["POST"])
 def initialize_setting():
@@ -69,18 +64,6 @@ def initialize_setting():
     send_front_chatroom()
     return jsonify({"message": "データが正常に処理されました"}), 200
 
-if len(sys.argv) < 2:
-    pass
-elif len(sys.argv) == 2:
-    json_file_path = sys.argv[1]
-    if not os.path.exists(json_file_path):
-        print(f"指定されたファイルが存在しません: {json_file_path}")
-    with open(json_file_path, 'r', encoding='utf-8') as file:
-        data = json.load(file)
-        chatroom.init_setting_from_dict(data)
-        send_front_chatroom()
 
 if __name__ == '__main__':
     app_socket.run(app, host="127.0.0.1", port=5050, debug=True)
-
-

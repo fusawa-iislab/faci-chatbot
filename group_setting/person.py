@@ -1,4 +1,5 @@
 from utils.gpt_function import get_gpt
+from group_setting.prompt import response_requirement
 
 
 class Person:
