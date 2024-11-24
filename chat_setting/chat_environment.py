@@ -1,6 +1,8 @@
 import torch
 from utils.gpt_function import get_gpt
-from typing import Dict
+from typing import Dict,Union
+from chat_setting.prompt import response_requirement
+import random
 
 
 class ChatRoom:
@@ -103,12 +105,12 @@ class ChatRoom:
         self.chatlog.append(cd)
         self.chatlog_str+=f"{cd.person.name}: {cd.content}\n"
         
-    def chatlog_to_str(self):
-        self.chatlog_str = ""
-        for _, chatdata in self.chatlog:
-            person_name = chatdata.person.name
-            content = chatdata.content
-            self.chatlog_str += f"{person_name}: {content}\n"
+    def chatlog_to_str(self,k:Union[int,None]=None):
+        if k is not None:
+            k = max(0, min(k, len(self.chatlog)))
+            return "".join([f"{chatdata.person.name}: {chatdata.content}\n" for chatdata in self.chatlog[-k:]])
+        else:
+            return "".join([f"{chatdata.person.name}: {chatdata.content}\n" for chatdata in self.chatlog])
 
     def participants_emotions(self):
         emotions = {}
@@ -133,7 +135,7 @@ class Person:
         self.comments = []
         Person._id_counter+=1
         self.person_id=Person._id_counter
-        self.chatroom=chatroom
+        self.chatroom:ChatRoom=chatroom
 
     def append_comment(self, comment):
         self.comments.append(comment)
@@ -157,7 +159,7 @@ class ParticipantBot(Person):
             f"エージェントの特徴:\n"
             f"    背景:{self.background},\n"
             f"    属性:{self.persona}\n"
-            f"    現在の感情:{self.emotion}\n"            
+            f"    前の感情:{self.emotion}\n"            
             f"##########################################\n"
         )
             
@@ -166,6 +168,7 @@ class ParticipantBot(Person):
             system = ""
             user = ""
             system += self.personal_data_to_str()
+            system += response_requirement
 
             user += "これまでの会話の流れ\n"
             user += self.chatroom.chatlog_str
@@ -177,7 +180,6 @@ class ParticipantBot(Person):
         return response
     
     def generate_emotion(self):
-        # CoTとかしてもいいかも
         def create_input_prompt(self):
             system = ""
             user = ""
@@ -186,13 +188,14 @@ class ParticipantBot(Person):
             system +=f"このエージェントの次の感情を選択肢の中から選択し、感情の名前のみ文字列で返してください\n"
 
             user += "直近の会話の流れ\n"
-            user += self.chatroom.chatlog_str
+            user += self.chatroom.chatlog_to_str(5)
             user += "######################################\n"
             user += "これまでの流れにからどのような感情を生成するか選択してください\n"
             return user, system
         user, system = create_input_prompt(self)
         print(user)
         print(system)   
-        response = get_gpt(user, system, temperature=0.5, max_tokens=100)
-        return response
+        emotion= get_gpt(user, system, temperature=0.5, max_tokens=100)
+        print(self.name, emotion)
+        self.emotion=emotion
 

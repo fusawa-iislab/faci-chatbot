@@ -1,7 +1,9 @@
-from flask import Flask,request,jsonify
+from flask import request
 from flask_socketio import SocketIO
+from threading import Thread
+from typing import Union
 
-from chat_setting.chat_environment import ChatRoom
+from chat_setting.chat_environment import ChatRoom, ParticipantBot
 
 
 # send chatroom-envrionment data to frontend
@@ -38,3 +40,19 @@ def set_chatroom(chatroom: ChatRoom):
     data=request.get_json()
     chatroom.init_setting_from_dict(data)
     send_front_chatroom(chatroom)
+
+# generate emotion for all participants
+def participants_emotion(socket: Union[SocketIO,None], chatroom: ChatRoom):
+    threads=[]
+    def participants_emotion(socket: SocketIO, p: ParticipantBot):
+        p.generate_emotion()
+        if socket:
+            socket.emit("participant-emotion", {"id": p.id, "emotion": p.emotion})
+
+    for p in chatroom.participantbots:
+        thread=Thread(target=participants_emotion, args=(socket,p))
+        threads.append(thread)
+        thread.start()
+
+    for thread in threads:
+        thread.join()
