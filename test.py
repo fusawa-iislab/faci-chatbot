@@ -1,4 +1,4 @@
-from group_setting.chatroom import ChatRoom
+from chat_setting.chat_environment import ChatRoom
 import sys
 import json
 
