@@ -1,5 +1,7 @@
-import React from 'react';
+import React,{useState} from 'react';
 import styles from './styles.module.css';
+import Button from '@mui/material/Button';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { ChatData } from '../../assets/structs';
 
 type ChatLogProps = {
@@ -9,18 +11,30 @@ type ChatLogProps = {
 const ChatLog : React.FC<ChatLogProps> = ({
     chatdatas=[],
 }) =>{
+
+    const [ShowChatlog,setShowChatlog] = useState<boolean>(false);
+
+    const handleShowChatlog = () => {
+        setShowChatlog(!ShowChatlog);
+    }
+
     return (
-        <div className={styles["chatlog-wrapper"]}>
-            <div className={styles["chatlog-container"]}>
-                <div className={styles["chatlog"]}>
-                    {chatdatas.map((chatdata,index)=>(
-                        <div className={styles["chatdata"]} key={index}>
-                            <p className={styles["chat-name"]}>{chatdata.name}:</p>
-                            <p className={styles["chat-content"]}>{chatdata.content}</p>
+        <div className={styles["wrapper"]}>
+            <Button onClick={handleShowChatlog} className={styles["toggle-button"]}><ArrowDropDownIcon className={styles["toggle-button-icon"]}/></Button>
+            {ShowChatlog &&
+                <div className={styles["chatlog-wrapper"]}>
+                    <div className={styles["chatlog-container"]}>
+                        <div className={styles["chatlog"]}>
+                            {chatdatas.map((chatdata,index)=>(
+                                <div className={styles["chatdata"]} key={index}>
+                                    <p className={styles["chat-name"]}>{chatdata.name}:</p>
+                                    <p className={styles["chat-content"]}>{chatdata.content}</p>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     );
 };

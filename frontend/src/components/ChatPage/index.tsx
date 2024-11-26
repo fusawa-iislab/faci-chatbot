@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react'; // useStateをインポート
+import React, { useState, useEffect } from 'react'; 
 import styles from './styles.module.css';
+import Button from '@mui/material/Button';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
 import ParticipantBot from '../ParticipantBot';
 import ChatLog from '../ChatLog';
 import SocketTextArea from '../SocketTextArea';
@@ -9,13 +12,43 @@ import { ChatData, Person,Participant } from '../../assets/structs';
 const ChatPage: React.FC = () => {
 
     const [inputText, setInputText] = useState(''); // inputTextの状態を管理
-    const [messages, setMessages] = useState<ChatData[]>([]);
+    const [ChatDatas, setChatDatas] = useState<ChatData[]>([]);
     const [participants, setParticipants] = useState<Participant[]>([]);
     const [SelectedPersonID, setSelectedPersonID] = useState(0);
     const [Outsocket, setSocket] = useState<any>(null);
-    const [User, setUser] = useState<Person>({name:"",id:-1})
+    const [User, setUser] = useState<Person>({name:"",id:-1});
 
 
+    useEffect(() => {
+        const socket = io(`${process.env.REACT_APP_BACKEND_PATH}`);
+        setSocket(socket);
+        socket.on('log', (data) => {
+            console.log(data.content);
+        });
+        socket.on("participants", (data) => {
+            setParticipants(data);
+        });
+        socket.on("chatlog",(data)=>{
+            setChatDatas(data)
+        })
+        socket.on("user",(data)=>{
+            setUser(data)
+        })
+        //chatdataの受け取り(リアルタイム)
+        socket.on('chatdata', (data) => {
+            setChatDatas((prevChatDatas) => [...prevChatDatas, data]);
+        });
+
+        return () => {
+            socket.off('chatdata');
+            socket.off('log');
+            socket.off("persons");
+            socket.off("chatlog");
+            socket.off("user");
+            socket.disconnect();
+        };
+    }, []);
+///////////////////////////////////////////////////////////////////////////////////////////////
     const handleInputSubmit = () => {
         if (inputText === "") {
             alert("テキストを入力してください");
@@ -29,50 +62,22 @@ const ChatPage: React.FC = () => {
         }
         return;
     };
-
-    useEffect(() => {
-        const socket = io(`${process.env.REACT_APP_BACKEND_PATH}`);
-        setSocket(socket);
-        //logの受け取り
-        socket.on('log', (data) => {
-            console.log(data.content);
-        });
-        socket.on("participants", (data) => {
-            setParticipants(data);
-        });
-        socket.on("chatlog",(data)=>{
-            setMessages(data)
-        })
-        socket.on("user",(data)=>{
-            setUser(data)
-        })
-
-        //chatdataの受け取り(リアルタイム)
-        socket.on('chatdata', (data) => {
-            setMessages((prevMessages) => [...prevMessages, data]);
-        });
-
-        return () => {
-            socket.off('chatdata');
-            socket.off('log');
-            socket.off("persons");
-            socket.off("chatlog");
-            socket.off("user");
-            socket.disconnect();
-        };
-    }, []);
-
+/////////////////////////////////////////////////////////////////////////////////////////////////
     const handleSelectPersonID = (id: number) => {
         if (SelectedPersonID === id) setSelectedPersonID(0);
         else setSelectedPersonID(id)
     }
 
+
     const SelectedPerson = participants.find(p => p.id === SelectedPersonID)
+
 
     return (
         <div className={styles["chatpage-container"]}>
             <div className={styles["chatpage-content"]}>
-                <ChatLog chatdatas={messages} />
+                <div className={styles["chatlog-container"]} >
+                    <ChatLog chatdatas={ChatDatas} />
+                </div>
                 <SocketTextArea handleInputSubmit={handleInputSubmit} inputText={inputText} setInputText={setInputText} />
                 {User.id!==-1&&
                     <p>あなたは{User.name}です。</p>

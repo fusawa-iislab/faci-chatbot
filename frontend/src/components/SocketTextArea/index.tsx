@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './styles.module.css';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import PublishIcon from '@mui/icons-material/Publish';
 
 export type SocketTextAreaProps = {
     handleInputSubmit: () => void,
@@ -16,7 +16,7 @@ const SocketTextArea: React.FC<SocketTextAreaProps> = ({
     return (
         <div className={styles['textbox-wrapper']}>
             <textarea className={styles["input-textarea"]} value={inputText} onChange={(e) => setInputText(e.target.value)} wrap="soft" />
-            <button className={styles["submit-button"]} type="button" onClick={handleInputSubmit}><ArrowUpwardIcon className={styles["submit-icon"]}/></button>
+            <button className={styles["submit-button"]} type="button" onClick={handleInputSubmit}><PublishIcon className={styles["submit-icon"]}/></button>
         </div>
     );
 };
