@@ -7,7 +7,7 @@
 }
 
 
-.chatpage-content {
+.chatpage-main {
     display: flex;
     flex-direction: column;
     padding: 10px 0;

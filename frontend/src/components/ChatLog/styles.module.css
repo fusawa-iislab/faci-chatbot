@@ -1,12 +1,19 @@
 @import '../../assets/common/common.css';
 
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    width: 500px;
+}
+
 
 
 .toggle-button {
     background-color: transparent;
     border: 0;
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
     padding: 0;
     margin: 0;
 }
@@ -27,6 +34,7 @@
     width: 500px;
     height: 400px;
     margin: 10px 0;
+    box-sizing: border-box;
 }
 
 .chatlog-container {
@@ -75,7 +83,7 @@
 }
 
 .chat-name{
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .chat-content{

@@ -74,9 +74,13 @@ const ChatPage: React.FC = () => {
 
     return (
         <div className={styles["chatpage-container"]}>
-            <div className={styles["chatpage-content"]}>
-                <div className={styles["chatlog-container"]} >
-                    <ChatLog chatdatas={ChatDatas} />
+            <div className={styles["chatpage-main"]}>
+                <div className={styles["participants-container"]}>
+                    {participants.map((p, index) =>
+                        <div className={`${styles["participant"]} ${p.id === SelectedPersonID ? styles["selected"] : ""}`} onClick={() => handleSelectPersonID(p.id)} key={index}>
+                            <ParticipantBot name={p.name} />
+                        </div>
+                    )}
                 </div>
                 <SocketTextArea handleInputSubmit={handleInputSubmit} inputText={inputText} setInputText={setInputText} />
                 {User.id!==-1&&
@@ -89,13 +93,9 @@ const ChatPage: React.FC = () => {
                         <p>全体に話します。</p>
                     )}
                 </div>
-                <div className={styles["participants-container"]}>
-                    {participants.map((p, index) =>
-                        <div className={`${styles["participant"]} ${p.id === SelectedPersonID ? styles["selected"] : ""}`} onClick={() => handleSelectPersonID(p.id)} key={index}>
-                            <ParticipantBot name={p.name} />
-                        </div>
-                    )}
-                </div>
+            </div>
+            <div className={styles["chatlog-wrapper"]}>
+                <ChatLog chatdatas={ChatDatas}/>
             </div>
         </div>
     )
