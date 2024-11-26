@@ -2,6 +2,9 @@ from flask import request
 from flask_socketio import SocketIO
 from threading import Thread
 from typing import Union
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from chat_setting.chat_environment import ChatRoom, ParticipantBot
 

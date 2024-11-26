@@ -1,5 +1,5 @@
 import torch
-from utils.gpt_function import get_gpt
+from utils.gpt_function import get_gpt,get_gpt_streaming
 from typing import Dict,Union
 from chat_setting.prompt import response_requirement
 import random
@@ -162,21 +162,27 @@ class ParticipantBot(Person):
             f"    前の感情:{self.emotion}\n"            
             f"##########################################\n"
         )
+    
+    def create_input_prompt(self):
+        system = ""
+        user = ""
+        system += self.personal_data_to_str()
+        system += response_requirement
+
+        user += "これまでの会話の流れ\n"
+        user += self.chatroom.chatlog_str
+        user += "######################################\n"
+        user += "これまでの流れに沿うように応答を生成してください"
+        return user, system
             
     def generate_response(self):
-        def create_input_prompt(self):
-            system = ""
-            user = ""
-            system += self.personal_data_to_str()
-            system += response_requirement
-
-            user += "これまでの会話の流れ\n"
-            user += self.chatroom.chatlog_str
-            user += "######################################\n"
-            user += "これまでの流れに沿うように応答を生成してください"
-            return user, system
-        user, system = create_input_prompt(self)
+        user, system = self.create_input_prompt()
         response = get_gpt(user, system, temperature=1, max_tokens=1000)
+        return response
+    
+    def generate_response_streaming(self, socket, socket_name):
+        user, system = self.create_input_prompt()
+        response = get_gpt_streaming(user, system, temperature=1, max_tokens=1000, socket=socket, socket_name=socket_name)
         return response
     
     def generate_emotion(self):
