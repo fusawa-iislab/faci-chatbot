@@ -6,7 +6,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ParticipantBot from '../ParticipantBot';
 import ChatLog from '../ChatLog';
 import SocketTextArea from '../SocketTextArea';
-import io from 'socket.io-client';
+import useSocket from '../../hooks/useSocket';
 import { ChatData, Person,Participant } from '../../assets/structs';
 
 const ChatPage: React.FC = () => {
@@ -15,39 +15,39 @@ const ChatPage: React.FC = () => {
     const [ChatDatas, setChatDatas] = useState<ChatData[]>([]);
     const [participants, setParticipants] = useState<Participant[]>([]);
     const [SelectedPersonID, setSelectedPersonID] = useState(0);
-    const [Outsocket, setSocket] = useState<any>(null);
     const [User, setUser] = useState<Person>({name:"",id:-1});
-
+    const socket = useSocket();
 
     useEffect(() => {
-        const socket = io(`${process.env.REACT_APP_BACKEND_PATH}`);
-        setSocket(socket);
-        socket.on('log', (data) => {
-            console.log(data.content);
-        });
-        socket.on("participants", (data) => {
-            setParticipants(data);
-        });
-        socket.on("chatlog",(data)=>{
-            setChatDatas(data)
-        })
-        socket.on("user",(data)=>{
-            setUser(data)
-        })
-        //chatdataの受け取り(リアルタイム)
-        socket.on('chatdata', (data) => {
-            setChatDatas((prevChatDatas) => [...prevChatDatas, data]);
-        });
+        if (socket) {
+            socket.on('log', (data) => {
+                console.log(data.content);
+            });
+            socket.on("participants", (data) => {
+                setParticipants(data);
+            });
+            socket.on("chatlog",(data)=>{
+                setChatDatas(data)
+            })
+            socket.on("user",(data)=>{
+                setUser(data)
+            })
+            //chatdataの受け取り(リアルタイム)
+            socket.on('chatdata', (data) => {
+                setChatDatas((prevChatDatas) => [...prevChatDatas, data]);
+            });
+    
 
-        return () => {
-            socket.off('chatdata');
-            socket.off('log');
-            socket.off("persons");
-            socket.off("chatlog");
-            socket.off("user");
-            socket.disconnect();
-        };
-    }, []);
+            return () => {
+                socket.off('chatdata');
+                socket.off('log');
+                socket.off("persons");
+                socket.off("chatlog");
+                socket.off("user");
+                socket.disconnect();
+            };
+        }
+    }, [socket]);
 ///////////////////////////////////////////////////////////////////////////////////////////////
     const handleInputSubmit = () => {
         if (inputText === "") {
@@ -56,9 +56,9 @@ const ChatPage: React.FC = () => {
         }
         var message: string = inputText;
         setInputText("");
-        if (Outsocket) {
+        if (socket) {
             const sendData = { text: message, selectedID: SelectedPersonID }
-            Outsocket.emit("user-input", sendData)
+            socket.emit("user-input", sendData)
         }
         return;
     };
