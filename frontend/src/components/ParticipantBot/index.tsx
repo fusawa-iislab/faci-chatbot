@@ -6,22 +6,23 @@ import {Participant} from "../../assets/structs";
 
 
 
-export type ParticipantBotProps = Participant & {
+export type ParticipantBotProps = {
+    p: Participant;
     comment?: string|null; 
 }
 
 const ParticipantBot : React.FC<ParticipantBotProps> = ({
-    name = "participant",
-    persona = "",
-    background = "",
+    p,
     comment = null,
 }) =>{
 
     return (
         <div className={styles["participant-wrapper"]}>
-            {comment && <p className={styles["comment"]}>{comment}</p>}
+            {comment && 
+                <p className={styles["comment"]}>{comment}</p>
+            }
             <img src={Silhoutte} className={styles["siloutte-image"]}/>
-            <p className={styles["participant-name"]}>{name}</p>
+            <p className={styles["participant-name"]}>{p.name}</p>
         </div>
     );
 };

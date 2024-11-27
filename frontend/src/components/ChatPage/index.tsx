@@ -78,7 +78,7 @@ const ChatPage: React.FC = () => {
                 <div className={styles["participants-container"]}>
                     {participants.map((p, index) =>
                         <div className={`${styles["participant"]} ${p.id === SelectedPersonID ? styles["selected"] : ""}`} onClick={() => handleSelectPersonID(p.id)} key={index}>
-                            <ParticipantBot name={p.name} />
+                            <ParticipantBot p={p} />
                         </div>
                     )}
                 </div>

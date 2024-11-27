@@ -1,23 +1,30 @@
 import React from 'react';
-import ParticipantBot from '.';
+import ParticipantBot, { ParticipantBotProps } from './index';
+import { Meta } from '@storybook/react';
+import { Participant } from '../../assets/structs';
 
-// サンプルデータを定義
-const sampleParticipants = [
-    { name: 'Alice', comment: 'こんにちは！', emoji: '😊', selected: false },
-    { name: 'Bob', comment: '元気ですか？', emoji: '🤗', selected: true }, // 例として選択された参加者
-    { name: 'Charlie', comment: '今日はどうでしたか？', emoji: '😄', selected: false },
-];
-
-export default {
-    title: 'Components/ParticipantBot', // Storybookのタイトル
-    component: ParticipantBot,
+// サンプルデータ
+const participant: Participant = {
+  id: 1,
+  name: 'Alice',
+  persona: 'Friendly',
+  background: 'Software Engineer',
 };
 
-// ストーリーを定義
+// Storybook メタデータ
+export default {
+  title: 'Components/ParticipantBot',
+  component: ParticipantBot,
+} as Meta;
+
 export const Default = () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        {sampleParticipants.map((participant, index) => (
-            <ParticipantBot key={index} name={participant.name}/>
-        ))}
-    </div>
+  <ParticipantBot p={participant} />
+);
+
+export const WithComment = () => (
+  <ParticipantBot p={participant} comment="Hello! I am Alice." />
+);
+
+export const WithoutComment = () => (
+  <ParticipantBot p={participant} comment={null} />
 );
