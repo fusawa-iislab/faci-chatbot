@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from chat_setting.chat_environment import ChatRoom, ParticipantBot
+from chat_setting.chat_environment import ChatRoom, ParticipantBot, Person
 
 
 # send chatroom-envrionment data to frontend
@@ -31,7 +31,7 @@ def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom):
         return 
     selected_person = chatroom.find_person(data["selectedID"])
     if selected_person:
-        response = selected_person.generate_response()
+        response = selected_person.generate_response_streaming(socket, f"comment-{selected_person.person_id}")
         chatroom.add_chatdata(selected_person.person_id, response)
         socket.emit("chatdata", {"name": selected_person.name, "content": response})
         return
@@ -47,13 +47,12 @@ def set_chatroom(chatroom: ChatRoom):
 # generate emotion for all participants
 def participants_emotion(socket: Union[SocketIO,None], chatroom: ChatRoom):
     threads=[]
-    def participants_emotion(socket: SocketIO, p: ParticipantBot):
+    def participant_emotion(socket: SocketIO, p: ParticipantBot):
         p.generate_emotion()
         if socket:
-            socket.emit("participant-emotion", {"id": p.id, "emotion": p.emotion})
-
+            socket.emit(f"emotion-{p.person_id}", p.emotion)
     for p in chatroom.participantbots:
-        thread=Thread(target=participants_emotion, args=(socket,p))
+        thread=Thread(target=participant_emotion, args=(socket,p))
         threads.append(thread)
         thread.start()
 

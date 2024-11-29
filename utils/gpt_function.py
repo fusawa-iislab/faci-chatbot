@@ -54,8 +54,11 @@ def get_gpt_streaming(prompt: str, system: str, temperature: float = 1, max_toke
         if chunk.choices[0].delta.content is not None:
             ele = chunk.choices[0].delta.content
             if socket_name:
-                socket.emit(socket_name, {"data": ele})
+                socket.emit(socket_name, ele)
             output += ele
+        else:
+            if socket_name:
+                socket.emit(socket_name, "nocontent")
     return output
 
 if __name__=="__main__":

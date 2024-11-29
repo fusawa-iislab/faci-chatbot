@@ -22,9 +22,9 @@ export const Default = () => (
 );
 
 export const WithComment = () => (
-  <ParticipantBot p={participant} comment="Hello! I am Alice." />
+  <ParticipantBot p={participant}/>
 );
 
 export const WithoutComment = () => (
-  <ParticipantBot p={participant} comment={null} />
+  <ParticipantBot p={participant} />
 );

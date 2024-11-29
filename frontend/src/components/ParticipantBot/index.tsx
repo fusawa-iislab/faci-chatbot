@@ -9,15 +9,14 @@ import {Participant} from "../../assets/structs";
 
 export type ParticipantBotProps = {
     p: Participant;
-    comment?: string|null; 
 }
 
 const ParticipantBot : React.FC<ParticipantBotProps> = ({
     p,
-    comment = null,
 }) =>{
 
     const [emotion,setEmotion] = useState<string|null>(null);
+    const [comment,setComment] = useState<string|null>(null);
     const socket = useSocket();
 
     useEffect(()=>{
@@ -25,8 +24,19 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
             socket.on(`emotion-${p.id}`,(data)=>{
                 setEmotion(data);
             });
+
+            socket.on(`comment-${p.id}`,(data)=>{
+                if (data==="nocontent") {
+                    setComment(null);
+                }
+                else {
+                    setComment((prevComment)=>prevComment+data);
+                }
+            });
+
             return ()=>{
                 socket.off(`emotion-${p.id}`);
+                socket.off(`comment-${p.id}`);
             }
         }
     },[socket]);

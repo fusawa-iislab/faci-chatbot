@@ -4,7 +4,7 @@ from flask_socketio import SocketIO, emit
 import os
 from dotenv import load_dotenv
 from chat_setting.chat_environment import ChatRoom
-from chat_setting.process_data import send_front_chatroom, process_user_input,set_chatroom
+from chat_setting.process_data import send_front_chatroom, process_user_input,set_chatroom,participants_emotion
 
 load_dotenv()
 
@@ -29,6 +29,7 @@ def on_connect():
 @app_socket_test.on("user-input")
 def receive_chat_input(data):
     process_user_input(data, app_socket_test, ChatRoom.current_chatroom())
+    participants_emotion(app_socket_test, ChatRoom.current_chatroom())
 
 @app_test.route('/api/init_setting', methods=["POST"])
 def initialize_setting():

@@ -199,9 +199,7 @@ class ParticipantBot(Person):
             user += "これまでの流れにからどのような感情を生成するか選択してください\n"
             return user, system
         user, system = create_input_prompt(self)
-        print(user)
-        print(system)   
-        emotion= get_gpt(user, system, temperature=0.5, max_tokens=100)
-        print(self.name, emotion)
+        # emotion= get_gpt(user, system, temperature=0.5, max_tokens=100)
+        emotion=random.choice(self.emotions)
         self.emotion=emotion
 
