@@ -55,6 +55,5 @@ def participants_emotion(socket: Union[SocketIO,None], chatroom: ChatRoom):
         thread=Thread(target=participant_emotion, args=(socket,p))
         threads.append(thread)
         thread.start()
-
     for thread in threads:
         thread.join()

@@ -49,15 +49,18 @@ class ChatRoom:
         self.persons = []
         self.chatlog_str=""
 
-    def print_attributes(self):
-        for attr_name in ["title", "description", "chatlog", "summerylog", "context_vec", "user", "participants"]:
-            print(f"{attr_name.capitalize()}: {getattr(self, attr_name)}")
 
     def find_person(self, person_id: int):
         for p in self.persons:
             if p.person_id==person_id:
                 return p
         raise NotImplementedError("idのpersonが見つかりません")
+    
+    def find_person_name(self, id: int):
+        for p in self.persons:
+            if p.id==id:
+                return p.name
+        raise NotImplementedError("nameのpersonが見つかりません")
         
     def init_setting_from_dict(self, data:dict):
         self.title = data.get("title", "")
@@ -94,7 +97,8 @@ class ChatRoom:
                 raise ValueError("Missing required argument: 'name'")
             background = args.get("background", "")
             persona = args.get("persona", "")
-            participant = ParticipantBot(name=args["name"], background=background, persona=persona,chatroom=self)
+            other_features = args.get("features", None)
+            participant = ParticipantBot(name=args["name"], background=background, persona=persona, other_features=other_features, chatroom=self)
             self.persons.append(participant)
             self.participantbots.append(participant)
         else:
@@ -112,8 +116,6 @@ class ChatRoom:
         else:
             return "".join([f"{chatdata.person.name}: {chatdata.content}\n" for chatdata in self.chatlog])
 
-    def participants_emotions(self):
-        emotions = {}
 
 class ChatData:
     _id_counter=0
@@ -141,25 +143,33 @@ class Person:
         self.comments.append(comment)
 
 
+
 class User(Person):
     def __init__(self,name: str,chatroom: ChatRoom):
         super().__init__(name,chatroom) 
 
 class ParticipantBot(Person):
     emotions = ["happy", "sad", "angry", "surprised", "disgusted", "fearful", "neutral"]
-    def __init__(self, name, chatroom:ChatRoom, background: str="",persona:str=""):
+    def __init__(self, name, chatroom:ChatRoom, background: str="",persona:str="",other_features:Union[Dict,None]=None):
         super().__init__(name,chatroom)
         self.background=background
         self.persona=persona
+        self.other_features=other_features
         self.emotion="neutral"
 
     def personal_data_to_str(self):
+        other_features_str = ""
+        if self.other_features:
+            for key, value in self.other_features.items():
+                other_features_str += f"    {key}: {value}\n"
+        
         return (
             f"あなたは{self.name}という名前のエージェントです。\n"
             f"エージェントの特徴:\n"
-            f"    背景:{self.background},\n"
-            f"    属性:{self.persona}\n"
-            f"    前の感情:{self.emotion}\n"            
+            f"    背景: {self.background},\n"
+            f"    属性: {self.persona}\n"
+            f"    直前の感情: {self.emotion}\n"
+            f"{other_features_str}"
             f"##########################################\n"
         )
     
@@ -168,7 +178,7 @@ class ParticipantBot(Person):
         user = ""
         system += self.personal_data_to_str()
         system += response_requirement
-
+        print(system)
         user += "これまでの会話の流れ\n"
         user += self.chatroom.chatlog_str
         user += "######################################\n"

@@ -25,8 +25,9 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
                 setEmotion(data);
             });
 
-            socket.on(`comment-${p.id}`,(data)=>{
+            socket.on(`comment-${p.id}`,async (data)=>{
                 if (data==="nocontent") {
+                    await sleep(1000);
                     setComment(null);
                 }
                 else {
@@ -56,3 +57,5 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
 };
 
 export default ParticipantBot;
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

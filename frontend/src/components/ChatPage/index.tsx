@@ -14,7 +14,7 @@ const ChatPage: React.FC = () => {
     const [inputText, setInputText] = useState(''); // inputTextの状態を管理
     const [ChatDatas, setChatDatas] = useState<ChatData[]>([]);
     const [participants, setParticipants] = useState<Participant[]>([]);
-    const [SelectedPersonID, setSelectedPersonID] = useState(0);
+    const [SelectedPersonID, setSelectedPersonID] = useState<number|null>(null);
     const [User, setUser] = useState<Person>({name:"",id:-1});
     const socket = useSocket();
 
@@ -60,11 +60,12 @@ const ChatPage: React.FC = () => {
             const sendData = { text: message, selectedID: SelectedPersonID }
             socket.emit("user-input", sendData)
         }
+        setSelectedPersonID(null)
         return;
     };
 /////////////////////////////////////////////////////////////////////////////////////////////////
     const handleSelectPersonID = (id: number) => {
-        if (SelectedPersonID === id) setSelectedPersonID(0);
+        if (SelectedPersonID === id) setSelectedPersonID(null);
         else setSelectedPersonID(id)
     }
 
