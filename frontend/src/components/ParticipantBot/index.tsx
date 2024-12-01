@@ -26,12 +26,13 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
             });
 
             socket.on(`comment-${p.id}`,async (data)=>{
-                if (data==="nocontent") {
+                if (data==="end-of-stream") {
                     await sleep(1000);
                     setComment(null);
                 }
                 else {
                     setComment((prevComment)=>prevComment+data);
+                    console.log(comment);
                 }
             });
 

@@ -4,10 +4,10 @@ from threading import Thread
 from typing import Union
 from dotenv import load_dotenv
 
+from chat_setting.chat_environment import ChatRoom, ParticipantBot
+
+
 load_dotenv()
-
-from chat_setting.chat_environment import ChatRoom, ParticipantBot, Person
-
 
 # send chatroom-envrionment data to frontend
 def send_front_chatroom(socket: SocketIO, chatroom: ChatRoom):
@@ -31,7 +31,7 @@ def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom):
         return 
     selected_person = chatroom.find_person(data["selectedID"])
     if selected_person:
-        response = selected_person.generate_response_streaming(socket, f"comment-{selected_person.person_id}")
+        response = selected_person.generate_response_streaming(socket,f"comment-{selected_person.person_id}")
         chatroom.add_chatdata(selected_person.person_id, response)
         socket.emit("chatdata", {"name": selected_person.name, "content": response})
         return

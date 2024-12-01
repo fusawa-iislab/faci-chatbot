@@ -1,8 +1,24 @@
 import torch
-from utils.gpt_function import get_gpt,get_gpt_streaming
 from typing import Dict,Union
-from chat_setting.prompt import response_requirement
 import random
+from time import sleep
+from openai import OpenAI
+from dotenv import load_dotenv
+import os
+from flask_socketio import SocketIO
+
+from utils.gpt_function import get_gpt
+from chat_setting.prompt import response_requirement
+
+load_dotenv()
+
+OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
+OPENAI_ORGANIZATION_ID=os.getenv("OPENAI_ORGANIZATION_ID")
+OPENAI_PROJECT=os.getenv("OPENAI_PROJECT")
+
+openai_client = OpenAI(api_key=OPENAI_API_KEY)
+
+
 
 
 class ChatRoom:
@@ -143,7 +159,6 @@ class Person:
         self.comments.append(comment)
 
 
-
 class User(Person):
     def __init__(self,name: str,chatroom: ChatRoom):
         super().__init__(name,chatroom) 
@@ -178,7 +193,7 @@ class ParticipantBot(Person):
         user = ""
         system += self.personal_data_to_str()
         system += response_requirement
-        print(system)
+
         user += "これまでの会話の流れ\n"
         user += self.chatroom.chatlog_str
         user += "######################################\n"
@@ -190,9 +205,40 @@ class ParticipantBot(Person):
         response = get_gpt(user, system, temperature=1, max_tokens=1000)
         return response
     
-    def generate_response_streaming(self, socket, socket_name):
+    def generate_response_streaming(self, socket: Union[SocketIO,None]=None, socket_name: Union[str,None]=None):
+
+        def openai_streaming(prompt: str, system: str, temperature: float = 1, max_tokens: int = 100, socket: Union[SocketIO,None] = None, socket_name: Union[str,None]=None):
+            data = {
+                "model": "gpt-4o",
+                "messages": [
+                    {"role": "system", "content": f"{system}"},
+                    {"role": "user", "content": f"{prompt}"}
+                ],
+                "temperature": temperature,
+                "stream": True
+            }
+            if max_tokens > 0:
+                data["max_tokens"] = max_tokens
+
+            stream = openai_client.chat.completions.create(**data)
+            output = ""
+            for chunk in stream:
+                if chunk.choices[0].delta.content is not None:
+                    ele = chunk.choices[0].delta.content
+                    print(ele)
+                    if socket:
+                        socket.emit(socket_name, ele)
+                    output += ele
+                else:
+                    if socket:
+                        socket.emit(socket_name, "end-of-stream")
+                    break
+                sleep(0.001)
+
+            return output
+        
         user, system = self.create_input_prompt()
-        response = get_gpt_streaming(user, system, temperature=1, max_tokens=1000, socket=socket, socket_name=socket_name)
+        response = openai_streaming(user, system, temperature=1, max_tokens=1000, socket=socket,socket_name=socket_name)
         return response
     
     def generate_emotion(self):
@@ -208,7 +254,7 @@ class ParticipantBot(Person):
             user += "######################################\n"
             user += "これまでの流れにからどのような感情を生成するか選択してください\n"
             return user, system
-        user, system = create_input_prompt(self)
+        # user, system = create_input_prompt(self)
         # emotion= get_gpt(user, system, temperature=0.5, max_tokens=100)
         emotion=random.choice(self.emotions)
         self.emotion=emotion
