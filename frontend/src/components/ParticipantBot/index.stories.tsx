@@ -18,13 +18,13 @@ export default {
 } as Meta;
 
 export const Default = () => (
-  <ParticipantBot p={participant} />
+  <ParticipantBot p={participant} socket={null}/>
 );
 
 export const WithComment = () => (
-  <ParticipantBot p={participant}/>
+  <ParticipantBot p={participant} socket={null}/>
 );
 
 export const WithoutComment = () => (
-  <ParticipantBot p={participant} />
+  <ParticipantBot p={participant} socket={null}/>
 );

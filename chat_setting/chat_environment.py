@@ -233,7 +233,7 @@ class ParticipantBot(Person):
                     if socket:
                         socket.emit(socket_name, "end-of-stream")
                     break
-                sleep(0.001)
+                sleep(0.1)
 
             return output
         
