@@ -26,17 +26,20 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
                 setEmotion(data);
             });
 
-            socket.on(`comment-${p.id}`,async (data)=>{
-                if (data==="end-of-stream") {
+            socket.on(`comment-${p.id}`,(data)=>{
+                if (data==="__end-of-stream") {
                     console.log(comment);
-                    await sleep(1000);
-                    setComment(null);
-                    console.log(comment);
+                    setTimeout(() => {setComment(null);}, 5000);
                 }
-                else {
-                    setComment((prevComment)=>prevComment+data);
-                    console.log(comment);
-                }
+                else { if(data==="__start-of-stream") {
+                    setComment("");
+                } else{
+                    setComment((prevComment) => {
+                        const updatedComment = prevComment + data;
+                        console.log(updatedComment);
+                        return updatedComment;
+                    });
+                }}
             });
 
             return ()=>{
@@ -45,6 +48,10 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
             }
         }
     },[socket]);
+
+    useEffect(()=>{
+        console.log(comment);
+    },[comment])
 
     return (
         <div className={styles["participant-wrapper"]}>

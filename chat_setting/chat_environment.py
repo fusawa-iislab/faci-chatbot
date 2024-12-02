@@ -220,20 +220,22 @@ class ParticipantBot(Person):
             if max_tokens > 0:
                 data["max_tokens"] = max_tokens
 
-            stream = openai_client.chat.completions.create(**data)
             output = ""
+            stream = openai_client.chat.completions.create(**data)
+            if socket:
+                socket.emit(socket_name, "__start-of-stream")
             for chunk in stream:
                 if chunk.choices[0].delta.content is not None:
                     ele = chunk.choices[0].delta.content
-                    print(ele)
                     if socket:
                         socket.emit(socket_name, ele)
+                        print(ele)
                     output += ele
                 else:
-                    if socket:
-                        socket.emit(socket_name, "end-of-stream")
                     break
                 sleep(0.1)
+            if socket:
+                socket.emit(socket_name, "__end-of-stream")
 
             return output
         

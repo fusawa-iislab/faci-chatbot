@@ -27,7 +27,7 @@ def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom):
     input_text = data['text']
     chatroom.add_chatdata(chatroom.user.person_id, input_text)
     socket.emit("chatdata", {"name": chatroom.user.name, "content": input_text})
-    if data["selectedID"] == -1:
+    if not data["selectedID"]:
         return 
     selected_person = chatroom.find_person(data["selectedID"])
     if selected_person:
