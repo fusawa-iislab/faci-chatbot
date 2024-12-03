@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import styles from './styles.module.css';
 import Button from '@mui/material/Button';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon  from '@mui/icons-material/ArrowDropUp';
 import { ChatData } from '../../assets/structs';
 
 type ChatLogProps = {
@@ -20,7 +21,12 @@ const ChatLog : React.FC<ChatLogProps> = ({
 
     return (
         <div className={styles["wrapper"]}>
-            <Button onClick={handleShowChatlog} className={styles["toggle-button"]}><ArrowDropDownIcon className={styles["toggle-button-icon"]}/></Button>
+            <Button onClick={handleShowChatlog} className={styles["toggle-button"]}>
+                {ShowChatlog ? 
+                    <ArrowDropUpIcon className={styles["toggle-button-icon"]}/> :
+                    <ArrowDropDownIcon className={styles["toggle-button-icon"]}/>
+                }
+            </Button>
             {ShowChatlog &&
                 <div className={styles["chatlog-wrapper"]}>
                     <div className={styles["chatlog-container"]}>
