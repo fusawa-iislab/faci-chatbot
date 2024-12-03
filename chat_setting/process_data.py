@@ -9,12 +9,22 @@ from chat_setting.chat_environment import ChatRoom, ParticipantBot
 
 load_dotenv()
 
+# initialize chatroom setting from request
+def set_chatroom(chatroom: ChatRoom):
+    data=request.get_json()
+    chatroom.init_setting_from_dict(data)
+    send_front_chatroom(chatroom)
+
 # send chatroom-envrionment data to frontend
 def send_front_chatroom(socket: SocketIO, chatroom: ChatRoom):
     socket.emit("chatlog", [{"name": chatdata.person.name, "content": chatdata.content, "id": chatdata.id} for chatdata in chatroom.chatlog])
     socket.emit("participants", [{"name": p.name, "persona": p.persona, "background": p.background, "id": p.person_id} for p in chatroom.participantbots])
     if chatroom.user:
         socket.emit("user", {"name": chatroom.user.name, "id": chatroom.user.person_id})
+
+def stop_comment(chatroom: ChatRoom):
+    chatroom.STOP_COMMENT=True
+    return
 
 # when user input textdata
 def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom):
@@ -38,11 +48,6 @@ def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom):
     else:
         raise NotImplementedError("personが見つかりません")
     
-# initialize chatroom setting from request
-def set_chatroom(chatroom: ChatRoom):
-    data=request.get_json()
-    chatroom.init_setting_from_dict(data)
-    send_front_chatroom(chatroom)
 
 # generate emotion for all participants
 def participants_emotion(socket: Union[SocketIO,None], chatroom: ChatRoom):

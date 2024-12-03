@@ -3,7 +3,7 @@ from flask_socketio import SocketIO, emit
 import os
 from dotenv import load_dotenv
 from chat_setting.chat_environment import ChatRoom
-from chat_setting.process_data import send_front_chatroom,process_user_input,set_chatroom,participants_emotion
+from chat_setting.process_data import send_front_chatroom,process_user_input,set_chatroom,participants_emotion,stop_comment
 
 load_dotenv()
 
@@ -34,6 +34,13 @@ def on_connect():
 def receive_chat_input(data):
     process_user_input(data, app_socket, ChatRoom.current_chatroom())
     participants_emotion(app_socket, ChatRoom.current_chatroom())
+
+#userがstopを押した時
+@app_socket.on("stop-comment")
+def stop_comment_sys(_):
+    stop_comment(ChatRoom.current_chatroom())
+
+
 
 @app.route('/api/init_setting', methods=["POST"])
 def initialize_setting():

@@ -19,8 +19,6 @@ OPENAI_PROJECT=os.getenv("OPENAI_PROJECT")
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
 
-
-
 class ChatRoom:
     _id_counter=0
     _current_chatroom_id=0
@@ -38,6 +36,9 @@ class ChatRoom:
         ChatRoom._id_counter+=1
         self.id=ChatRoom._id_counter
         ChatRoom._chatrooms_dict[self.id]=self
+
+        self.STOP_COMMENT=False
+
 
     @classmethod
     def create_chatroom(cls,title: str="",description: str=""):
@@ -225,7 +226,7 @@ class ParticipantBot(Person):
             if socket:
                 socket.emit(socket_name, "__start-of-stream")
             for chunk in stream:
-                if chunk.choices[0].delta.content is not None:
+                if (chunk.choices[0].delta.content is not None) and (self.chatroom.STOP_COMMENT):
                     ele = chunk.choices[0].delta.content
                     if socket:
                         socket.emit(socket_name, ele)
@@ -236,6 +237,9 @@ class ParticipantBot(Person):
                 # sleep(0.1)
             if socket:
                 socket.emit(socket_name, "__end-of-stream")
+
+            if self.chatroom.STOP_COMMENT:
+                self.chatroom.STOP_COMMENT=False
 
             return output
         

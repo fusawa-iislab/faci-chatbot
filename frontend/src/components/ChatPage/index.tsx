@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'; 
 import styles from './styles.module.css';
-// import Button from '@mui/material/Button';
+import Button from '@mui/material/Button';
 // import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import ParticipantBot from '../ParticipantBot';
@@ -48,7 +48,7 @@ const ChatPage: React.FC = () => {
             };
         }
     }, [socket]);
-///////////////////////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------------------------//
     const handleInputSubmit = () => {
         if (inputText === "") {
             alert("テキストを入力してください");
@@ -63,15 +63,22 @@ const ChatPage: React.FC = () => {
         setSelectedPersonID(null)
         return;
     };
-/////////////////////////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------------------------//
     const handleSelectPersonID = (id: number) => {
         if (SelectedPersonID === id) setSelectedPersonID(null);
         else setSelectedPersonID(id)
     }
 
-
     const SelectedPerson = participants.find(p => p.id === SelectedPersonID)
 
+//-----------------------------------------------------------------------------------------------//
+    const handleStopClick = () => {
+        if (socket) {
+            socket.emit("stop-comment", "a")
+        }
+    }
+
+//-----------------------------------------------------------------------------------------------//
 
     return (
         <div className={styles["chatpage-container"]}>
@@ -83,6 +90,7 @@ const ChatPage: React.FC = () => {
                         </div>
                     )}
                 </div>
+                <Button className={styles["stop-button"]} onClick={handleStopClick}>STOP</Button>
                 <SocketTextArea handleInputSubmit={handleInputSubmit} inputText={inputText} setInputText={setInputText} />
                 {User.id!==-1&&
                     <p>あなたは{User.name}です。</p>
