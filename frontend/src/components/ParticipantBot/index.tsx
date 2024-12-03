@@ -49,10 +49,6 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
         }
     },[socket]);
 
-    useEffect(()=>{
-        console.log(comment);
-    },[comment])
-
     return (
         <div className={styles["participant-wrapper"]}>
             {emotion && 
