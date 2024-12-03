@@ -136,12 +136,16 @@ class ChatRoom:
 
 class ChatData:
     _id_counter=0
-    def __init__(self,person_id:int,content:str,chatroom:ChatRoom):#crはChatRoomの略
+    statuses=["SUCCESS","STOPPED","ERROR"]
+    def __init__(self,person_id:int,content:str,chatroom:ChatRoom,status:str="SUCCESS"):#crはChatRoomの略
+        if status not in ChatData.statuses:
+            raise ValueError(f"Invalid status: {status}. Must be one of {ChatData.statuses}")
         ChatData._id_counter += 1
         self.id = ChatData._id_counter
         self.person_id = person_id
         self.content = content
         self.person=chatroom.find_person(person_id)
+        self.status=status
     @classmethod
     def reset(cls):
         cls._id_counter = 0

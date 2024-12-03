@@ -27,7 +27,7 @@ def stop_comment(chatroom: ChatRoom):
     return
 
 # when user input textdata
-def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom):
+def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom)->None:
     if 'text' not in data or "selectedID" not in data:
         socket.emit("log", {'content': '入力が正しくありません'})
         return
