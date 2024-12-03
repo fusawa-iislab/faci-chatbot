@@ -16,13 +16,7 @@
     padding: 5px;
 }
 
-.comment-wrapper {
-    padding: 2px;
+.comment, .no-comment {
+    width: 100%;
+    height: 30px;
 }
-
-.comment-text {
-    font-size: 12px;
-    width: 100px;
-    text-align: center;
-}
-

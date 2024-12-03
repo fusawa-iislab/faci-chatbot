@@ -53,10 +53,12 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
         <div className={styles["participant-wrapper"]}>
             {emotion && 
                 <p className={styles["emotion"]}>{emotion}</p>
-            }
-            {comment && 
+            } 
+            {comment ? (
                 <p className={styles["comment"]}>{comment}</p>
-            }
+            ) : (
+                <div className={styles["no-comment"]}></div>
+            )}
             <img src={Silhoutte} className={styles["siloutte-image"]}/>
             <p className={styles["participant-name"]}>{p.name}</p>
         </div>

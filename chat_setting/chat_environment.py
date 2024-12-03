@@ -229,11 +229,11 @@ class ParticipantBot(Person):
                     ele = chunk.choices[0].delta.content
                     if socket:
                         socket.emit(socket_name, ele)
-                        print(ele)
+                        # print(ele)
                     output += ele
                 else:
                     break
-                sleep(0.1)
+                # sleep(0.1)
             if socket:
                 socket.emit(socket_name, "__end-of-stream")
 
