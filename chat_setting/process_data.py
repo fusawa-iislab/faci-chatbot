@@ -3,6 +3,7 @@ from flask_socketio import SocketIO
 from threading import Thread
 from typing import Union
 from dotenv import load_dotenv
+from time import sleep
 
 from chat_setting.chat_environment import ChatRoom, ParticipantBot
 
@@ -14,6 +15,7 @@ def set_chatroom(chatroom: ChatRoom):
     data=request.get_json()
     chatroom.init_setting_from_dict(data)
     send_front_chatroom(chatroom)
+    return
 
 # send chatroom-envrionment data to frontend
 def send_front_chatroom(socket: SocketIO, chatroom: ChatRoom):
@@ -24,6 +26,9 @@ def send_front_chatroom(socket: SocketIO, chatroom: ChatRoom):
 
 def stop_comment(chatroom: ChatRoom):
     chatroom.STOP_COMMENT=True
+    sleep(0.1)
+    if chatroom.STOP_COMMENT:
+        chatroom.STOP_COMMENT=False
     return
 
 # when user input textdata

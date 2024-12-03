@@ -230,7 +230,7 @@ class ParticipantBot(Person):
             if socket:
                 socket.emit(socket_name, "__start-of-stream")
             for chunk in stream:
-                if (chunk.choices[0].delta.content is not None) and (self.chatroom.STOP_COMMENT):
+                if (chunk.choices[0].delta.content is not None) and (not self.chatroom.STOP_COMMENT):
                     ele = chunk.choices[0].delta.content
                     if socket:
                         socket.emit(socket_name, ele)
