@@ -1,3 +1,6 @@
+import eventlet
+eventlet.monkey_patch() 
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
@@ -25,21 +28,24 @@ def on_connect():
     print("クライアントが接続しました")
     emit('log', {"content": "connected to backend"})
     send_front_chatroom(app_socket_test, ChatRoom.current_chatroom())
+    return
 
 @app_socket_test.on("user-input")
 def receive_chat_input(data):
-    process_user_input(data, app_socket_test, ChatRoom.current_chatroom())
-    participants_emotion(app_socket_test, ChatRoom.current_chatroom())
+    def test(data,app_socket,chatroom):
+        process_user_input(data, app_socket, chatroom)
+        participants_emotion(app_socket, chatroom)
+    app_socket_test.start_background_task(test, data, app_socket_test, ChatRoom.current_chatroom())
 
 #userがstopを押した時
 @app_socket_test.on("stop-comment")
 def stop_comment_sys(_):
-    stop_comment(chatroom=ChatRoom.current_chatroom())
+    app_socket_test.start_background_task(stop_comment, ChatRoom.current_chatroom())
 
 @app_test.route('/api/init_setting', methods=["POST"])
 def initialize_setting():
     new_chatroom = ChatRoom.create_chatroom()
-    set_chatroom(new_chatroom)
+    app_socket_test.start_background_task(set_chatroom, new_chatroom)
     return jsonify({"message": "データが正常に処理されました"}), 200
 
 

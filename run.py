@@ -1,5 +1,7 @@
-from app import app, app_socket
+# import eventlet
+# eventlet.monkey_patch() 
 
+from app import app, app_socket
 import sys
 import os
 import argparse
