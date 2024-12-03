@@ -28,22 +28,22 @@ def index():
 def serve_static(path):
     return send_from_directory(app.static_folder+"/static/", path)
 
-def tmp(socket,chatroom):
-    print("クライアントが接続しました")
-    socket.emit('log', {"content": "connected to backend"})
-    send_front_chatroom(app_socket, chatroom)
-    sleep(5)
-    socket.emit('log', {"content": "connected to backend2"})
-    sleep(5)
-    socket.emit('log', {"content": "connected to backend3"})
+# def tmp(socket,chatroom):
+#     print("クライアントが接続しました")
+#     socket.emit('log', {"content": "connected to backend"})
+#     send_front_chatroom(app_socket, chatroom)
+#     sleep(5)
+#     socket.emit('log', {"content": "connected to backend2"})
+#     sleep(5)
+#     socket.emit('log', {"content": "connected to backend3"})
 
 
 @app_socket.on('connect')
 def on_connect():
-    # print("クライアントが接続しました")
-    # emit('log', {"content": "connected to backend"})
-    # send_front_chatroom(app_socket, ChatRoom.current_chatroom())
-    app_socket.start_background_task(tmp, app_socket, ChatRoom.current_chatroom())
+    print("クライアントが接続しました")
+    emit('log', {"content": "connected to backend"})
+    send_front_chatroom(app_socket, ChatRoom.current_chatroom())
+    # app_socket.start_background_task(tmp, app_socket, ChatRoom.current_chatroom())
     return
 
 def test(data,app_socket,chatroom):
