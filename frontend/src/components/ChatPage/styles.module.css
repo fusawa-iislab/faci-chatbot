@@ -32,7 +32,3 @@
 .participant {
     margin: 0 5px;
 }
-
-.participant.selected {
-    background-color: rgb(255, 255, 100);
-}

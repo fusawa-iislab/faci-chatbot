@@ -10,11 +10,13 @@ import {Participant} from "../../assets/structs";
 export type ParticipantBotProps = {
     p: Participant;
     socket: Socket|null;
+    selected?: boolean;
 }
 
 const ParticipantBot : React.FC<ParticipantBotProps> = ({
     p,
     socket,
+    selected=false,
 }) =>{
 
     const [emotion,setEmotion] = useState<string|null>(null);
@@ -59,8 +61,10 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
             ) : (
                 <div className={styles["no-comment"]}></div>
             )}
-            <img src={Silhoutte} className={styles["siloutte-image"]}/>
-            <p className={styles["participant-name"]}>{p.name}</p>
+            <div className={`${styles["participant-info"]} ${selected ? styles["selected"]:""}`}>
+                <img src={Silhoutte} className={styles["siloutte-image"]}/>
+                <p className={styles["participant-name"]}>{p.name}</p>
+            </div>
         </div>
     );
 };
