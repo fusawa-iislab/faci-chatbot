@@ -83,7 +83,15 @@ const ChatPage: React.FC = () => {
 
 //-----------------------------------------------------------------------------------------------//
     const handleAskClick = () => {
-        setAskForComment(!AskForComment)
+        if (AskForComment) setAskForComment(false);
+        else {
+            if (SelectedPersonID) {
+                alert("選択を解除して下さい");
+            }
+            else {
+                setAskForComment(true);
+            }
+        }
     }
 
 //-----------------------------------------------------------------------------------------------//
