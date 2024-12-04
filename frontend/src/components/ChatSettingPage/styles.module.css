@@ -5,11 +5,30 @@
     padding: 10px;
 }
 
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: fit-content;
+}
+
+.conversation-situation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 10px 0;
+    width: fit-content;
+}
+
 .input-group {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     padding: 5px;
+}
+
+.input-group.column {
+    flex-direction: column;
 }
 
 .input-group label{
@@ -21,6 +40,12 @@
     padding: 0;
 }
 
+.title textarea, .description textarea {
+    width: 500px;
+    background-color: transparent;
+}
+
+
 .input-error-inner {
     display: flex;
     flex-direction: column;
@@ -31,6 +56,7 @@
 .participant-number {
     display: flex;
     flex-direction: row;
+    margin: 10px 0;
 }
 
 /* .participant-number input {
@@ -42,11 +68,15 @@
     color: red;
 }
 
-.participants{
+.participants-container{
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    justify-content: center;
     margin: 5px;
+    max-width: 700px;
+    align-items: center;
+    width: fit-content;
 }
 
 .participant-input-container {
@@ -57,6 +87,10 @@
     border-radius: 10px;
 }
 
-.submit-button {
-    margin-left: auto;
+.submit-button-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%
 }
+

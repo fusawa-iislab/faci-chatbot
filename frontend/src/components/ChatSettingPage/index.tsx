@@ -3,20 +3,24 @@ import styles from './styles.module.css';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
+import Textarea from '@mui/joy/Textarea';
+import Divider from '@mui/material/Divider';
 
-type ParticipantDescription = {
+
+
+export type ParticipantDescription = {
     name: string;
     background: string;
     persona: string;
     type: string;
 };
 
-type ChatSettingsProp = {
+type ChatSettingPageProp = {
     SettingDone: boolean,
     setSettingDone: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-const ChatSettings: React.FC<ChatSettingsProp> = ({
+const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
     SettingDone,
     setSettingDone,
 }) => {
@@ -41,8 +45,8 @@ const ChatSettings: React.FC<ChatSettingsProp> = ({
                 setNumberConfirmed(false);
                 return;
             }
-            if (NumInput>5) {
-                setPnumberError("5人以内にしてください");
+            if (NumInput>10) {
+                setPnumberError("10人以内にしてください");
                 setNumberConfirmed(false);
                 return;
             }
@@ -75,7 +79,11 @@ const ChatSettings: React.FC<ChatSettingsProp> = ({
         const description = (document.getElementById('description') as HTMLInputElement)?.value;
         const personsdata = participants.map(participant => ({
             type: 'ParticipantBot',
-            args:{name:participant.name,background:participant.background,persona:participant.persona}
+            args:{
+                name : participant.name,
+                background : participant.background,
+                persona : participant.persona
+            }
         }));
         const username = (document.getElementById('yourname') as HTMLInputElement)?.value;
         const userdata = { type: "User", args: { name: username,background:"",persona:"" }};
@@ -105,56 +113,60 @@ const ChatSettings: React.FC<ChatSettingsProp> = ({
 
     return (
         <div className={styles["chat-settings-wrapper"]}>
-            <form onSubmit={handleInitSubmit}>
-                <div className={styles['debate-situation']}>
+            <form onSubmit={handleInitSubmit} className={styles["form-wrapper"]}>
+                <div className={styles['conversation-situation']}>
                     <div className={styles["input-group"]}>
-                        <InputLabel htmlFor="your-name">あなたの名前</InputLabel>
+                        <InputLabel htmlFor="your-name">あなたの名前:</InputLabel>
                         <Input type="text" required placeholder="名前" id="yourname" />
                     </div>
-                    <div className={styles["input-group"]}>
-                        <InputLabel htmlFor="title">議題</InputLabel>
-                        <Input type="text" required placeholder="議題を入力してください" id="title" />
+                    <div className={styles["input-group"]+" "+styles["column"]}>
+                        {/* <InputLabel htmlFor="title">議題</InputLabel> */}
+                        <InputLabel htmlFor="title">議題:</InputLabel>
+                        <Textarea required placeholder="何か議題を設定してください" id="title" minRows={2} className={styles["title"]}/>
                     </div>
-                    <div className={styles["input-group"]}>
-                        <InputLabel htmlFor="description">詳細</InputLabel>
-                        <Input type="text" placeholder="何か詳しく伝えたいことがあれば" id="description" />
+                    <div className={styles["input-group"]+" "+styles["column"]}>
+                        <InputLabel htmlFor="description">詳細:</InputLabel>
+                        <Textarea placeholder="詳細を記入してください" id="description" minRows={2} className={styles["description"]}/>
                     </div>
-                </div>
-                <div className={styles['participant-number']}>
-                    <div className={styles["input-group"]}>
-                        <InputLabel htmlFor="p-number">参加者の人数</InputLabel>
-                        <div className={styles["input-error-inner"]}>
-                            <Input required onChange={handleNumberChange} value={NumberStr} id="p-number"/>
-                            {PnumberError && <p className={styles["error"]}>{PnumberError}</p>}
+                    <div className={styles['participant-number']}>
+                        <div className={styles["input-group"]}>
+                            <InputLabel htmlFor="p-number">参加者の人数:</InputLabel>
+                            <div className={styles["input-error-inner"]}>
+                                <Input required onChange={handleNumberChange} value={NumberStr} id="p-number"/>
+                                {PnumberError && <p className={styles["error"]}>{PnumberError}</p>}
+                            </div>
                         </div>
+                        <Button onClick={handleNumberConfirm} disabled={Boolean(PnumberError)}>確定</Button>
                     </div>
-                    <Button onClick={handleNumberConfirm} disabled={Boolean(PnumberError)}>確定</Button>
                 </div>
+                <Divider />
                 {NumberConfirmed && (
-                    <div className={styles['persons']}>
+                    <div className={styles['participants-container']}>
                         {participants.map((participant,i)=>(
-                            <div key={i} className="person-input-container">
+                            <div key={i} className={styles["participant-input-container"]}>
                                 <p>{i+1}人目</p>
                                 <div className={styles["input-group"]}>
-                                    <InputLabel htmlFor={`name-${i + 1}`}>名前</InputLabel>
+                                    <InputLabel htmlFor={`name-${i + 1}`}>名前:</InputLabel>
                                     <Input type="text" value={participant.name} onChange={(e) => handlePersonChange(e, i, 'name')} id={`name-${i + 1}`}/>
                                 </div>
                                 <div className={styles["input-group"]}>
-                                    <InputLabel htmlFor={`role-${i + 1}`}>背景</InputLabel>
+                                    <InputLabel htmlFor={`role-${i + 1}`}>背景:</InputLabel>
                                     <Input type="text" value={participant.background} onChange={(e) => handlePersonChange(e, i, 'background')} id={`role-${i + 1}`}/>
                                 </div>
                                 <div className={styles["input-group"]}>
-                                    <InputLabel htmlFor={`persona-${i + 1}`}>属性</InputLabel>
+                                    <InputLabel htmlFor={`persona-${i + 1}`}>属性:</InputLabel>
                                     <Input type="text" value={participant.persona} onChange={(e) => handlePersonChange(e, i, 'persona')} id={`persona-${i + 1}`}/>
                                 </div>
                             </div>
                         ))}
                     </div>
                 )}
-                <Button type="submit" disabled={Boolean(PnumberError) || !NumberConfirmed} className={styles["submit-button"]}>送信</Button>
+                <div className={styles["submit-button-wrapper"]}>
+                    <Button type="submit" disabled={Boolean(PnumberError) || !NumberConfirmed} className={styles["submit-button"]}>送信</Button>
+                </div>
             </form>
         </div>
     );
 };
 
-export default ChatSettings;
+export default ChatSettingPage;
