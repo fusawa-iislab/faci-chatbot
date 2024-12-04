@@ -66,7 +66,7 @@ const ChatPage: React.FC = () => {
     };
 //-----------------------------------------------------------------------------------------------//
     const handleSelectPersonID = (id: number) => {
-        setAskForComment(false);
+        setAskForComment(false); //participantを選択したら発言を求めるのをやめる
         if (SelectedPersonID === id) setSelectedPersonID(null);
         else setSelectedPersonID(id)
     }

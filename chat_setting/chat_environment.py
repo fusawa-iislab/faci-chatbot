@@ -234,7 +234,7 @@ class ParticipantBot(Person):
                     ele = chunk.choices[0].delta.content
                     if socket:
                         socket.emit(socket_name, ele)
-                        print(ele)
+                        # print(ele)
                     output += ele
                 else:
                     break
