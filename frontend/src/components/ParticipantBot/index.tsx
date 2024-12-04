@@ -30,6 +30,7 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
 
     const [emotion,setEmotion] = useState<string|null>(emotionsMap.get("neutral") || "🙂");
     const [comment,setComment] = useState<string|null>(null);
+    const [raisedHand,setRaisedHand] = useState<boolean>(false);
 
     useEffect(()=>{
         if(socket){
@@ -53,6 +54,10 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
                 }}
             });
 
+            socket.on(`raise-hand-${p.id}`,(data)=>{
+                setRaisedHand(data);
+            })
+
             return ()=>{
                 socket.off(`emotion-${p.id}`);
                 socket.off(`comment-${p.id}`);
@@ -62,14 +67,22 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
 
     return (
         <div className={styles["participant-wrapper"]}>
-            {emotion && 
-                <p className={styles["emotion"]}>{emotion}</p>
-            } 
             {comment ? (
                 <p className={styles["comment"]}>{comment}</p>
             ) : (
                 <div className={styles["no-comment"]}></div>
             )}
+            <div className={styles["participant-reactions"]}>
+                {raisedHand ? (
+                    <div className={styles["raised-hand"]}>🖐️</div>
+                ) : (
+                    <div className={styles["no-raised-hand"]}>　</div>
+                )
+                }
+                {emotion && 
+                    <p className={styles["emotion"]}>{emotion}</p>
+                } 
+            </div>
             <div className={`${styles["participant-info"]} ${selected ? styles["selected"]:""}`}>
                 <img src={Silhoutte} className={styles["siloutte-image"]}/>
                 <p className={styles["participant-name"]}>{p.name}</p>
@@ -80,4 +93,3 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
 
 export default ParticipantBot;
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

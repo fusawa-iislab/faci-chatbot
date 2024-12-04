@@ -62,6 +62,7 @@ const ChatPage: React.FC = () => {
             socket.emit("user-input", sendData)
         }
         setSelectedPersonID(null)
+        setAskForComment(false)
         return;
     };
 //-----------------------------------------------------------------------------------------------//

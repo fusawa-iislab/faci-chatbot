@@ -1,5 +1,5 @@
 import torch
-from typing import Dict,Union
+from typing import Dict,Union,List
 import random
 from time import sleep
 from openai import OpenAI
@@ -26,13 +26,13 @@ class ChatRoom:
     def __init__(self,title: str="",description: str=""):
         self.title=title
         self.description=description
-        self.chatlog=[]
+        self.chatlog: List[ChatData]=[]
         self.chatlog_str=""
         self.summerylog=[]
         self.context_vec=torch.tensor([[0]])
         self.user=None
-        self.participantbots=[]
-        self.persons=[]
+        self.participantbots:List[ParticipantBot]=[]
+        self.persons:List[Person]=[]
         ChatRoom._id_counter+=1
         self.id=ChatRoom._id_counter
         ChatRoom._chatrooms_dict[self.id]=self
@@ -242,10 +242,8 @@ class ParticipantBot(Person):
 
             if socket:
                 socket.emit(socket_name, "__end-of-stream")
-
             if self.chatroom.STOP_COMMENT:
                 self.chatroom.STOP_COMMENT=False
-
             return output
         
         user, system = self.create_input_prompt()
@@ -269,4 +267,29 @@ class ParticipantBot(Person):
         # emotion= get_gpt(user, system, temperature=0.5, max_tokens=100)
         emotion=random.choice(self.emotions)
         self.emotion=emotion
+
+
+    def raise_hand_to_speak(self):
+
+        def create_input_prompt(self):
+            system = ""
+            user = ""
+            system += self.personal_data_to_str()
+            system += "あなたは呼びかけに対して発言したいかどうかをTかFのどちらかで答えてください\n"
+
+            user += "直近の会話の流れ\n"
+            user += self.chatroom.chatlog_to_str()
+            user += "######################################\n"
+            user += "これまでの流れにから次の発言を生成してください\n"
+            return user, system
+        
+        user, system = create_input_prompt(self)
+        response = get_gpt(user, system, temperature=1, max_tokens=10)
+        if response.lower() == "t":
+            return True
+        elif response.lower() == "f":
+            return False
+        else:
+            raise ValueError("Invalid response. Must be either 'T' or 'F'")
+        
 

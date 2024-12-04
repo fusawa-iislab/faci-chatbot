@@ -33,13 +33,24 @@ def stop_comment(chatroom: ChatRoom):
 
 # when user input textdata
 def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom)->None:
-    if 'text' not in data or "selectedID" not in data:
+    if ('text' not in data) or ("selectedID" not in data) or ("askForComment" not in data):
         socket.emit("log", {'content': '入力が正しくありません'})
         return
     if not chatroom.user:
         socket.emit("log", {'content': '入力するuserがいません'})
         return 
+    
     input_text = data['text']
+
+    if data["askForComment"]:
+        chatroom.add_chatdata(chatroom.user.person_id, input_text)
+        socket.emit("chatdata", {"name": chatroom.user.name, "content": input_text})
+        participants_raise_hands_to_speak(socket, chatroom)
+        return
+    else:
+        for p in chatroom.participantbots:
+            if socket:
+                socket.emit(f"raise-hand-{p.person_id}", False)
     chatroom.add_chatdata(chatroom.user.person_id, input_text)
     socket.emit("chatdata", {"name": chatroom.user.name, "content": input_text})
     if not data["selectedID"]:
@@ -67,3 +78,17 @@ def participants_emotion(socket: Union[SocketIO,None], chatroom: ChatRoom):
         thread.start()
     for thread in threads:
         thread.join()
+
+def participants_raise_hands_to_speak(socket: Union[SocketIO,None], chatroom: ChatRoom):
+    threads=[]
+    def participant_raise_hand(socket: SocketIO, p: ParticipantBot):
+        will=p.raise_hand_to_speak()
+        if socket:
+            socket.emit(f"raise-hand-{p.person_id}", will)
+    for p in chatroom.participantbots:
+        thread=Thread(target=participant_raise_hand, args=(socket,p))
+        threads.append(thread)
+        thread.start()
+    for thread in threads:
+        thread.join()
+    return
