@@ -58,7 +58,7 @@ const ChatPage: React.FC = () => {
         var message: string = inputText;
         setInputText("");
         if (socket) {
-            const sendData = { text: message, selectedID: SelectedPersonID }
+            const sendData = { text: message, selectedID: SelectedPersonID, askForComment: AskForComment }
             socket.emit("user-input", sendData)
         }
         setSelectedPersonID(null)
