@@ -16,6 +16,7 @@ const ChatPage: React.FC = () => {
     const [participants, setParticipants] = useState<Participant[]>([]);
     const [SelectedPersonID, setSelectedPersonID] = useState<number|null>(null);
     const [User, setUser] = useState<Person>({name:"",id:-1});
+    const [AskForComment, setAskForComment] = useState<boolean>(false);
     const socket = useSocket();
 
     useEffect(() => {
@@ -65,6 +66,7 @@ const ChatPage: React.FC = () => {
     };
 //-----------------------------------------------------------------------------------------------//
     const handleSelectPersonID = (id: number) => {
+        setAskForComment(false);
         if (SelectedPersonID === id) setSelectedPersonID(null);
         else setSelectedPersonID(id)
     }
@@ -79,6 +81,11 @@ const ChatPage: React.FC = () => {
     }
 
 //-----------------------------------------------------------------------------------------------//
+    const handleAskClick = () => {
+        setAskForComment(!AskForComment)
+    }
+
+//-----------------------------------------------------------------------------------------------//
 
     return (
         <div className={styles["chatpage-container"]}>
@@ -90,6 +97,7 @@ const ChatPage: React.FC = () => {
                         </div>
                     )}
                 </div>
+                <Button className={styles["ask-button"]} onClick={handleAskClick}>ASK</Button>
                 <Button className={styles["stop-button"]} onClick={handleStopClick}>STOP</Button>
                 <SocketTextArea handleInputSubmit={handleInputSubmit} inputText={inputText} setInputText={setInputText} />
                 {User.id!==-1&&
