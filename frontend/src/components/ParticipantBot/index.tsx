@@ -19,13 +19,22 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
     selected=false,
 }) =>{
 
-    const [emotion,setEmotion] = useState<string|null>(null);
+    const emotionsMap: Map<string,string> = new Map([
+        ["angry","😡"],
+        ["fearful","🫢"],
+        ["happy","😊"],
+        ["sad","😢"],
+        ["surprised","😲"],
+        ["neutral","🙂"],
+    ]);
+
+    const [emotion,setEmotion] = useState<string|null>(emotionsMap.get("neutral") || "🙂");
     const [comment,setComment] = useState<string|null>(null);
 
     useEffect(()=>{
         if(socket){
             socket.on(`emotion-${p.id}`,(data)=>{
-                setEmotion(data);
+                setEmotion(emotionsMap.get(data) || null);
             });
 
             socket.on(`comment-${p.id}`,(data)=>{

@@ -39,7 +39,6 @@ class ChatRoom:
 
         self.STOP_COMMENT=False
 
-
     @classmethod
     def create_chatroom(cls,title: str="",description: str=""):
         new_chatroom=ChatRoom(title,description)
@@ -169,7 +168,8 @@ class User(Person):
         super().__init__(name,chatroom) 
 
 class ParticipantBot(Person):
-    emotions = ["happy", "sad", "angry", "surprised", "disgusted", "fearful", "neutral"]
+    emotions = ["happy", "sad", "angry", "surprised", "fearful", "neutral"]
+    # emotions = ["happy", "sad", "angry", "surprised", "disgusted", "fearful", "neutral"]
     def __init__(self, name, chatroom:ChatRoom, background: str="",persona:str="",other_features:Union[Dict,None]=None):
         super().__init__(name,chatroom)
         self.background=background
