@@ -14,28 +14,24 @@ load_dotenv()
 
 FRONTEND_PATH = os.getenv("FRONTEND_PATH")
 
-app = Flask(__name__, static_folder="./frontend/build", static_url_path="")
+app = Flask(__name__, static_folder="./frontend/build")
 app_socket = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 
 
-# ルートにアクセスしたときに、ビルドされたindex.htmlを返す
-@app.route('/')
-def index():
-    return send_from_directory(app.static_folder, 'index.html')
+@app.route('/api/init_setting', methods=["POST"])
+def initialize_setting():
+    new_chatroom = ChatRoom.create_chatroom()
+    app_socket.start_background_task(set_chatroom, new_chatroom)
+    return jsonify({"message": "データが正常に処理されました"}), 200
 
-# その他の静的ファイル（JS、CSSなど）を提供
-@app.route('/static/<path:path>')
-def serve_static(path):
-    return send_from_directory(app.static_folder+"/static/", path)
 
-# def tmp(socket,chatroom):
-#     print("クライアントが接続しました")
-#     socket.emit('log', {"content": "connected to backend"})
-#     send_front_chatroom(app_socket, chatroom)
-#     sleep(5)
-#     socket.emit('log', {"content": "connected to backend2"})
-#     sleep(5)
-#     socket.emit('log', {"content": "connected to backend3"})
+## 全てのpathを処理してしまうので最後で
+@app.route("/")
+@app.route("/<path:path>")
+def url_access(path=""):
+    if path.startswith("static"):
+        return send_from_directory(app.static_folder, path)
+    return send_from_directory(app.static_folder, "index.html")
 
 
 @app_socket.on('connect')
@@ -43,13 +39,12 @@ def on_connect():
     print("クライアントが接続しました")
     emit('log', {"content": "connected to backend"})
     send_front_chatroom(app_socket, ChatRoom.current_chatroom())
-    # app_socket.start_background_task(tmp, app_socket, ChatRoom.current_chatroom())
     return
+
 
 def test(data,app_socket,chatroom):
     process_user_input(data, app_socket, chatroom)
     participants_emotion(app_socket, chatroom)
-
 
 @app_socket.on("user-input")
 def receive_chat_input(data):
@@ -63,11 +58,7 @@ def stop_comment_sys(_):
 
 
 
-@app.route('/api/init_setting', methods=["POST"])
-def initialize_setting():
-    new_chatroom = ChatRoom.create_chatroom()
-    app_socket.start_background_task(set_chatroom, new_chatroom)
-    return jsonify({"message": "データが正常に処理されました"}), 200
+
 
 
 if __name__ == '__main__':

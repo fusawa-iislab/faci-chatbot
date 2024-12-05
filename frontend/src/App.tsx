@@ -18,6 +18,7 @@ const App = ()=> {
 			<Route path="/" element={SettingDone?<Navigate to="/chatpage"/> : <Navigate to="/chat-settings"/>}/>
 			<Route path="/chatpage" element={SettingDone?<ChatPage/> : <Navigate to="/chat-settings"/>}/>
 			<Route path="/chat-settings" element={!SettingDone?<ChatSettingPage SettingDone={SettingDone} setSettingDone={setSettingDone}/> : <Navigate to="/chatpage"/>}/>
+			<Route path="*" element={<div>404 Not Found</div>} />
 		</Routes>
 	</Router>
 	// <div className={styles["test-main"]}>
