@@ -6,8 +6,8 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 import os
 from dotenv import load_dotenv
-from chat_setting.chat_environment import ChatRoom
-from chat_setting.process_data import send_front_chatroom, process_user_input,set_chatroom,participants_emotion,stop_comment
+from chat_environment.chat_environment import ChatRoom
+from chat_environment.process_data import send_front_chatroom, process_user_input,set_chatroom,participants_emotion,stop_comment
 
 load_dotenv()
 

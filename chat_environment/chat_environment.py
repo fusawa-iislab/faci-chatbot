@@ -8,7 +8,7 @@ import os
 from flask_socketio import SocketIO
 
 from utils.gpt_function import get_gpt
-from chat_setting.prompt import response_requirement
+from chat_environment.prompt import response_requirement
 
 load_dotenv()
 

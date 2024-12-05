@@ -5,7 +5,7 @@ from app import app, app_socket
 import sys
 import os
 import argparse
-from chat_setting.chat_environment import ChatRoom
+from chat_environment.chat_environment import ChatRoom
 import json
 
 def parse_args():

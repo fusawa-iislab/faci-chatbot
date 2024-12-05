@@ -1,5 +1,4 @@
 ### todo
-- ルーティングがきもい
 - setting
     - chatlogの設定をinteractiveに
     - デフォルトセットを使えるように(使いやすく)

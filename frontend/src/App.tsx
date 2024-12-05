@@ -15,9 +15,9 @@ const App = ()=> {
 	return (
 	<Router>
 		<Routes>
-			<Route path="/" element={SettingDone?<Navigate to="/chatpage"/> : <Navigate to="/chat-settings"/>}/>
-			<Route path="/chatpage" element={SettingDone?<ChatPage/> : <Navigate to="/chat-settings"/>}/>
-			<Route path="/chat-settings" element={!SettingDone?<ChatSettingPage SettingDone={SettingDone} setSettingDone={setSettingDone}/> : <Navigate to="/chatpage"/>}/>
+			<Route path="/" element={SettingDone?<Navigate to="/chatpage"/> : <Navigate to="/setting"/>}/>
+			<Route path="/chatpage" element={SettingDone?<ChatPage/> : <Navigate to="/setting"/>}/>
+			<Route path="/setting" element={!SettingDone?<ChatSettingPage SettingDone={SettingDone} setSettingDone={setSettingDone}/> : <Navigate to="/chatpage"/>}/>
 			<Route path="*" element={<div>404 Not Found</div>} />
 		</Routes>
 	</Router>

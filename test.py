@@ -1,8 +1,8 @@
-from chat_setting.chat_environment import ChatRoom
+from chat_environment.chat_environment import ChatRoom
 import json
 
 from utils.gpt_function import get_gpt
-from chat_setting.process_data import participants_raise_hands_to_speak
+from chat_environment.process_data import participants_raise_hands_to_speak
 
 test_chatroom = ChatRoom.create_chatroom()
 with open('./data/test/3/3_test.json', 'r') as file:

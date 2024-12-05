@@ -5,7 +5,7 @@ from typing import Union
 from dotenv import load_dotenv
 from time import sleep
 
-from chat_setting.chat_environment import ChatRoom, ParticipantBot
+from chat_environment.chat_environment import ChatRoom, ParticipantBot
 
 
 load_dotenv()
