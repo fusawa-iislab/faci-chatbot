@@ -22,6 +22,12 @@ app_socket_test = SocketIO(app_test, cors_allowed_origins=FRONTEND_PATH, async_m
 def home():
     return "test"
 
+@app_test.route('/api/init_setting', methods=["POST"])
+def initialize_setting():
+    new_chatroom = ChatRoom.create_chatroom()
+    app_socket_test.start_background_task(set_chatroom, new_chatroom)
+    return jsonify({"message": "データが正常に処理されました"}), 200
+
 
 @app_socket_test.on('connect')
 def on_connect():
@@ -42,11 +48,7 @@ def receive_chat_input(data):
 def stop_comment_sys(_):
     app_socket_test.start_background_task(stop_comment, ChatRoom.current_chatroom())
 
-@app_test.route('/api/init_setting', methods=["POST"])
-def initialize_setting():
-    new_chatroom = ChatRoom.create_chatroom()
-    app_socket_test.start_background_task(set_chatroom, new_chatroom)
-    return jsonify({"message": "データが正常に処理されました"}), 200
+
 
 
 if __name__ == '__main__':

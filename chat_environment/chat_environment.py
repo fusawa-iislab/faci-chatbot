@@ -42,7 +42,7 @@ class ChatRoom:
     @classmethod
     def create_chatroom(cls,title: str="",description: str=""):
         new_chatroom=ChatRoom(title,description)
-        ChatRoom._current_chatroom_id=ChatRoom._id_counter
+        ChatRoom._current_chatroom_id=new_chatroom.id
         return new_chatroom
     
     @classmethod
