@@ -1,9 +1,11 @@
 import React,{useEffect,useState} from 'react';
 import Silhoutte from '../../assets/images/person- silhouette.svg';
 import styles from './styles.module.css';
+import Popper from '@mui/material/Popper';
 
 import {Socket} from 'socket.io-client';
 import {Participant} from "../../assets/structs";
+
 
 
 
@@ -46,11 +48,7 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
                 else { if(data==="__start-of-stream") {
                     setComment("");
                 } else{
-                    setComment((prevComment) => {
-                        const updatedComment = prevComment + data;
-                        console.log(updatedComment);
-                        return updatedComment;
-                    });
+                    setComment((prevComment) => prevComment + data);
                 }}
             });
 
@@ -65,27 +63,35 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
         }
     },[socket]);
 
+
     return (
         <div className={styles["participant-wrapper"]}>
-            {comment ? (
-                <p className={styles["comment"]}>{comment}</p>
-            ) : (
-                <div className={styles["no-comment"]}></div>
-            )}
-            <div className={styles["participant-reactions"]}>
-                {raisedHand ? (
-                    <div className={styles["raised-hand"]}>🖐️</div>
-                ) : (
-                    <div className={styles["no-raised-hand"]}>　</div>
-                )
-                }
-                {emotion && 
-                    <p className={styles["emotion"]}>{emotion}</p>
-                } 
-            </div>
-            <div className={`${styles["participant-info"]} ${selected ? styles["selected"]:""}`}>
-                <img src={Silhoutte} className={styles["siloutte-image"]}/>
-                <p className={styles["participant-name"]}>{p.name}</p>
+            <Popper 
+                open={comment!==null} anchorEl={document.querySelector(`.${styles["participant-without-comment"]}`)} 
+                placement={"top"} disablePortal={true}
+                modifiers={[{name:"arrow",enabled:true},{name:"flip",enabled:false}]}>
+                <div className={styles["comment-wrapper"]}>
+                    <div className={styles["comment"]}>
+                        {comment}
+                    </div>
+                </div>
+            </Popper>
+            {/* space for comment */}
+            <div style={{height:50,width:1}} ></div>
+            <div className={styles["participant-without-comment"]}>
+                <div className={styles["participant-reactions"]}>
+                    {raisedHand ? (
+                        <div className={styles["raised-hand"]}>🖐️</div>
+                    ) : (
+                        <div className={styles["no-raised-hand"]}>　</div>
+                    )
+                    }
+                    <p className={styles["emotion"]}>{emotion||"🙂"}</p> 
+                </div>
+                <div className={`${styles["participant-info"]} ${selected ? styles["selected"]:""}`}>
+                    <img src={Silhoutte} className={styles["siloutte-image"]}/>
+                    <p className={styles["participant-name"]}>{p.name}</p>
+                </div>
             </div>
         </div>
     );
