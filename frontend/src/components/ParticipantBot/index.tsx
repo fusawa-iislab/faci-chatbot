@@ -67,9 +67,9 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
     return (
         <div className={styles["participant-wrapper"]}>
             <Popper 
-                open={comment!==null} anchorEl={document.querySelector(`.${styles["participant-without-comment"]}`)} 
+                open={comment!==null} anchorEl={document.querySelector(`#participant-without-comment-${p.id}`)} 
                 placement={"top"} disablePortal={true}
-                modifiers={[{name:"arrow",enabled:true},{name:"flip",enabled:false}]}>
+                modifiers={[{name:"arrow",enabled:true},{name:"flip",enabled:false},{name:"preventOverflow",enabled:false}]}>
                 <div className={styles["comment-wrapper"]}>
                     <div className={styles["comment"]}>
                         {comment}
@@ -77,8 +77,8 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
                 </div>
             </Popper>
             {/* space for comment */}
-            <div style={{height:50,width:1}} ></div>
-            <div className={styles["participant-without-comment"]}>
+            <div style={{height:75,width:1}} ></div>
+            <div className={styles["participant-without-comment"]} id={`participant-without-comment-${p.id}`}>
                 <div className={styles["participant-reactions"]}>
                     {raisedHand ? (
                         <div className={styles["raised-hand"]}>🖐️</div>
