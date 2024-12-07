@@ -106,8 +106,10 @@ const ChatPage: React.FC = () => {
                         </div>
                     )}
                 </div>
-                <Button className={styles["ask-button"]} onClick={handleAskClick}>ASK</Button>
-                <Button className={styles["stop-button"]} onClick={handleStopClick}>STOP</Button>
+                <div className={styles["control-buttons"]}>
+                    <Button className={`${styles["ask-button"]} ${AskForComment ? styles["active"] : ""}`} onClick={handleAskClick}>ASK</Button>
+                    <Button className={styles["stop-button"]} onClick={handleStopClick}>STOP</Button>
+                </div>
                 <SocketTextArea handleInputSubmit={handleInputSubmit} inputText={inputText} setInputText={setInputText} />
                 {User.id!==-1&&
                     <p>あなたは{User.name}です。</p>

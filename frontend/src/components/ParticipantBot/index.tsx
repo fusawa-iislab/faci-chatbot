@@ -42,7 +42,6 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
 
             socket.on(`comment-${p.id}`,(data)=>{
                 if (data==="__end-of-stream") {
-                    console.log(comment);
                     setTimeout(() => {setComment(null);}, 5000);
                 }
                 else { if(data==="__start-of-stream") {
@@ -86,7 +85,7 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
                         <div className={styles["no-raised-hand"]}>　</div>
                     )
                     }
-                    <p className={styles["emotion"]}>{emotion||"🙂"}</p> 
+                    <div className={styles["emotion"]}>{emotion||"🙂"}</div> 
                 </div>
                 <div className={`${styles["participant-info"]} ${selected ? styles["selected"]:""}`}>
                     <img src={Silhoutte} className={styles["siloutte-image"]}/>
