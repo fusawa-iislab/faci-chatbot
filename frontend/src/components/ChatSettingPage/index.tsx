@@ -10,20 +10,27 @@ import Divider from '@mui/material/Divider';
 
 
 export type PersonDescription = {
-    name: string;
-    background: string;
-    persona: string;
+    name: string,
+    background: string,
+    persona: string,
 };
 
-type PersonData = {
-    type: string;
-    args: PersonDescription;
+type InputData = {
+    username: string,
+    title: string,
+    description: string,
+    participants: PersonDescription[],
 }
 
-type SettingData = {
-    title: string;
-    description: string;
-    personsdata: PersonData[];
+type PersonData = {
+    type: string,
+    args: PersonDescription,
+}
+
+type SendData = {
+    title: string,
+    description: string,
+    personsdata: PersonData[],
 }
 
 type ChatSettingPageProp = {
@@ -37,23 +44,22 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
 }) => {
 
     const [PageIndex, setPageIndex] = useState<number>(0);
-    const [UserName, setUserName] = useState<string>('');
-    const [Title, setTitle] = useState<string>('');
-    const [Description, setDescription] = useState<string>('');
+    const [InputGroup,setInputGroup] = useState<InputData>({username: '',title:"",description:"",participants:[]})
+
     const [NumberStr, setNumberStr] =useState<string>('');
-    const [Pnumber, setPnumber] = useState<number>(0);
+    var ParticipantNumber=0;
+    var PrevParticipantNumber=0;
     const [PnumberError, setPnumberError] = useState<string | null>("自然数を入力してください");
     const [NumberConfirmed, setNumberConfirmed] = useState<boolean>(false);
-    const [participants, setParticipants] = useState<PersonDescription[]>([]);
 
     const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setUserName(e.target.value);
+        setInputGroup(prevState => ({ ...prevState, username: e.target.value }));
     }
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setTitle(e.target.value);
+        setInputGroup(prevState => ({ ...prevState, title: e.target.value }));
     }
     const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setDescription(e.target.value);
+        setInputGroup(prevState => ({ ...prevState, description: e.target.value }));
     }
 
     const handleNumberChange = async (e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
@@ -76,45 +82,47 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
                 setNumberConfirmed(false);
                 return;
             }
-            setPnumber(NumInput); 
+            ParticipantNumber=NumInput; 
         }
     };
 
     const handleNumberConfirm = () => {
+        if (PrevParticipantNumber>ParticipantNumber) {
+            setInputGroup(prevState => ({...prevState,participants: prevState.participants.slice(0,ParticipantNumber)}));
+        }
+        else if (PrevParticipantNumber<ParticipantNumber) {
+            setInputGroup(prevState => ({...prevState,participants: [...prevState.participants, ...Array(ParticipantNumber-PrevParticipantNumber).fill({ name: '', background: '', persona: '' })]}));
+        }
         setNumberConfirmed(true);
-        setParticipants(Array(Pnumber).fill({ name: '', background: '', persona: '' }));
+        PrevParticipantNumber=ParticipantNumber;
     };
 
-    const handlePersonChange = (
+    const handleParticipantChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
         index: number,
         field: keyof PersonDescription
     ) => {
-        const updatedPersons = participants.map((participant, i) => {
+        const updatedParticipants = InputGroup.participants.map((participant, i) => {
             if (i === index) {
                 return { ...participant, [field]: e.target.value };
             }
             return participant; 
         });
-        setParticipants(updatedPersons);
+        setInputGroup(prevState => ({ ...prevState, participants: updatedParticipants }));
     };
 
     const handleInitSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const personsdata = participants.map(participant => ({
+        const PersonsData: PersonData[] = InputGroup.participants.map(participant => ({
             type: 'ParticipantBot',
-            args:{
-                name : participant.name,
-                background : participant.background,
-                persona : participant.persona
-            }
+            args: participant
         }));
-        const userdata = { type: "User", args: { name: UserName, background:"", persona:"" }};
-        personsdata.push(userdata);
-        const data : SettingData= {
-             title: Title, 
-             description: Description, 
-             personsdata: personsdata
+        const UserData: PersonData = { type: "User", args: { name: InputGroup.username, background:"", persona:"" }};
+        PersonsData.unshift(UserData);
+        const data : SendData= {
+             title: InputGroup.title, 
+             description: InputGroup.description, 
+             personsdata: PersonsData
         };
         
         try {
@@ -139,23 +147,23 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
 
     return (
         <div className={styles["chat-settings-wrapper"]}>
-            <form onSubmit={handleInitSubmit} className={styles["form-wrapper"]}>
+            <div className={styles["form-wrapper"]}>
 
                 {PageIndex === 0 && (
                     <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
                         <div className={styles['conversation-situation']}>
                             <div className={styles["input-group"]}>
                                 <InputLabel htmlFor="your-name">あなたの名前:</InputLabel>
-                                <Input type="text" required placeholder="名前" id="yourname" onChange={handleUserNameChange} value={UserName}/>
+                                <Input type="text" required placeholder="名前" id="yourname" onChange={handleUserNameChange} value={InputGroup.username}/>
                             </div>
                             <div className={styles["input-group"]+" "+styles["column"]}>
                                 {/* <InputLabel htmlFor="title">議題</InputLabel> */}
                                 <InputLabel htmlFor="title">議題:</InputLabel>
-                                <Textarea required placeholder="何か議題を設定してください" id="title" minRows={2} className={styles["title"]}  onChange={handleTitleChange} value={Title} />
+                                <Textarea required placeholder="何か議題を設定してください" id="title" minRows={2} className={styles["title"]}  onChange={handleTitleChange} value={InputGroup.title} />
                             </div>
                             <div className={styles["input-group"]+" "+styles["column"]}>
                                 <InputLabel htmlFor="description">詳細:</InputLabel>
-                                <Textarea placeholder="詳細を記入してください" id="description" minRows={2} className={styles["description"]} onChange={handleDescriptionChange} value={Description}/>
+                                <Textarea placeholder="詳細を記入してください" id="description" minRows={2} className={styles["description"]} onChange={handleDescriptionChange} value={InputGroup.description}/>
                             </div>
                             <div className={styles['participant-number']}>
                                 <div className={styles["input-group"]}>
@@ -171,20 +179,20 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
                         <Divider />
                         {NumberConfirmed && (
                             <div className={styles['participants-container']}>
-                                {participants.map((participant,i)=>(
+                                {InputGroup.participants.map((participant,i)=>(
                                     <div key={i} className={styles["participant-input-container"]}>
                                         <p>{i+1}人目</p>
                                         <div className={styles["input-group"]}>
                                             <InputLabel htmlFor={`name-${i + 1}`}>名前:</InputLabel>
-                                            <Input type="text" value={participant.name} onChange={(e) => handlePersonChange(e, i, 'name')} id={`name-${i + 1}`}/>
+                                            <Input type="text" value={participant.name} onChange={(e) => handleParticipantChange(e, i, 'name')} id={`name-${i + 1}`}/>
                                         </div>
                                         <div className={styles["input-group"]}>
                                             <InputLabel htmlFor={`role-${i + 1}`}>背景:</InputLabel>
-                                            <Input type="text" value={participant.background} onChange={(e) => handlePersonChange(e, i, 'background')} id={`role-${i + 1}`}/>
+                                            <Input type="text" value={participant.background} onChange={(e) => handleParticipantChange(e, i, 'background')} id={`role-${i + 1}`}/>
                                         </div>
                                         <div className={styles["input-group"]}>
                                             <InputLabel htmlFor={`persona-${i + 1}`}>属性:</InputLabel>
-                                            <Input type="text" value={participant.persona} onChange={(e) => handlePersonChange(e, i, 'persona')} id={`persona-${i + 1}`}/>
+                                            <Input type="text" value={participant.persona} onChange={(e) => handleParticipantChange(e, i, 'persona')} id={`persona-${i + 1}`}/>
                                         </div>
                                     </div>
                                 ))}
@@ -203,11 +211,11 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
                         </div>
                         
                         <div className={styles["submit-button-wrapper"]}>
-                            <Button type="submit" disabled={Boolean(PnumberError) || !NumberConfirmed} className={styles["submit-button"]}>送信</Button>
+                            <Button type="submit" disabled={Boolean(PnumberError) || !NumberConfirmed} className={styles["submit-button"]} onClick={handleInitSubmit} >送信</Button>
                         </div>
                     </div>
                 )}
-            </form>
+            </div>
         </div>
     );
 };
