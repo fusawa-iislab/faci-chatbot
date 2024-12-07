@@ -211,7 +211,7 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
                         </div>
                         
                         <div className={styles["submit-button-wrapper"]}>
-                            <Button type="submit" disabled={Boolean(PnumberError) || !NumberConfirmed} className={styles["submit-button"]} onClick={handleInitSubmit} >送信</Button>
+                            <Button disabled={Boolean(PnumberError) || !NumberConfirmed} className={styles["submit-button"]} onClick={handleInitSubmit} >送信</Button>
                         </div>
                     </div>
                 )}
