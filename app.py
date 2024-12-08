@@ -7,6 +7,7 @@ import os
 from dotenv import load_dotenv
 from time import sleep
 
+from utils.misc import create_templates_dict_from_json
 from chat_environment.chat_environment import ChatRoom
 from chat_environment.process_data import send_front_chatroom,process_user_input,set_chatroom,participants_emotion,stop_comment
 
@@ -24,6 +25,11 @@ def initialize_setting():
     app_socket.start_background_task(set_chatroom, new_chatroom)
     return jsonify({"message": "データが正常に処理されました"}), 200
 
+# デフォルトでのセッティングをロードする
+@app.route('/api/load_templates', methods=["GET"])
+def load_templates():
+    templates = create_templates_dict_from_json("./data/templates")
+    return jsonify(templates)
 
 ## 全てのpathを処理してしまうので最後で
 @app.route("/")

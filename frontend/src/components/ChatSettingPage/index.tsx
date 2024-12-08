@@ -6,7 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Textarea from '@mui/joy/Textarea';
 import Divider from '@mui/material/Divider';
 
-
+import DefaultSetting from '../DefaultSetting';
 
 
 export type PersonDescription = {
@@ -149,6 +149,7 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
 
     return (
         <div className={styles["chat-settings-wrapper"]}>
+            <DefaultSetting />
             <div className={styles["form-wrapper"]}>
 
                 {PageIndex === 0 && (

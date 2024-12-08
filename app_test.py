@@ -6,6 +6,8 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 import os
 from dotenv import load_dotenv
+
+from utils.misc import create_templates_dict_from_json
 from chat_environment.chat_environment import ChatRoom
 from chat_environment.process_data import send_front_chatroom, process_user_input,set_chatroom,participants_emotion,stop_comment
 
@@ -27,6 +29,11 @@ def initialize_setting():
     new_chatroom = ChatRoom.create_chatroom()
     app_socket_test.start_background_task(set_chatroom, new_chatroom)
     return jsonify({"message": "データが正常に処理されました"}), 200
+
+@app_test.route('/api/load_templates', methods=["GET"])
+def load_templates():
+    templates = create_templates_dict_from_json("./data/templates")
+    return jsonify(templates)
 
 
 @app_socket_test.on('connect')
