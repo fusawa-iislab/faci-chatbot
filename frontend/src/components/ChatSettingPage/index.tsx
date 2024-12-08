@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles.module.css';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
@@ -47,8 +47,7 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
     const [InputGroup,setInputGroup] = useState<InputData>({username: '',title:"",description:"",participants:[]})
 
     const [NumberStr, setNumberStr] =useState<string>('');
-    var ParticipantNumber=0;
-    var PrevParticipantNumber=0;
+    const [ParticipantNumbers, setParticipantNumber] = useState<{prev:number,current:number}>({prev:0,current:0});
     const [PnumberError, setPnumberError] = useState<string | null>("自然数を入力してください");
     const [NumberConfirmed, setNumberConfirmed] = useState<boolean>(false);
 
@@ -82,20 +81,23 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
                 setNumberConfirmed(false);
                 return;
             }
-            ParticipantNumber=NumInput; 
         }
     };
 
     const handleNumberConfirm = () => {
-        if (PrevParticipantNumber>ParticipantNumber) {
-            setInputGroup(prevState => ({...prevState,participants: prevState.participants.slice(0,ParticipantNumber)}));
-        }
-        else if (PrevParticipantNumber<ParticipantNumber) {
-            setInputGroup(prevState => ({...prevState,participants: [...prevState.participants, ...Array(ParticipantNumber-PrevParticipantNumber).fill({ name: '', background: '', persona: '' })]}));
-        }
+        setParticipantNumber({prev:ParticipantNumbers.current,current:Number(NumberStr)});
         setNumberConfirmed(true);
-        PrevParticipantNumber=ParticipantNumber;
     };
+
+    useEffect(() => {
+        console.log(ParticipantNumbers);
+        if (ParticipantNumbers.current > ParticipantNumbers.prev) {
+            const newParticipants = Array.from({ length: ParticipantNumbers.current - ParticipantNumbers.prev }, () => ({ name: '', background: '', persona: '' }));
+            setInputGroup(prevState => ({ ...prevState, participants: [...prevState.participants, ...newParticipants] }));
+        } else if (ParticipantNumbers.current < ParticipantNumbers.prev) {
+            setInputGroup(prevState => ({ ...prevState, participants: prevState.participants.slice(0, ParticipantNumbers.current) }));
+        }
+    }, [ParticipantNumbers]);
 
     const handleParticipantChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
