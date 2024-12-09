@@ -75,8 +75,6 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
                     </div>
                 </div>
             </Popper>
-            {/* space for comment */}
-            <div style={{height:75,width:1}} ></div>
             <div className={styles["participant-without-comment"]} id={`participant-without-comment-${p.id}`}>
                 <div className={styles["participant-reactions"]}>
                     {raisedHand ? (

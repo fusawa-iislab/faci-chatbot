@@ -28,8 +28,8 @@ class ChatRoom:
         self.description=description
         self.chatlog: List[ChatData]=[]
         self.chatlog_str=""
-        self.summerylog=[]
-        self.context_vec=torch.tensor([[0]])
+        # self.summerylog=[]
+        # self.context_vec=torch.tensor([[0]])
         self.user=None
         self.participantbots:List[ParticipantBot]=[]
         self.persons:List[Person]=[]
@@ -58,8 +58,8 @@ class ChatRoom:
 
     def reset(self):
         self.chatlog = []
-        self.summerylog = []
-        self.context_vec = torch.tensor([[0]])
+        # self.summerylog = []
+        # self.context_vec = torch.tensor([[0]])
         self.user = None 
         self.participantbots = []
         self.persons = []
@@ -84,8 +84,8 @@ class ChatRoom:
         for person_data in data.get("personsdata", []):
             self.add_person(person_data["type"], person_data["args"])
         self.chatlog=[]
-        self.summerylog=[]
-        self.context_vec=torch.tensor(([0]))
+        # self.summerylog=[]
+        # self.context_vec=torch.tensor(([0]))
         if data.get("chatlog"):
             self.load_chatlog(data["chatlog"])
 

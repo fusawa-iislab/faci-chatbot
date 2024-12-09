@@ -19,10 +19,11 @@
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    width: 100%;
+    width: 600px;
     margin: 30px 0;
     padding: 5px;
     flex-wrap: wrap;
+    margin-top: 75px; /* 75px is the height of comment */
 }
 
 .participant {
@@ -31,12 +32,21 @@
     box-sizing: border-box;
 }
 
+.user-input-container {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+    width: fit-content;
+    align-items: flex-end;
+}
+
 .control-buttons {
     display: flex;
     flex-direction: row;
     margin: 10px 0;
     margin-left: auto;
     column-gap: 10px;
+    width: fit-content;
 }
 
 .control-buttons button {
@@ -44,12 +54,12 @@
     border-radius: 5px;
 }
 
-.ask-button.active{
+button.ask-button.active{
     background-color: rgb(25, 118, 210);
     color: white;
 }
 
-.stop-button{
+button.stop-button {
     color: rgb(210, 25, 25);
 }
 
