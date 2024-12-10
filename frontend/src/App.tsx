@@ -10,7 +10,7 @@ import Divider from '@mui/material/Divider'
 
 const App = ()=> {
 
-	const [SettingDone,setSettingDone] = useState<boolean>(false);
+	const [SettingDone,setSettingDone] = useState<boolean>(true);
 
 	return (
 	<Router>

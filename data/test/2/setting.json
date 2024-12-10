@@ -12,7 +12,6 @@
             "type": "ConvBot",
             "args": {
                 "name": "Alice",
-                "background": "Customer service representative",
                 "persona": "Friendly and helpful"
             }
         },
@@ -20,7 +19,6 @@
             "type": "ConvBot",
             "args": {
                 "name": "Bob",
-                "background": "Technical support engineer",
                 "persona": "Calm and knowledgeable"
             }
         },
@@ -28,7 +26,6 @@
             "type": "ConvBot",
             "args": {
                 "name": "Charlie",
-                "background": "Network specialist",
                 "persona": "Analytical and precise"
             }
         }

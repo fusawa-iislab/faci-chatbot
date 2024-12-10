@@ -7,15 +7,15 @@ import ParticipantBot from '../ParticipantBot';
 import ChatLog from '../ChatLog';
 import SocketTextArea from '../SocketTextArea';
 import useSocket from '../../hooks/useSocket';
-import { ChatData, Person,Participant } from '../../assets/structs';
+import { ChatData, Person} from '../../assets/CommonStructs';
 
 const ChatPage: React.FC = () => {
 
     const [inputText, setInputText] = useState(''); // inputTextの状態を管理
     const [ChatDatas, setChatDatas] = useState<ChatData[]>([]);
-    const [participants, setParticipants] = useState<Participant[]>([]);
+    const [participants, setParticipants] = useState<Person[]>([]);
     const [SelectedPersonID, setSelectedPersonID] = useState<number|null>(null);
-    const [User, setUser] = useState<Person>({name:"",id:-1});
+    const [User, setUser] = useState<Person>({name:"",id:-1,persona:""});
     const [AskForComment, setAskForComment] = useState<boolean>(false);
     const socket = useSocket();
 

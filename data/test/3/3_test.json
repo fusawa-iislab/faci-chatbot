@@ -12,7 +12,6 @@
         "type": "ParticipantBot",
         "args": {
           "name": "患者A",
-          "background": "治療中の薬物依存者",
           "persona": "不安を抱えているが回復を望んでいる"
         }
       },
@@ -20,7 +19,6 @@
         "type": "ParticipantBot",
         "args": {
           "name": "患者B",
-          "background": "薬物依存から回復しつつある患者",
           "persona": "前向きだが時折不安を感じる"
         }
       },
@@ -28,7 +26,6 @@
         "type": "ParticipantBot",
         "args": {
           "name": "患者C",
-          "background": "治療を始めたばかりの薬物依存者",
           "persona": "内向的でまだ信頼を築いている途中"
         }
       }

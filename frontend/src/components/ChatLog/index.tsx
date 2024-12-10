@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 import Button from '@mui/material/Button';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon  from '@mui/icons-material/ArrowDropUp';
-import { ChatData } from '../../assets/structs';
+import { ChatData } from '../../assets/CommonStructs';
 
 type ChatLogProps = {
     chatdatas?: Array<ChatData>;

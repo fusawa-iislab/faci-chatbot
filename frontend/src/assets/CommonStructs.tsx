@@ -7,12 +7,11 @@ export type ChatData = {
 
 export type Person = {
     name: string;
+    persona: string;
     id: number;
 
 }
 
-export type Participant = Person & {
-    persona: string;
-}
+export type PersonDescription = Omit<Person, 'id'>
 
 

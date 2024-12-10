@@ -20,7 +20,7 @@ def set_chatroom(chatroom: ChatRoom):
 # send chatroom-envrionment data to frontend
 def send_front_chatroom(socket: SocketIO, chatroom: ChatRoom):
     socket.emit("chatlog", [{"name": chatdata.person.name, "content": chatdata.content, "id": chatdata.id} for chatdata in chatroom.chatlog])
-    socket.emit("participants", [{"name": p.name, "persona": p.persona, "background": p.background, "id": p.person_id} for p in chatroom.participantbots])
+    socket.emit("participants", [{"name": p.name, "persona": p.persona,  "id": p.person_id} for p in chatroom.participantbots])
     if chatroom.user:
         socket.emit("user", {"name": chatroom.user.name, "id": chatroom.user.person_id})
 

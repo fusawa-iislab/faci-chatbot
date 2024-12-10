@@ -1,10 +1,10 @@
 import React from 'react';
 import ParticipantBot, { ParticipantBotProps } from './index';
 import { Meta } from '@storybook/react';
-import { Participant } from '../../assets/structs';
+import { Person } from '../../assets/CommonStructs';
 
 // サンプルデータ
-const participant: Participant = {
+const participant: Person = {
   id: 1,
   name: 'Alice',
   persona: 'Friendly',

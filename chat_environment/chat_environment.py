@@ -111,10 +111,9 @@ class ChatRoom:
         elif type == "ParticipantBot":
             if "name" not in args:
                 raise ValueError("Missing required argument: 'name'")
-            background = args.get("background", "")
             persona = args.get("persona", "")
             other_features = args.get("features", None)
-            participant = ParticipantBot(name=args["name"], background=background, persona=persona, other_features=other_features, chatroom=self)
+            participant = ParticipantBot(name=args["name"], persona=persona, other_features=other_features, chatroom=self)
             self.persons.append(participant)
             self.participantbots.append(participant)
         else:
@@ -170,9 +169,8 @@ class User(Person):
 class ParticipantBot(Person):
     emotions = ["happy", "sad", "angry", "surprised", "fearful", "neutral"]
     # emotions = ["happy", "sad", "angry", "surprised", "disgusted", "fearful", "neutral"]
-    def __init__(self, name, chatroom:ChatRoom, background: str="",persona:str="",other_features:Union[Dict,None]=None):
+    def __init__(self, name, chatroom:ChatRoom,persona:str="",other_features:Union[Dict,None]=None):
         super().__init__(name,chatroom)
-        self.background=background
         self.persona=persona
         self.other_features=other_features
         self.emotion="neutral"
@@ -186,7 +184,6 @@ class ParticipantBot(Person):
         return (
             f"あなたは{self.name}という名前のエージェントです。\n"
             f"エージェントの特徴:\n"
-            f"    背景: {self.background},\n"
             f"    属性: {self.persona}\n"
             f"    直前の感情: {self.emotion}\n"
             f"{other_features_str}"

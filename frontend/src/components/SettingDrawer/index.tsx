@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
-import { Person } from '../../assets/structs';
+import { Person } from '../../assets/CommonStructs';
 import styles from "./styles.module.css"
 
 

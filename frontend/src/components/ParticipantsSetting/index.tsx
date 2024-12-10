@@ -4,7 +4,9 @@ import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import Textarea from '@mui/joy/Textarea';
 import Button from '@mui/material/Button';
-import { PersonDescription,InputData } from '../ChatSettingPage';
+
+import {InputData } from '../ChatSettingPage';
+import {PersonDescription} from "../../assets/CommonStructs";
 
 
 type ParticipantsSettingParops = {

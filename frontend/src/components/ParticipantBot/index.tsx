@@ -4,13 +4,13 @@ import styles from './styles.module.css';
 import Popper from '@mui/material/Popper';
 
 import {Socket} from 'socket.io-client';
-import {Participant} from "../../assets/structs";
+import {Person} from "../../assets/CommonStructs";
 
 
 
 
 export type ParticipantBotProps = {
-    p: Participant;
+    p: Person;
     socket: Socket|null;
     selected?: boolean;
 }

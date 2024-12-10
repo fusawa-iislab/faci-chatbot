@@ -6,11 +6,12 @@ import InputLabel from '@mui/material/InputLabel';
 import Textarea from '@mui/joy/Textarea';
 import Divider from '@mui/material/Divider';
 
-import {Person,Participant} from "../../assets/structs";
+
+
+import {PersonDescription} from "../../assets/CommonStructs";
 import ParticipantsSetting from '../ParticipantsSetting';
 
 
-export type PersonDescription = Omit<Participant, 'id'>
 
 export type InputData = {
     username: string,
@@ -102,7 +103,6 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
         if (InputGroup.participants.length < PNumber) {
             const newParticipants = Array.from({ length: PNumber - InputGroup.participants.length }, () => ({
                 name: '',
-                background: '',
                 persona: '',
             }));
             setInputGroup(prevState => ({ ...prevState, participants: [...InputGroup.participants, ...newParticipants] }));
@@ -111,23 +111,6 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
             setInputGroup(prevState => ({ ...prevState, participants: InputGroup.participants.slice(0, PNumber) }));
         }
     }, [PNumber]);
-
-
-
-
-    // const handleParticipantChange = (
-    //     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    //     index: number,
-    //     field: keyof PersonDescription
-    // ) => {
-    //     const updatedParticipants = InputGroup.participants.map((participant, i) => {
-    //         if (i === index) {
-    //             return { ...participant, [field]: e.target.value };
-    //         }
-    //         return participant; 
-    //     });
-    //     setInputGroup(prevState => ({ ...prevState, participants: updatedParticipants }));
-    // };
 
     // useEffect(() => {
     //     const fetchData = async () => {
