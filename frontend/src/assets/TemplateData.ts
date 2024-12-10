@@ -1,16 +1,8 @@
-import { PersonDescription } from "./CommonStructs";
+import { SituationTemplate,PersonTemplate } from "./CommonStructs";
 
-export type SituationalTemplate = {
-    title: string;
-    content: {title: string, description: string};
-}
 
-export type Persontemplate = {
-    title: string;
-    content: PersonDescription;
-}
 
-export const SituationalTemplates: SituationalTemplate[] = [
+export const SituationTemplates: SituationTemplate[] = [
     {
         title: "薬物使用経験についての会話",
         content: {
@@ -20,7 +12,7 @@ export const SituationalTemplates: SituationalTemplate[] = [
     },
 ]
 
-export const PersonTemplates: Persontemplate[] = [
+export const PersonTemplates: PersonTemplate[] = [
     {
         title: "紋切り型の人",
         content: {
