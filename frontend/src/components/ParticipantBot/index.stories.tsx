@@ -8,7 +8,6 @@ const participant: Participant = {
   id: 1,
   name: 'Alice',
   persona: 'Friendly',
-  background: 'Software Engineer',
 };
 
 // Storybook メタデータ

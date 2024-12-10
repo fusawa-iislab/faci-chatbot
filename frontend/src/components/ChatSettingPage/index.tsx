@@ -6,15 +6,13 @@ import InputLabel from '@mui/material/InputLabel';
 import Textarea from '@mui/joy/Textarea';
 import Divider from '@mui/material/Divider';
 
+import {Person,Participant} from "../../assets/structs";
+import ParticipantsSetting from '../ParticipantsSetting';
 
 
-export type PersonDescription = {
-    name: string,
-    background: string,
-    persona: string,
-};
+export type PersonDescription = Omit<Participant, 'id'>
 
-type InputData = {
+export type InputData = {
     username: string,
     title: string,
     description: string,
@@ -59,8 +57,10 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
     const [PNumber, setPNumber] = useState<number>(0);
     const [PnumberError, setPnumberError] = useState<string | null>("自然数を入力してください");
 
+
     const [SituationsTemplates, setSituationsTemplates] = useState<SituationTemplate[]>([]);
     const [PersonsTemplates, setPersonsTemplates] = useState<PersonTemplate[]>([]);
+
 
     const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setInputGroup(prevState => ({ ...prevState, username: e.target.value }));
@@ -93,6 +93,7 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
                 return;
             }
             setPNumber(NumInput);
+            console.log(InputGroup)
             return;
         }
     };
@@ -114,35 +115,35 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
 
 
 
-    const handleParticipantChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-        index: number,
-        field: keyof PersonDescription
-    ) => {
-        const updatedParticipants = InputGroup.participants.map((participant, i) => {
-            if (i === index) {
-                return { ...participant, [field]: e.target.value };
-            }
-            return participant; 
-        });
-        setInputGroup(prevState => ({ ...prevState, participants: updatedParticipants }));
-    };
+    // const handleParticipantChange = (
+    //     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    //     index: number,
+    //     field: keyof PersonDescription
+    // ) => {
+    //     const updatedParticipants = InputGroup.participants.map((participant, i) => {
+    //         if (i === index) {
+    //             return { ...participant, [field]: e.target.value };
+    //         }
+    //         return participant; 
+    //     });
+    //     setInputGroup(prevState => ({ ...prevState, participants: updatedParticipants }));
+    // };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_PATH}/api/load_templates`);
-                const data = await response.json();
-                console.log(data);
-                setSituationsTemplates(data.situation);
-                setPersonsTemplates(data.person);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-        fetchData();
-        console.log('fetching data');
-    }, []);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(`${process.env.REACT_APP_BACKEND_PATH}/api/load_templates`);
+    //             const data = await response.json();
+    //             console.log(data);
+    //             setSituationsTemplates(data.situation);
+    //             setPersonsTemplates(data.person);
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //         }
+    //     };
+    //     fetchData();
+    //     console.log('fetching data');
+    // }, []);
 
     const handleInitSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -150,7 +151,7 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
             type: 'ParticipantBot',
             args: participant
         }));
-        const UserData: PersonData = { type: "User", args: { name: InputGroup.username, background:"", persona:"" }};
+        const UserData: PersonData = { type: "User", args: { name: InputGroup.username, persona:"" }};
         PersonsData.unshift(UserData);
         const data : SendData= {
              title: InputGroup.title, 
@@ -209,29 +210,10 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
                             </div>
                         </div>
                         <Divider />
-                        {PNumber!==0 && (
+                        {InputGroup.participants.length!==0 && (
                             <div>
-                                <div className={styles["participants-control"]}>
-
-                                </div>
                                 <div className={styles['participants-container']}>
-                                    {InputGroup.participants.map((participant,i)=>(
-                                        <div key={i} className={styles["participant-input-container"]}>
-                                            <p>{i+1}人目</p>
-                                            <div className={styles["input-group"]}>
-                                                <InputLabel htmlFor={`name-${i + 1}`}>名前:</InputLabel>
-                                                <Input type="text" value={participant.name} onChange={(e) => handleParticipantChange(e, i, 'name')} id={`name-${i + 1}`}/>
-                                            </div>
-                                            <div className={styles["input-group"]}>
-                                                <InputLabel htmlFor={`role-${i + 1}`}>背景:</InputLabel>
-                                                <Input type="text" value={participant.background} onChange={(e) => handleParticipantChange(e, i, 'background')} id={`role-${i + 1}`}/>
-                                            </div>
-                                            <div className={styles["input-group"]}>
-                                                <InputLabel htmlFor={`persona-${i + 1}`}>人格:</InputLabel>
-                                                <Input type="text" value={participant.persona} onChange={(e) => handleParticipantChange(e, i, 'persona')} id={`persona-${i + 1}`}/>
-                                            </div>
-                                        </div>
-                                    ))}
+                                    <ParticipantsSetting InputGroup={InputGroup} setInputGroup={setInputGroup}/>
                                 </div>
                             </div>
                         )}

@@ -43,7 +43,6 @@ export const DefaultPerson: React.FC<PersonTemplate> = (person) => {
             {isOpen && (
                 <div style={{paddingLeft:10,}}>
                     <p>名前:{person.content.name}</p>
-                    <p>背景:{person.content.background}</p>
                     <p>人格:{person.content.persona}</p>
                 </div>)}
         </div>

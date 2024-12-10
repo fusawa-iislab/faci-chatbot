@@ -1,0 +1,56 @@
+@import '../../assets/common/common.css';
+
+
+.participant-setting-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #fff7d8;
+    border: 3px solid #ffeec3;
+    border-radius: 15px;
+    width: 500px;
+}
+
+.participant-setting-inner {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 5px;
+    margin: 3px 0;
+}
+
+.input-group.column {
+    flex-direction: column;
+}
+
+.input-group label{
+    padding-right: 10px;
+    width: fit-content;
+}
+
+.input-group input {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+
+.input-group textarea {
+    margin: 0;
+    padding: 0;
+    width: 400px;
+}
+
+.participant-scroll {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    margin: 5px;
+}

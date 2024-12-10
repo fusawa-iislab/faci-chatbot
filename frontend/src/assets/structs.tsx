@@ -8,9 +8,11 @@ export type ChatData = {
 export type Person = {
     name: string;
     id: number;
+
 }
 
 export type Participant = Person & {
-    persona?: string;
-    background?: string;
+    persona: string;
 }
+
+
