@@ -112,21 +112,6 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
         }
     }, [PNumber]);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await fetch(`${process.env.REACT_APP_BACKEND_PATH}/api/load_templates`);
-    //             const data = await response.json();
-    //             console.log(data);
-    //             setSituationsTemplates(data.situation);
-    //             setPersonsTemplates(data.person);
-    //         } catch (error) {
-    //             console.error('Error fetching data:', error);
-    //         }
-    //     };
-    //     fetchData();
-    //     console.log('fetching data');
-    // }, []);
 
     const handleInitSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -141,6 +126,7 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
              description: InputGroup.description, 
              personsdata: PersonsData
         };
+        console.log(data); 
         
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_PATH}/api/init_setting`, {

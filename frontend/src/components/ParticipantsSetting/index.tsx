@@ -64,9 +64,6 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
         handleDefaultPersonChange(PIndex,SelectedDefaultPerson);
         },[SelectedDefaultPerson])
 
-    useEffect(()=>{
-        setInputField(InputGroup.participants[PIndex]);
-    },[InputGroup,PIndex,SelectedDefaultPerson])
 
     return (
         <div style={{display:"flex", flexDirection: "column", alignItems: "center" }}>
@@ -78,11 +75,11 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
                         <Input type="text" value={InputGroup.participants[PIndex].name} onChange={(e) => handleParticipantChange(e,PIndex, "name")} placeholder="名前" id={`name-${PIndex}`}/>
                     </div>
                     <div className={`${styles["input-group"]} ${styles["column"]}`}>
-                        <InputLabel htmlFor={`persona-${PIndex}`}>人格:</InputLabel>
+                        <InputLabel htmlFor={`persona-${PIndex}`}>性格:</InputLabel>
                         <Textarea value={InputGroup.participants[PIndex].persona} onChange={(e) => handleParticipantChange(e, PIndex, 'persona')} id={`persona-${PIndex}`} minRows={2} style={{marginBottom:10}}/>
                     </div>
                     <div>
-                        <Button onClick={handleOpenTemplateClick} className={styles["open-default-button"]} id={`open-default-${PIndex}`}>デフォルトを使う</Button>
+                        <Button onClick={handleOpenTemplateClick} className={styles["open-default-button"]} id={`open-default-${PIndex}`}>テンプレートを使う</Button>
                         <Popper open={OpenTemplate} anchorEl={document.querySelector(`#open-default-${PIndex}`)}
                                 placement={'bottom'} disablePortal={true}>
                             <DefaultPersonsSelector setSelectedDefaultPerson={setSelectedDefaultPerson} setOpenTemplate={setOpenTemplate}/>

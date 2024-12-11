@@ -22,7 +22,8 @@ app_socket = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 @app.route('/api/init_setting', methods=["POST"])
 def initialize_setting():
     new_chatroom = ChatRoom.create_chatroom()
-    app_socket.start_background_task(set_chatroom, new_chatroom)
+    data=request.get_json()
+    app_socket.start_background_task(set_chatroom, data, new_chatroom)
     return jsonify({"message": "データが正常に処理されました"}), 200
 
 # デフォルトでのセッティングをロードする

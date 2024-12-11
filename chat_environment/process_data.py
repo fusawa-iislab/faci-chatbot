@@ -11,8 +11,7 @@ from chat_environment.chat_environment import ChatRoom, ParticipantBot
 load_dotenv()
 
 # initialize chatroom setting from request
-def set_chatroom(chatroom: ChatRoom):
-    data=request.get_json()
+def set_chatroom(data:Union[list,dict],chatroom: ChatRoom):
     chatroom.init_setting_from_dict(data)
     send_front_chatroom(chatroom)
     return
