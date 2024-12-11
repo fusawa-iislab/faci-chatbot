@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
-import styles from './styles.module.css'
 import ChatPage from './components/ChatPage';
 import ChatSettingPage from './components/ChatSettingPage';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Divider from '@mui/material/Divider'
 
 
 

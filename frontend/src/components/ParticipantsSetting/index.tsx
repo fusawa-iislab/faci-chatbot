@@ -5,6 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Textarea from '@mui/joy/Textarea';
 import Button from '@mui/material/Button';
 import Popper from '@mui/material/Popper';
+import Divider from '@mui/material/Divider';
 
 import {InputData } from '../ChatSettingPage';
 import {PersonDescription, PersonTemplate} from "../../assets/CommonStructs";
@@ -108,8 +109,9 @@ export const DefaultPersonsSelector: React.FC<{setSelectedDefaultPerson:React.Di
                 <div onClick={()=>{
                     setSelectedDefaultPerson(i);
                     setOpenTemplate(false);
-                }}>
-                    <DefaultPersonOption {...person} key={i}/>
+                }} key={i}>
+                    <DefaultPersonOption {...person} />
+                    <Divider/>
                 </div>
             ))}
         </div>
