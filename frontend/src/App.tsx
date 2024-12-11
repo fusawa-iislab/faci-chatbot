@@ -13,19 +13,14 @@ const App = ()=> {
 	const [SettingDone,setSettingDone] = useState<boolean>(false);
 
 	return (
-	<Router>
-		<Routes>
-			<Route path="/" element={SettingDone?<Navigate to="/chatpage"/> : <Navigate to="/setting"/>}/>
-			<Route path="/chatpage" element={SettingDone?<ChatPage/> : <Navigate to="/setting"/>}/>
-			<Route path="/setting" element={!SettingDone?<ChatSettingPage SettingDone={SettingDone} setSettingDone={setSettingDone}/> : <Navigate to="/chatpage"/>}/>
-			<Route path="*" element={<div>404 Not Found</div>} />
-		</Routes>
-	</Router>
-	// <div className={styles["test-main"]}>
-	//   <ChatPage/>
-	//   <Divider/>
-	//   <ChatSettings SettingDone={SettingDone} setSettingDone={setSettingDone}/>
-	// </div>
+		<Router>
+			<Routes>
+				<Route path="/" element={SettingDone?<Navigate to="/chatpage"/> : <Navigate to="/setting"/>}/>
+				<Route path="/chatpage" element={<ChatPage/>} />
+				<Route path="/setting" element={<ChatSettingPage SettingDone={SettingDone} setSettingDone={setSettingDone}/>}/>
+				<Route path="*" element={<div>404 Not Found</div>} />
+			</Routes>
+		</Router>
 	);
 }
 

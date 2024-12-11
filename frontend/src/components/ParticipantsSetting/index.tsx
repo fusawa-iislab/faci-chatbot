@@ -24,7 +24,6 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
     const [OpenTemplate, setOpenTemplate] = useState<boolean>(false);
     const [SelectedDefaultPerson, setSelectedDefaultPerson] = useState<number|null>(null);
     
-    const [InputField, setInputField] = useState<PersonDescription>({name:"",persona:""});
 
     const handleOpenTemplateClick = (e:React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
