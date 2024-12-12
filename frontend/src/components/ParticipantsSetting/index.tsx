@@ -78,7 +78,7 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
                         <InputLabel htmlFor={`persona-${PIndex}`}>性格:</InputLabel>
                         <Textarea value={InputGroup.participants[PIndex].persona} onChange={(e) => handleParticipantChange(e, PIndex, 'persona')} id={`persona-${PIndex}`} minRows={2} style={{marginBottom:10}}/>
                     </div>
-                    <div>
+                    <div style={{display: "flex", flexDirection: "column", width: "100%", alignItems: "flex-end"}}>
                         <Button onClick={handleOpenTemplateClick} className={styles["open-default-button"]} id={`open-default-${PIndex}`}>テンプレートを使う</Button>
                         <Popper open={OpenTemplate} anchorEl={document.querySelector(`#open-default-${PIndex}`)}
                                 placement={'bottom'} disablePortal={true}>

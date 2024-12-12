@@ -1,4 +1,4 @@
-import torch
+# import torch
 from typing import Dict,Union,List
 import random
 from time import sleep
@@ -46,14 +46,14 @@ class ChatRoom:
         return new_chatroom
     
     @classmethod
-    def find_chatroom(cls, chatroom_id: int):
+    def find_chatroom(cls, chatroom_id: int) -> 'ChatRoom':
         chatroom = cls._chatrooms_dict.get(chatroom_id)
         if chatroom is None:
             raise ValueError(f"Chatroom with id {chatroom_id} not found")
         return chatroom
     
     @classmethod
-    def current_chatroom(self):
+    def current_chatroom(self)->'ChatRoom':
         return ChatRoom.find_chatroom(ChatRoom._current_chatroom_id)
 
     def reset(self):

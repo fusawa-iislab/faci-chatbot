@@ -59,10 +59,6 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
     const [PnumberError, setPnumberError] = useState<string | null>("自然数を入力してください");
 
 
-    const [SituationsTemplates, setSituationsTemplates] = useState<SituationTemplate[]>([]);
-    const [PersonsTemplates, setPersonsTemplates] = useState<PersonTemplate[]>([]);
-
-
     const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setInputGroup(prevState => ({ ...prevState, username: e.target.value }));
     }
@@ -94,7 +90,6 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
                 return;
             }
             setPNumber(NumInput);
-            console.log(InputGroup)
             return;
         }
     };
@@ -126,7 +121,6 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
              description: InputGroup.description, 
              personsdata: PersonsData
         };
-        console.log(data); 
         
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_PATH}/api/init_setting`, {
@@ -139,7 +133,8 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
     
             if (response.ok) {
                 console.log('送信が成功しました');
-                setSettingDone(true)
+                setSettingDone(true);
+                window.location.assign('/chatpage');
             } else {
                 console.error('送信に失敗しました');
             }

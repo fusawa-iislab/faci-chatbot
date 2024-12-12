@@ -28,7 +28,9 @@ def home():
 def initialize_setting():
     new_chatroom = ChatRoom.create_chatroom()
     data=request.get_json()
-    app_socket_test.start_background_task(set_chatroom, data, new_chatroom)
+    # app_socket_test.start_background_task(set_chatroom, data, new_chatroom)
+    set_chatroom(data,new_chatroom)
+    send_front_chatroom(app_socket_test, new_chatroom)
     return jsonify({"message": "データが正常に処理されました"}), 200
 
 @app_test.route('/api/load_templates', methods=["GET"])

@@ -1,4 +1,3 @@
-from flask import request
 from flask_socketio import SocketIO
 from threading import Thread
 from typing import Union
@@ -13,7 +12,6 @@ load_dotenv()
 # initialize chatroom setting from request
 def set_chatroom(data:Union[list,dict],chatroom: ChatRoom):
     chatroom.init_setting_from_dict(data)
-    send_front_chatroom(chatroom)
     return
 
 # send chatroom-envrionment data to frontend
@@ -22,6 +20,7 @@ def send_front_chatroom(socket: SocketIO, chatroom: ChatRoom):
     socket.emit("participants", [{"name": p.name, "persona": p.persona,  "id": p.person_id} for p in chatroom.participantbots])
     if chatroom.user:
         socket.emit("user", {"name": chatroom.user.name, "id": chatroom.user.person_id})
+    return
 
 def stop_comment(chatroom: ChatRoom):
     chatroom.STOP_COMMENT=True
@@ -37,7 +36,7 @@ def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom)->None:
         return
     if not chatroom.user:
         socket.emit("log", {'content': '入力するuserがいません'})
-        return 
+        return
     
     input_text = data['text']
 
