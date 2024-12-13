@@ -33,5 +33,12 @@ export const PersonTemplates: PersonTemplate[] = [
             name: "C",
             persona: "毎回セッションに参加してくれるがあまり乗り気ではない。薬物使用についてはあまり話したがらない"
         }
+    },
+    {
+        title: "薬物使用経験者",
+        content: {
+            name: "test",
+            persona: "過去に薬物使用の経験がある。現在は薬物を使用していないが、薬物使用についての話には参加し、周りの人の役に立つような話をする"
+        }
     }
 ]

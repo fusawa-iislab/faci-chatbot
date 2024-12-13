@@ -11,21 +11,21 @@
     {
       "type": "ParticipantBot",
       "args": {
-        "name": "患者A",
+        "name": "A",
         "persona": "不安を抱えているが回復を望んでいる"
       }
     },
     {
       "type": "ParticipantBot",
       "args": {
-        "name": "患者B",
+        "name": "B",
         "persona": "前向きだが時折不安を感じる"
       }
     },
     {
       "type": "ParticipantBot",
       "args": {
-        "name": "患者C",
+        "name": "C",
         "persona": "内向的でまだ信頼を築いている途中"
       }
     }
