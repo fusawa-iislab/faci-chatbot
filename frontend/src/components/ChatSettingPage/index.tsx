@@ -36,15 +36,6 @@ type ChatSettingPageProp = {
     setSettingDone: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export type SituationTemplate = {
-    title: string;
-    content: {title: string, description: string};
-}
-
-export type PersonTemplate = {
-    title: string;
-    content: PersonDescription;
-}
 
 const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
     SettingDone,

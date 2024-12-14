@@ -81,7 +81,7 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
                     <div style={{display: "flex", flexDirection: "column", width: "100%", alignItems: "flex-end"}}>
                         <Button onClick={handleOpenTemplateClick} className={styles["open-default-button"]} id={`open-default-${PIndex}`}>テンプレートを使う</Button>
                         <Popper open={OpenTemplate} anchorEl={document.querySelector(`#open-default-${PIndex}`)}
-                                placement={'bottom'} disablePortal={true}>
+                                placement={'bottom'} disablePortal={true} style={{zIndex:1}}>
                             <DefaultPersonsSelector setSelectedDefaultPerson={setSelectedDefaultPerson} setOpenTemplate={setOpenTemplate}/>
                         </Popper>
                     </div>

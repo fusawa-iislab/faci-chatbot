@@ -6,7 +6,6 @@ from time import sleep
 
 from chat_environment.chat_environment import ChatRoom, ParticipantBot
 
-
 load_dotenv()
 
 # initialize chatroom setting from request
@@ -31,20 +30,18 @@ def stop_comment(chatroom: ChatRoom):
 
 # when user input textdata
 def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom)->None:
-    if ('text' not in data) or ("selectedID" not in data) or ("askForComment" not in data):
+    data_elements = ["text", "selectedID", "askForComment"]
+    if not all([e in data for e in data_elements]):
         socket.emit("log", {'content': '入力が正しくありません'})
         return
     if not chatroom.user:
         socket.emit("log", {'content': '入力するuserがいません'})
         return
-    
     input_text = data['text']
-
     if data["askForComment"]:
         chatroom.add_chatdata(chatroom.user.person_id, input_text)
         socket.emit("chatdata", {"name": chatroom.user.name, "content": input_text})
         participants_raise_hands_to_speak(socket, chatroom)
-        return
     else:
         for p in chatroom.participantbots:
             if socket:

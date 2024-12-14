@@ -1,4 +1,3 @@
-# import torch
 from typing import Dict,Union,List
 import random
 from time import sleep
@@ -29,7 +28,6 @@ class ChatRoom:
         self.chatlog: List[ChatData]=[]
         self.chatlog_str=""
         # self.summerylog=[]
-        # self.context_vec=torch.tensor([[0]])
         self.user=None
         self.participantbots:List[ParticipantBot]=[]
         self.persons:List[Person]=[]
@@ -59,7 +57,6 @@ class ChatRoom:
     def reset(self):
         self.chatlog = []
         # self.summerylog = []
-        # self.context_vec = torch.tensor([[0]])
         self.user = None 
         self.participantbots = []
         self.persons = []
@@ -85,7 +82,6 @@ class ChatRoom:
             self.add_person(person_data["type"], person_data["args"])
         self.chatlog=[]
         # self.summerylog=[]
-        # self.context_vec=torch.tensor(([0]))
         if data.get("chatlog"):
             self.load_chatlog(data["chatlog"])
 
@@ -94,11 +90,13 @@ class ChatRoom:
             self.add_chatdata(**d)
 
     def add_person(self,type:str,args:dict):
+        # Personの時
         if type == "Person":
             if "name" not in args:
                 raise ValueError("Missing required argument: 'name'")
             person = Person(name=args["name"],chatroom=self)
             self.persons.append(person)
+        # Userの時
         elif type == "User":
             if "name" not in args:
                 raise ValueError("Missing required argument: 'name'")
@@ -108,6 +106,7 @@ class ChatRoom:
                 self.user=user
             else:
                 raise ValueError("User is aliready defined")
+        # ParticipantBotの時
         elif type == "ParticipantBot":
             if "name" not in args:
                 raise ValueError("Missing required argument: 'name'")
