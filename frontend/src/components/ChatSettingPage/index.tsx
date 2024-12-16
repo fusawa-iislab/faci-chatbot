@@ -127,6 +127,10 @@ const ChatSettingPage: React.FC= () => {
         }
     };
 
+    useEffect(() => {
+        setInputGroup(prevState => ({ ...prevState, title: "薬物依存治療グループセラピー", description: "薬物依存症の人が集まってファシリテータのもと、薬物の使用経験について話し合います。"}));
+    },[])
+
     return (
         <div className={styles["chat-settings-wrapper"]}>
             <div className={styles["form-wrapper"]}>
@@ -140,7 +144,7 @@ const ChatSettingPage: React.FC= () => {
                             <Divider/>
                             <div className={styles["input-group"]+" "+styles["column"]}>
                                 {/* <InputLabel htmlFor="title">議題</InputLabel> */}
-                                <InputLabel htmlFor="title">議題:</InputLabel>
+                                <InputLabel htmlFor="title">タイトル:</InputLabel>
                                 <Textarea required placeholder="何か議題を設定してください" id="title" minRows={2} className={styles["title"]}  onChange={handleTitleChange} value={InputGroup.title} />
                             </div>
                             <div className={styles["input-group"]+" "+styles["column"]}>
