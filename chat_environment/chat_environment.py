@@ -167,12 +167,13 @@ class User(Person):
 
 class ParticipantBot(Person):
     emotions = ["happy", "sad", "angry", "surprised", "fearful", "neutral"]
-    # emotions = ["happy", "sad", "angry", "surprised", "disgusted", "fearful", "neutral"]
     def __init__(self, name, chatroom:ChatRoom,persona:str="",other_features:Union[Dict,None]=None):
         super().__init__(name,chatroom)
         self.persona=persona
         self.other_features=other_features
         self.emotion="neutral"
+        self.wordcount=0
+        self.emotions=[]
 
     def personal_data_to_str(self):
         other_features_str = ""
@@ -244,6 +245,7 @@ class ParticipantBot(Person):
         
         user, system = self.create_input_prompt()
         response = openai_streaming(user, system, temperature=1, max_tokens=1000, socket=socket,socket_name=socket_name)
+        self.wordcount += len(response)
         return response
     
     def generate_emotion(self):
@@ -263,6 +265,7 @@ class ParticipantBot(Person):
         emotion= get_gpt(user, system, temperature=0.5, max_tokens=100)
         # emotion=random.choice(self.emotions)
         self.emotion=emotion
+        self.emotions.append(emotion)
         return
 
 
