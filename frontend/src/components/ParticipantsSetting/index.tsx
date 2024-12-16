@@ -88,9 +88,9 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
                 </div>
             </div>
             <div className={styles["participant-scroll"]}>
-                <Button onClick={() => setPIndex(PIndex-1)} disabled={PIndex <= 0}>前の人</Button>
+                <Button onClick={() => {setPIndex(PIndex-1); setSelectedDefaultPerson(null)}} disabled={PIndex <= 0}>前の人</Button>
                 <span>{PIndex+1}/{InputGroup.participants.length}</span>
-                <Button onClick={() => setPIndex(PIndex+1)} disabled={PIndex >= InputGroup.participants.length-1}>次の人</Button>
+                <Button onClick={() => {setPIndex(PIndex+1); setSelectedDefaultPerson(null)}} disabled={PIndex >= InputGroup.participants.length-1}>次の人</Button>
             </div>
         </div>
     )
