@@ -34,6 +34,13 @@ def load_templates():
     templates = create_templates_dict_from_json("./data/templates")
     return jsonify(templates)
 
+@app.route('/api/review', methods=["GET"])
+def send_review():
+    cur_chatroom=ChatRoom.current_chatroom().prepare_review_data()
+    send_data=[{"name": person.name, "word_count": person.word_count, "speak_count":person.speak_count} for person in cur_chatroom.participantbots]
+    return jsonify(send_data)
+
+
 ## 全てのpathを処理してしまうので最後で
 @app.route("/")
 @app.route("/<path:path>")

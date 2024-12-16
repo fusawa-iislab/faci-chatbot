@@ -4,7 +4,7 @@ from typing import Union
 from dotenv import load_dotenv
 from time import sleep
 
-from chat_environment.chat_environment import ChatRoom, ParticipantBot
+from chat_environment.chat_environment import ChatRoom, ChatData, ParticipantBot
 
 load_dotenv()
 
@@ -86,4 +86,12 @@ def participants_raise_hands_to_speak(socket: Union[SocketIO,None], chatroom: Ch
         thread.start()
     for thread in threads:
         thread.join()
+    return
+
+def prepare_review_data(chatroom: ChatRoom):
+    chatdatas:ChatData=chatroom.chatlog
+    for chatdata in chatdatas:
+        person=chatroom.find_person(chatdata.person_id)
+        person.word_count+=len(chatdata.content)
+        person.speak_count+=1
     return

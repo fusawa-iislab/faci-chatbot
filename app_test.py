@@ -38,6 +38,12 @@ def load_templates():
     templates = create_templates_dict_from_json("./data/templates")
     return jsonify(templates)
 
+@app_test.route('/api/review', methods=["GET"])
+def send_review():
+    cur_chatroom=ChatRoom.current_chatroom().prepare_review_data()
+    send_data=[{"name": p.name, "word_count": p.word_count, "speak_count":p.speak_count} for p in cur_chatroom.participantbots]
+    return jsonify(send_data)
+
 
 @app_socket_test.on('connect')
 def on_connect():

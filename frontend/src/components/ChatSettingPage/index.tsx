@@ -31,16 +31,10 @@ type SendData = {
     personsdata: PersonData[],
 }
 
-type ChatSettingPageProp = {
-    SettingDone: boolean,
-    setSettingDone: React.Dispatch<React.SetStateAction<boolean>>,
-}
 
 
-const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
-    SettingDone,
-    setSettingDone,
-}) => {
+
+const ChatSettingPage: React.FC= () => {
 
     const [PageIndex, setPageIndex] = useState<number>(0);
     const [InputGroup,setInputGroup] = useState<InputData>({username: '',title:"",description:"",participants:[]})
@@ -124,7 +118,6 @@ const ChatSettingPage: React.FC<ChatSettingPageProp> = ({
     
             if (response.ok) {
                 console.log('送信が成功しました');
-                setSettingDone(true);
                 window.location.assign('/chatpage');
             } else {
                 console.error('送信に失敗しました');

@@ -2,8 +2,8 @@
 - setting
     - chatlogの設定をinteractiveに
     - デフォルトセットを使えるように(使いやすく)
-        - バックとの接続完了
         - うまく見えるようにする
+    - participantの属性の追加
 - chatpage
     - participantbotの見た目改善
     - chatlogは見えてた方がいいのではないか by koji

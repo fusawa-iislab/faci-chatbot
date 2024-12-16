@@ -156,6 +156,8 @@ class Person:
         Person._id_counter+=1
         self.person_id=Person._id_counter
         self.chatroom:ChatRoom=chatroom
+        self.word_count=0
+        self.speak_count=0
 
     def append_comment(self, comment):
         self.comments.append(comment)
@@ -172,7 +174,6 @@ class ParticipantBot(Person):
         self.persona=persona
         self.other_features=other_features
         self.emotion="neutral"
-        self.wordcount=0
         self.emotions=[]
 
     def personal_data_to_str(self):
@@ -245,7 +246,6 @@ class ParticipantBot(Person):
         
         user, system = self.create_input_prompt()
         response = openai_streaming(user, system, temperature=1, max_tokens=1000, socket=socket,socket_name=socket_name)
-        self.wordcount += len(response)
         return response
     
     def generate_emotion(self):
