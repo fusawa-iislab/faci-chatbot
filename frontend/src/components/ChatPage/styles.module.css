@@ -70,3 +70,8 @@ button.stop-button {
     align-items: center;
 }
 
+button.review-button {
+    color: white;
+    background-color: rgb(25, 118, 210);
+}
+

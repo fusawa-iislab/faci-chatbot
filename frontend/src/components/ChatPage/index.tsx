@@ -127,6 +127,9 @@ const ChatPage: React.FC = () => {
             <div className={styles["chatlog-wrapper"]}>
                 <ChatLog chatdatas={ChatDatas}/>
             </div>
+            <div style={{width:"100%", display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
+                <Button onClick={() => window.location.assign('/review')} className={styles["review-button"]}>Review</Button>
+            </div>
         </div>
     )
 }
