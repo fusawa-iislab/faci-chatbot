@@ -89,6 +89,9 @@ def participants_raise_hands_to_speak(socket: Union[SocketIO,None], chatroom: Ch
     return
 
 def prepare_review_data(chatroom: ChatRoom):
+    for person in chatroom.persons:
+        person.word_count=0
+        person.speak_count=0
     chatdatas:ChatData=chatroom.chatlog
     for chatdata in chatdatas:
         person=chatroom.find_person(chatdata.person_id)

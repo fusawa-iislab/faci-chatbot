@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Plot from 'react-plotly.js';
+import styles from './styles.module.css';
 
 type ReviewPageProps = {
 
@@ -11,9 +12,13 @@ type ParticipantsReviewData = {
     speak_count: number;
 }
 
+type PlotData = {
+    data: any[];
+    layout: object;
+}
 
 const ReviewPage: React.FC<ReviewPageProps> = () => {
-    const [PlotData, setPlotData] = useState<any[]>([]);
+    const [PlotDatas, setPlotDatas] = useState<PlotData[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,29 +33,51 @@ const ReviewPage: React.FC<ReviewPageProps> = () => {
             const WordCounts:number[]= data.map((d)=>d.word_count);
             const SpeakCounts:number[]= data.map((d)=>d.speak_count);
             
-            const WordCountPlot = {
-                x: Names,
-                y: WordCounts,
-                type: 'bar',
-                name: 'Word Count'
+            const WordCountPlot : PlotData = {
+                data: [{
+                    x: Names,
+                    y: WordCounts,
+                    type: 'bar',
+                    name: 'Word Count'
+                }],
+                layout: { 
+                    title: '文字数',
+                    xaxis: {title: '名前'},
+                    yaxis: {title: '文字数'},
+                    autosize: true,
+                }
             }
 
-            const SpeakCountPlot = {
-                x: Names,
-                y: SpeakCounts,
-                type: 'bar',
-                name: 'Speak Count'
+            const SpeakCountPlot: PlotData = {
+                data: [{
+                    x: Names,
+                    y: SpeakCounts,
+                    type: 'bar',
+                    name: 'Speak Count'
+                }],
+                layout: { 
+                    title: '発言回数',
+                    xaxis: {title: '名前'},
+                    yaxis: {title: '発言回数'},
+                    autosize: true,
+                }
             }
 
-            setPlotData((prevPlotData)=>{
-                return [WordCountPlot,SpeakCountPlot]
+            setPlotDatas((prevPlotDatas)=>{
+                return [...prevPlotDatas, WordCountPlot, SpeakCountPlot];
             })
         });
     }, []);
 
     return (
-        <div>
-            <Plot data={PlotData} layout={{ title: 'Participants Review' }}></Plot>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
+            <div className={styles["plot-area-container"]}>
+                {PlotDatas.map((PlotData,index)=>
+                    <div  key={index} className={styles["plot-area-item"]}>
+                        <Plot data={PlotData.data} layout={PlotData.layout} style={{width: '100%'}}></Plot>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

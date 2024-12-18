@@ -1,0 +1,14 @@
+@import '../../assets/common/common.css';
+
+.plot-area-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 80vw;
+}
+
+.plot-area-item {
+    width: 100%;
+    padding: 10px;
+}
+
