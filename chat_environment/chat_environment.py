@@ -31,6 +31,7 @@ class ChatRoom:
         self.user=None
         self.participantbots:List[ParticipantBot]=[]
         self.persons:List[Person]=[]
+        self.limit_time = {"munite": 0, "second": 0}
         ChatRoom._id_counter+=1
         self.id=ChatRoom._id_counter
         ChatRoom._chatrooms_dict[self.id]=self
@@ -61,6 +62,8 @@ class ChatRoom:
         self.participantbots = []
         self.persons = []
         self.chatlog_str=""
+        self.limit_time = None
+        self.STOP_COMMENT=False
 
 
     def find_person(self, person_id: int):
@@ -82,6 +85,10 @@ class ChatRoom:
             self.add_person(person_data["type"], person_data["args"])
         self.chatlog=[]
         # self.summerylog=[]
+        if data.get("time"):
+            munite = data["time"]["munite"]
+            second = data["time"]["second"]
+            self.limit_time = {"munite": munite, "second": second}
         if data.get("chatlog"):
             self.load_chatlog(data["chatlog"])
 

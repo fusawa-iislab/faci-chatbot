@@ -45,6 +45,7 @@ const ReviewPage: React.FC<ReviewPageProps> = () => {
                     xaxis: {title: '名前'},
                     yaxis: {title: '文字数'},
                     autosize: true,
+                    responsive: true,
                 }
             }
 
@@ -57,9 +58,13 @@ const ReviewPage: React.FC<ReviewPageProps> = () => {
                 }],
                 layout: { 
                     title: '発言回数',
-                    xaxis: {title: '名前'},
+                    xaxis: {
+                        title: '名前',
+                        range: [-0.5, Names.length-0.5],
+                    },
                     yaxis: {title: '発言回数'},
                     autosize: true,
+                    responsive: true,
                 }
             }
 
@@ -74,7 +79,7 @@ const ReviewPage: React.FC<ReviewPageProps> = () => {
             <div className={styles["plot-area-container"]}>
                 {PlotDatas.map((PlotData,index)=>
                     <div  key={index} className={styles["plot-area-item"]}>
-                        <Plot data={PlotData.data} layout={PlotData.layout} style={{width: '100%'}}></Plot>
+                        <Plot data={PlotData.data} layout={PlotData.layout} style={{width: "100%", height: "100%"}}></Plot>
                     </div>
                 )}
             </div>

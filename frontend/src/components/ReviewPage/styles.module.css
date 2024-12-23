@@ -2,13 +2,16 @@
 
 .plot-area-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 50% 50%;
     gap: 10px;
-    width: 80vw;
+    max-width: 1000px;
+    min-width: 800px;
 }
 
 .plot-area-item {
-    width: 100%;
-    padding: 10px;
+    width: 500px;
+    height: 400px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
 }
 

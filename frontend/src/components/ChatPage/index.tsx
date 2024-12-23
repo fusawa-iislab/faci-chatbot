@@ -6,8 +6,10 @@ import Button from '@mui/material/Button';
 import ParticipantBot from '../ParticipantBot';
 import ChatLog from '../ChatLog';
 import SocketTextArea from '../SocketTextArea';
+import CountUpTimer from '../CountUpTimer';
 import useSocket from '../../hooks/useSocket';
 import { ChatData, Person} from '../../assets/CommonStructs';
+
 
 const ChatPage: React.FC = () => {
 
@@ -37,8 +39,8 @@ const ChatPage: React.FC = () => {
             socket.on('chatdata', (data) => {
                 setChatDatas((prevChatDatas) => [...prevChatDatas, data]);
             });
-    
 
+    
             return () => {
                 socket.off('chatdata');
                 socket.off('log');
@@ -99,6 +101,7 @@ const ChatPage: React.FC = () => {
     return (
         <div className={styles["chatpage-container"]}>
             <div className={styles["chatpage-main"]}>
+            <CountUpTimer />
                 <div className={styles["participants-container"]}>
                     {participants.map((p, index) =>
                         <div className={`${styles["participant"]}`} onClick={() => handleSelectPersonID(p.id)} key={index}>
@@ -123,12 +126,12 @@ const ChatPage: React.FC = () => {
                         <p>全体に話します。</p>
                     )}
                 </div>
+                <div style={{width:"100%", display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
+                    <Button onClick={() => window.location.assign('/review')} className={styles["review-button"]}>Review</Button>
+                </div>
             </div>
             <div className={styles["chatlog-wrapper"]}>
                 <ChatLog chatdatas={ChatDatas}/>
-            </div>
-            <div style={{width:"100%", display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
-                <Button onClick={() => window.location.assign('/review')} className={styles["review-button"]}>Review</Button>
             </div>
         </div>
     )

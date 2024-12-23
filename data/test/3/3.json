@@ -1,6 +1,10 @@
 {
   "title": "薬物依存治療グループセラピー",
   "description": "薬物依存治療を受けている方々のためのサポート環境です。",
+  "time": {
+    "munite": 60,
+    "second": 0
+  },
   "personsdata": [
     {
       "type": "User",
