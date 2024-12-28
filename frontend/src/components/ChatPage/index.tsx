@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'; 
 import styles from './styles.module.css';
 import Button from '@mui/material/Button';
-// import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon  from '@mui/icons-material/ArrowDropUp';
 
 import ParticipantBot from '../ParticipantBot';
 import ChatLog from '../ChatLog';
@@ -19,6 +20,7 @@ const ChatPage: React.FC = () => {
     const [SelectedPersonID, setSelectedPersonID] = useState<number|null>(null);
     const [User, setUser] = useState<Person>({name:"",id:-1,persona:""});
     const [AskForComment, setAskForComment] = useState<boolean>(false);
+    const [ShowChatlog, setShowChatlog] = useState<boolean>(false);
     const socket = useSocket();
 
     useEffect(() => {
@@ -98,6 +100,10 @@ const ChatPage: React.FC = () => {
 
 //-----------------------------------------------------------------------------------------------//
 
+    const handleShowChatlog = () => {
+        setShowChatlog(!ShowChatlog);
+    }
+
     return (
         <div className={styles["chatpage-container"]}>
             <div className={styles["chatpage-main"]}>
@@ -131,7 +137,15 @@ const ChatPage: React.FC = () => {
                 </div>
             </div>
             <div className={styles["chatlog-wrapper"]}>
-                <ChatLog chatdatas={ChatDatas}/>
+                <Button onClick={handleShowChatlog} className={styles["toggle-button"]}>
+                    {ShowChatlog ? 
+                        <ArrowDropUpIcon className={styles["toggle-button-icon"]}/> :
+                        <ArrowDropDownIcon className={styles["toggle-button-icon"]}/>
+                    }
+                </Button>
+                {ShowChatlog &&
+                    <ChatLog chatdatas={ChatDatas} />
+                }
             </div>
         </div>
     )

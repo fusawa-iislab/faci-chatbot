@@ -64,10 +64,31 @@ button.stop-button {
 }
 
 
+.toggle-button {
+    background-color: transparent;
+    border: 0;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    margin: 0;
+    margin-right: auto;
+}
+
+.toggle-button path {
+    fill: rgb(120, 120, 120);
+}
+
+.toggle-button-icon{
+    width: 100%;
+    height: 100%;
+}
+
+
 .chatlog-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 600px;
 }
 
 button.review-button {

@@ -16,5 +16,9 @@
 
     - low-priority participantbotのスクロールバー
 - review
-    - そもそも作成から
-    - ああああ
+    - plotの色変えたい
+    - 一人一人の感想
+    - chatlog
+
+- all
+    - 写真とかありだったり？
