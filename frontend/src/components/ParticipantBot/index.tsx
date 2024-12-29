@@ -5,7 +5,7 @@ import Popper from '@mui/material/Popper';
 
 import {Socket} from 'socket.io-client';
 import {Person} from "../../assets/CommonStructs";
-import ParticipantTooltip from '../ParticipantTooltip';
+// import ParticipantTooltip from '../ParticipantTooltip';
 
 
 
@@ -86,12 +86,12 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
                     }
                     <div className={styles["emotion"]}>{emotion||"🙂"}</div> 
                 </div>
-                <ParticipantTooltip person={p}>
+                {/* <ParticipantTooltip person={p}> */}
                     <div className={`${styles["participant-info"]} ${selected ? styles["selected"]:""}`}>
                         <img src={Silhoutte} className={styles["siloutte-image"]}/>
                         <p className={styles["participant-name"]}>{p.name}</p>
                     </div>
-                </ParticipantTooltip>
+                {/* </ParticipantTooltip> */}
             </div>
         </div>
     );
