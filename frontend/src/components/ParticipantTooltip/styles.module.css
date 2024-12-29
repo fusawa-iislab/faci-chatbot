@@ -1,0 +1,21 @@
+@import '../../assets/common/common.css';
+
+.tooltip-wrapper {
+    background-color: #f5f5f9;
+    width: 200px;
+    border: 1px solid #777;
+    border-radius: 5px;
+    z-index: 2;
+    /* color: black; */
+    padding: 5px;
+}
+
+[role="tooltip"] {
+    background-color: transparent;
+}
+
+[class=MuiTooltip-tooltip] {
+    background-color: transparent;
+    padding: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
