@@ -107,7 +107,10 @@ const ChatPage: React.FC = () => {
     return (
         <div className={styles["chatpage-container"]}>
             <div className={styles["chatpage-main"]}>
-            <CountUpTimer />
+                <div style={{display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center"}}>
+                    <h1>Chat Page</h1>
+                    <CountUpTimer/>
+                </div>
                 <div className={styles["participants-container"]}>
                     {participants.map((p, index) =>
                         <div className={`${styles["participant"]}`} onClick={() => handleSelectPersonID(p.id)} key={index}>

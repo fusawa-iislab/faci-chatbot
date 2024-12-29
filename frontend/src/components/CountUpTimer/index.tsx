@@ -18,7 +18,7 @@ const CountUpTimer = () => {
 
   return (
     <div>
-      <p>{formatTime(timeElapsed)}</p>
+      <p style={{fontSize:24}}>{formatTime(timeElapsed)}</p>
     </div>
   );
 };

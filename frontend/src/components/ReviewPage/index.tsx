@@ -41,8 +41,10 @@ const ReviewPage: React.FC<ReviewPageProps> = () => {
                 <h3>Chat Log</h3>
                 <ChatLog chatdatas={ReviewPageDatas.chatdatas}/>
             </div>
-            
-            <DataPlots/>
+            <div style={{display:"flex",flexDirection:"column",alignItems:"center",width: "fit-content"}}>
+                <h3 style={{width: "100%", marginLeft: "auto"}}>Data Plots</h3>
+                <DataPlots/>
+            </div>
         </div>
     )
 }
