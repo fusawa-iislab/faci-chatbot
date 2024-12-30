@@ -125,10 +125,12 @@ class ChatRoom:
         else:
             raise ValueError(f"Unknown person type: {type}")
         
-    def add_chatdata(self,person_id:int,content:str):
-        cd=ChatData(person_id,content,self)
+    def add_chatdata(self,person_id:int,content:str,status:str="SUCCESS"):
+        cd=ChatData(person_id,content,self,status)
         self.chatlog.append(cd)
         self.chatlog_str+=f"{cd.person.name}: {cd.content}\n"
+        return cd.id
+    
         
     def chatlog_to_str(self,k:Union[int,None]=None):
         if k is not None:
@@ -230,6 +232,7 @@ class ParticipantBot(Person):
             if max_tokens > 0:
                 data["max_tokens"] = max_tokens
 
+            return_status = "SUCCESS"
             output = ""
             stream = openai_client.chat.completions.create(**data)
             if socket:
@@ -249,7 +252,8 @@ class ParticipantBot(Person):
                 socket.emit(socket_name, "__end-of-stream")
             if self.chatroom.STOP_COMMENT:
                 self.chatroom.STOP_COMMENT=False
-            return output
+                return_status = "STOPPED"
+            return output, return_status
         
         user, system = self.create_input_prompt()
         response = openai_streaming(user, system, temperature=1, max_tokens=1000, socket=socket,socket_name=socket_name)

@@ -1,7 +1,10 @@
+export type ChatStatus = 'SUCCESS' | 'STOPPED' | 'ERROR';
+
 export type ChatData = {
     name: string;
     content: string;
     id: number;
+    status: ChatStatus;
 }
 
 

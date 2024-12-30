@@ -34,16 +34,17 @@ const ReviewPage: React.FC<ReviewPageProps> = () => {
 
 
     return (
-        <div style={{display:"flex",flexDirection:"column",alignItems:"center", marginTop:10}}>
-            <h1>Review Page</h1>
-
-            <div style={{width:800, marginBottom:10} }>
-                <h3>Chat Log</h3>
-                <ChatLog chatdatas={ReviewPageDatas.chatdatas}/>
-            </div>
-            <div style={{display:"flex",flexDirection:"column",alignItems:"center",width: "fit-content"}}>
-                <h3 style={{width: "100%", marginLeft: "auto"}}>Data Plots</h3>
-                <DataPlots/>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"center", marginTop:10, width: "100vw"}}> 
+            <div className={styles["review-page"]}>
+                <h1 style={{alignSelf:"flex-start"}}>Review Page</h1>
+                <div style={{width:800, marginBottom:10} }>
+                    <h3>Chat Log</h3>
+                    <ChatLog chatdatas={ReviewPageDatas.chatdatas}/>
+                </div>
+                <div style={{display:"flex",flexDirection:"column",alignItems:"center",width: "fit-content"}}>
+                    <h3 style={{width: "100%", marginLeft: "auto"}}>Data Plots</h3>
+                    <DataPlots/>
+                </div>
             </div>
         </div>
     )

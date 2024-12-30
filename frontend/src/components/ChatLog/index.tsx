@@ -18,7 +18,9 @@ const ChatLog : React.FC<ChatLogProps> = ({
                     {chatdatas.map((chatdata,index)=>(
                         <div className={styles["chatdata"]} key={index}>
                             <p className={styles["chat-name"]}>{chatdata.name}:</p>
-                            <p className={styles["chat-content"]}>{chatdata.content}</p>
+                            <p className={styles["chat-content"]}>{chatdata.content}
+                                {chatdata.status==="STOPPED" && <span className={styles["chat-stopped"]}>STOP</span>}
+                            </p>
                         </div>
                     ))}
                 </div>

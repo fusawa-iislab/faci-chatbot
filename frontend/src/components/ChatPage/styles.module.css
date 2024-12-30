@@ -78,7 +78,7 @@ button.stop-button {
     height: 30px;
     padding: 0;
     margin: 0;
-    margin-right: auto;
+    align-self: flex-start;
 }
 
 .toggle-button path {
@@ -94,5 +94,6 @@ button.stop-button {
 button.review-button {
     color: white;
     background-color: rgb(25, 118, 210);
+    align-self: flex-end;
 }
 

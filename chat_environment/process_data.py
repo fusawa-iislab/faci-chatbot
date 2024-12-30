@@ -15,7 +15,7 @@ def set_chatroom(data:Union[list,dict],chatroom: ChatRoom):
 
 # send chatroom-envrionment data to frontend
 def send_front_chatroom(socket: SocketIO, chatroom: ChatRoom):
-    socket.emit("chatlog", [{"name": chatdata.person.name, "content": chatdata.content, "id": chatdata.id} for chatdata in chatroom.chatlog])
+    socket.emit("chatlog", [{"name": chatdata.person.name, "content": chatdata.content, "id": chatdata.id, "status": chatdata.status} for chatdata in chatroom.chatlog])
     socket.emit("participants", [{"name": p.name, "persona": p.persona,  "id": p.person_id} for p in chatroom.participantbots])
     if chatroom.user:
         socket.emit("user", {"name": chatroom.user.name, "id": chatroom.user.person_id})
@@ -40,22 +40,22 @@ def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom)->None:
         return
     input_text = data['text']
     if data["askForComment"]:
-        chatroom.add_chatdata(chatroom.user.person_id, input_text)
+        chatroom.add_chatdata(chatroom.user.person_id, input_text, status="SUCCESS")
         socket.emit("chatdata", {"name": chatroom.user.name, "content": input_text})
         participants_raise_hands_to_speak(socket, chatroom)
     else:
         for p in chatroom.participantbots:
             if socket:
                 socket.emit(f"raise-hand-{p.person_id}", False)
-    chatroom.add_chatdata(chatroom.user.person_id, input_text)
-    socket.emit("chatdata", {"name": chatroom.user.name, "content": input_text})
+    cd_id=chatroom.add_chatdata(chatroom.user.person_id, input_text, status="SUCCESS")
+    socket.emit("chatdata", {"name": chatroom.user.name, "content": input_text, "status": "SUCCESS", "id": cd_id})
     if not data["selectedID"]:
         return 
     selected_person = chatroom.find_person(data["selectedID"])
     if selected_person:
-        response = selected_person.generate_response_streaming(socket,f"comment-{selected_person.person_id}")
-        chatroom.add_chatdata(selected_person.person_id, response)
-        socket.emit("chatdata", {"name": selected_person.name, "content": response})
+        response, return_status = selected_person.generate_response_streaming(socket,f"comment-{selected_person.person_id}")
+        cd_id=chatroom.add_chatdata(selected_person.person_id, response, return_status)
+        socket.emit("chatdata", {"name": selected_person.name, "content": response, "status": return_status, "id": cd_id})
         return
     else:
         raise NotImplementedError("personが見つかりません")

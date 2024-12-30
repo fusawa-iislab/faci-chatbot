@@ -64,3 +64,8 @@
     font-size: 15px;
 }
 
+.chat-stopped {
+    background-color: rgb(231, 39, 39);
+    font-weight: bold;
+}
+

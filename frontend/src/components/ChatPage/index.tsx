@@ -113,11 +113,12 @@ const ChatPage: React.FC = () => {
                 </div>
                 <div className={styles["participants-container"]}>
                     {participants.map((p, index) =>
-                        <div className={`${styles["participant"]}`} onClick={() => handleSelectPersonID(p.id)} key={index}>
+                        <div className={styles["participant"]} onClick={() => handleSelectPersonID(p.id)} key={index}>
                             <ParticipantBot p={p} socket={socket} selected={p.id===SelectedPersonID}/>
                         </div>
                     )}
                 </div>
+
                 <div className={styles["use-input-conatiner"]}>
                     <div className={styles["control-buttons"]}>
                         <Button className={`${styles["ask-button"]} ${AskForComment ? styles["active"] : ""}`} onClick={handleAskClick}>ASK</Button>
@@ -125,6 +126,7 @@ const ChatPage: React.FC = () => {
                     </div>
                     <SocketTextArea handleInputSubmit={handleInputSubmit} inputText={inputText} setInputText={setInputText} />
                 </div>
+
                 {User.id!==-1&&
                     <p>あなたは{User.name}です。</p>
                 }
@@ -135,9 +137,7 @@ const ChatPage: React.FC = () => {
                         <p>全体に話します。</p>
                     )}
                 </div>
-                <div style={{width:"100%", display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
-                    <Button onClick={() => window.location.assign('/review')} className={styles["review-button"]}>Review</Button>
-                </div>
+                <Button onClick={() => window.location.assign('/review')} className={styles["review-button"]}>Review</Button>
             </div>
             <div className={styles["chatlog-wrapper"]}>
                 <Button onClick={handleShowChatlog} className={styles["toggle-button"]}>
@@ -145,7 +145,7 @@ const ChatPage: React.FC = () => {
                         <ArrowDropUpIcon className={styles["toggle-button-icon"]}/> :
                         <ArrowDropDownIcon className={styles["toggle-button-icon"]}/>
                     }
-                </Button>
+                </Button>   
                 {ShowChatlog &&
                     <ChatLog chatdatas={ChatDatas} />
                 }

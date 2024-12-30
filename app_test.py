@@ -48,7 +48,7 @@ def send_review():
 @app_test.route('/api/review-data', methods=["GET"])
 def review_data():
     cur_chatroom=ChatRoom.current_chatroom()
-    send_data={"chatdatas":[{"name":c.person.name,"content":c.content, "id":c.id} for c in cur_chatroom.chatlog]}
+    send_data={"chatdatas":[{"name":c.person.name,"content":c.content, "id":c.id, "status": c.status} for c in cur_chatroom.chatlog]}
     return jsonify(send_data)
 
 
