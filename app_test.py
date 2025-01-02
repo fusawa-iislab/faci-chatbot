@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from utils.misc import create_templates_dict_from_json
 from chat_environment.chat_environment import ChatRoom
-from chat_environment.process_data import send_front_chatroom, process_user_input,set_chatroom,participants_emotion,stop_comment,prepare_review_plot_data
+from chat_environment.process_data import send_front_chatroom, process_user_input,set_chatroom,participants_emotion,stop_comment,prepare_review_plot_data,prepare_review_data
 
 load_dotenv()
 
@@ -48,7 +48,7 @@ def send_review():
 @app_test.route('/api/review-data', methods=["GET"])
 def review_data():
     cur_chatroom=ChatRoom.current_chatroom()
-    send_data={"chatdatas":[{"name":c.person.name,"content":c.content, "id":c.id, "status": c.status} for c in cur_chatroom.chatlog]}
+    send_data=prepare_review_data(cur_chatroom)
     return jsonify(send_data)
 
 

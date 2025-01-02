@@ -99,3 +99,7 @@ def prepare_review_plot_data(chatroom: ChatRoom):
         person.word_count+=len(chatdata.content)
         person.speak_count+=1
     return
+
+def prepare_review_data(chatroom: ChatRoom):
+    data = {"chatdatas":[{"name":c.person.name,"content":c.content, "id":c.id, "status": c.status} for c in chatroom.chatlog]}
+    return data
