@@ -79,9 +79,5 @@ def stop_comment_sys(_):
     app_socket.start_background_task(stop_comment, ChatRoom.current_chatroom())
 
 
-
-
-
-
 if __name__ == '__main__':
     app_socket.run(app, host="127.0.0.1", port=5050, debug=True)

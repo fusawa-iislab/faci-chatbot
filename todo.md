@@ -21,3 +21,7 @@
 
 - all
     - 写真とかありだったり？
+
+- backend
+    - prompt
+    - situational_promptでも作る？

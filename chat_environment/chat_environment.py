@@ -178,39 +178,27 @@ class User(Person):
 
 class ParticipantBot(Person):
     emotions = ["happy", "sad", "angry", "surprised", "fearful", "neutral"]
-    def __init__(self, name, chatroom:ChatRoom,persona:str="",other_features:Union[Dict,None]=None):
+    def __init__(self, name, chatroom:ChatRoom,persona:str=""):
         super().__init__(name,chatroom)
         self.persona=persona
-        self.other_features=other_features
         self.emotion="neutral"
         self.emotions=[]
 
     def personal_data_to_str(self):
-        other_features_str = ""
-        if self.other_features:
-            for key, value in self.other_features.items():
-                other_features_str += f"    {key}: {value}\n"
-        
+        persona_info = f"    属性: {self.persona}\n    直前の感情: {self.emotion}\n"
+        chatroom_info = f"あなたは現在{self.chatroom.title}に参加しています。\n"
+        description_info = f"チャットルームの説明: {self.chatroom.description}\n" if self.chatroom.description else ""
+
         return (
             f"あなたは{self.name}という名前のエージェントです。\n"
             f"エージェントの特徴:\n"
-            f"    属性: {self.persona}\n"
-            f"    直前の感情: {self.emotion}\n"
-            f"{other_features_str}"
+            f"{persona_info}"
             f"##########################################\n"
+            f"{chatroom_info}"
+            f"{description_info}"
         )
-    
-    def create_input_prompt(self):
-        system = ""
-        user = ""
-        system += self.personal_data_to_str()
-        system += response_requirement
 
-        user += "これまでの会話の流れ\n"
-        user += self.chatroom.chatlog_str
-        user += "######################################\n"
-        user += "これまでの流れに沿うように応答を生成してください"
-        return user, system
+    
             
     def generate_response(self):
         user, system = self.create_input_prompt()
@@ -255,29 +243,50 @@ class ParticipantBot(Person):
                 return_status = "STOPPED"
             return output, return_status
         
-        user, system = self.create_input_prompt()
-        response = openai_streaming(user, system, temperature=1, max_tokens=1000, socket=socket,socket_name=socket_name)
+        def create_input_prompt(self):
+            system = ""
+            system += self.personal_data_to_str()
+            system += response_requirement
+
+            system += "これまでの会話の流れ\n"
+            system += self.chatroom.chatlog_str
+            system += "######################################\n"
+            system += "これまでの流れに沿うように応答を生成してください"
+            return system
+        
+        system = self.create_input_prompt()
+        response = openai_streaming("", system, temperature=1, max_tokens=1000, socket=socket,socket_name=socket_name)
         return response
     
     def generate_emotion(self):
         def create_input_prompt(self):
             system = ""
-            user = ""
             system += self.personal_data_to_str()
             system +=f"感情の選択肢: {str(self.emotions)}\n"
-            system +=f"このエージェントの次の感情を選択肢の中から選択し、感情の名前のみ文字列で返してください\n"
+            system +=f"直近の流れを踏まえてこのエージェントの次の感情を選択肢の中から選択し、感情の名前のみ文字列で返してください\n"
 
-            user += "直近の会話の流れ\n"
-            user += self.chatroom.chatlog_to_str(5)
-            user += "######################################\n"
-            user += "これまでの流れにからどのような感情を生成するか選択してください\n"
-            return user, system
-        user, system = create_input_prompt(self)
-        emotion= get_gpt(user, system, temperature=0.5, max_tokens=100)
-        # emotion=random.choice(self.emotions)
+            system += "直近の会話の流れ\n"
+            system += self.chatroom.chatlog_to_str(5)
+            return system
+        system = create_input_prompt(self)
+        emotion= get_gpt("", system, temperature=0.5, max_tokens=100)
         self.emotion=emotion
         self.emotions.append(emotion)
         return
+    
+    def generate_review_comment(self):
+        def create_input_prompt(self):
+            system = ""
+            system += self.personal_data_to_str()
+            system += "このエージェントによるこれまでの会話の感想を生成してください\n"
+
+            system += "これまでの会話内容\n"
+            system += self.chatroom.chatlog_to_str()
+            return system
+        
+        system = create_input_prompt(self)
+        response = get_gpt("", system, temperature=1, max_tokens=1000)
+        return response
 
 
     def raise_hand_to_speak(self):
