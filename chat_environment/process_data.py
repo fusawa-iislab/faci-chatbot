@@ -19,7 +19,7 @@ def send_front_chatroom(socket: SocketIO, chatroom: ChatRoom):
     socket.emit("participants", [{"name": p.name, "persona": p.persona,  "id": p.person_id} for p in chatroom.participantbots])
     if chatroom.user:
         socket.emit("user", {"name": chatroom.user.name, "id": chatroom.user.person_id})
-    socket.emit("limit-time", chatroom.limit_time)
+    # socket.emit("limit-time", chatroom.limit_time)
     return
 
 def stop_comment(chatroom: ChatRoom):

@@ -21,6 +21,10 @@
 
 - all
     - 写真とかありだったり？
+    - socketの認証
+        - 参考
+            - https://zenn.dev/takuya77088/articles/a9211670da7c2d
+            
 
 - backend
     - prompt

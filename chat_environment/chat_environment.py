@@ -31,7 +31,7 @@ class ChatRoom:
         self.user=None
         self.participantbots:List[ParticipantBot]=[]
         self.persons:List[Person]=[]
-        self.limit_time = {"munite": 0, "second": 0}
+        # self.limit_time = {"munite": 0, "second": 0}
         ChatRoom._id_counter+=1
         self.id=ChatRoom._id_counter
         ChatRoom._chatrooms_dict[self.id]=self
@@ -85,10 +85,10 @@ class ChatRoom:
             self.add_person(person_data["type"], person_data["args"])
         self.chatlog=[]
         # self.summerylog=[]
-        if data.get("time"):
-            munite = data["time"]["munite"]
-            second = data["time"]["second"]
-            self.limit_time = {"munite": munite, "second": second}
+        # if data.get("time"):
+        #     munite = data["time"]["munite"]
+        #     second = data["time"]["second"]
+        #     self.limit_time = {"munite": munite, "second": second}
         if data.get("chatlog"):
             self.load_chatlog(data["chatlog"])
 
@@ -118,8 +118,7 @@ class ChatRoom:
             if "name" not in args:
                 raise ValueError("Missing required argument: 'name'")
             persona = args.get("persona", "")
-            other_features = args.get("features", None)
-            participant = ParticipantBot(name=args["name"], persona=persona, other_features=other_features, chatroom=self)
+            participant = ParticipantBot(name=args["name"], persona=persona, chatroom=self)
             self.persons.append(participant)
             self.participantbots.append(participant)
         else:
@@ -254,7 +253,7 @@ class ParticipantBot(Person):
             system += "これまでの流れに沿うように応答を生成してください"
             return system
         
-        system = self.create_input_prompt()
+        system = create_input_prompt(self)
         response = openai_streaming("", system, temperature=1, max_tokens=1000, socket=socket,socket_name=socket_name)
         return response
     
@@ -269,7 +268,8 @@ class ParticipantBot(Person):
             system += self.chatroom.chatlog_to_str(5)
             return system
         system = create_input_prompt(self)
-        emotion= get_gpt("", system, temperature=0.5, max_tokens=100)
+        # emotion= get_gpt("", system, temperature=0.5, max_tokens=100)
+        emotion = random.choice(self.emotions)
         self.emotion=emotion
         self.emotions.append(emotion)
         return

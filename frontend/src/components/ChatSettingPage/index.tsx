@@ -10,7 +10,7 @@ import Divider from '@mui/material/Divider';
 
 import {PersonDescription} from "../../assets/CommonStructs";
 import ParticipantsSetting from '../ParticipantsSetting';
-import TimeSelector from '../TimeSelector';
+// import TimeSelector from '../TimeSelector';
 
 
 
@@ -19,7 +19,7 @@ export type InputData = {
     title: string,
     description: string,
     participants: PersonDescription[],
-    time: {minute: string, second: string},
+    // time: {minute: string, second: string},
 }
 
 type PersonData = {
@@ -31,7 +31,7 @@ type SendData = {
     title: string,
     description: string,
     personsdata: PersonData[],
-    time: {minute: string, second: string},
+    // time: {minute: string, second: string},
 }
 
 
@@ -40,7 +40,7 @@ type SendData = {
 const ChatSettingPage: React.FC= () => {
 
     const [PageIndex, setPageIndex] = useState<number>(0);
-    const [InputGroup,setInputGroup] = useState<InputData>({username: '',title:"",description:"",participants:[], time:{minute: '0', second: '0'}});
+    const [InputGroup,setInputGroup] = useState<InputData>({username: '',title:"",description:"",participants:[]});
 
     const [NumberStr, setNumberStr] =useState<string>('0');
     const [PNumber, setPNumber] = useState<number>(0);
@@ -114,7 +114,7 @@ const ChatSettingPage: React.FC= () => {
              title: InputGroup.title, 
              description: InputGroup.description, 
              personsdata: PersonsData,
-             time: InputGroup.time
+            //  time: InputGroup.time
         };
         
         try {
@@ -152,9 +152,9 @@ const ChatSettingPage: React.FC= () => {
                                 <Input type="text" required placeholder="名前" id="yourname" onChange={handleUserNameChange} value={InputGroup.username}/>
                             </div>
                             <Divider/>
-                            <div className={styles["input-group"]}>
+                            {/* <div className={styles["input-group"]}>
                                 <TimeSelector handleTimeChange={handleTimeChange} time={InputGroup.time}/>
-                            </div>
+                            </div> */}
                             <Divider/>
                             <div className={styles["input-group"]+" "+styles["column"]}>
                                 {/* <InputLabel htmlFor="title">議題</InputLabel> */}
