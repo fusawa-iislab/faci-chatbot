@@ -76,7 +76,7 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
                     </div>
                 </div>
             </Popper>
-            <div className={styles["participant-without-comment"]} id={`participant-without-comment-${p.id}`}>
+            <div className={`${styles["participant-without-comment"]} ${selected ? styles["selected"]:""}`} id={`participant-without-comment-${p.id}`}>
                 <div className={styles["participant-reactions"]}>
                     {raisedHand ? (
                         <div className={styles["raised-hand"]}>🖐️</div>
@@ -87,7 +87,7 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
                     <div className={styles["emotion"]}>{emotion||"🙂"}</div> 
                 </div>
                 {/* <ParticipantTooltip person={p}> */}
-                    <div className={`${styles["participant-info"]} ${selected ? styles["selected"]:""}`}>
+                    <div className={styles["participant-info"]}>
                         <img src={Silhoutte} className={styles["siloutte-image"]}/>
                         <p className={styles["participant-name"]}>{p.name}</p>
                     </div>

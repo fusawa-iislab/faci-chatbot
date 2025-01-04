@@ -5,6 +5,7 @@
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
+    width: 100%;
 }
 
 .selected {
@@ -17,7 +18,8 @@
     align-items: center;
     padding: 5px;
     max-height: 75px;
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
     overflow-x: hidden;
     overflow-y: auto;
     background-color: #E9E9E9;
@@ -45,16 +47,18 @@
 .participant-without-comment {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    width: fit-content;
+    align-items: center;
+    width: 100%;
+    border: grey 1px solid;
 }
+
 
 
 .participant-reactions {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 100%;
+    width: 70%;
     font-size: 30px;
 }
 
@@ -66,10 +70,10 @@
 }
 
 .siloutte-image{
-    width: 100px;
+    width: 60%;
     padding: 5px;
 }
 
 .selected{
-    background-color: rgb(255, 255, 100);
+    background-color: rgba(255, 255, 100, 0.5);
 }

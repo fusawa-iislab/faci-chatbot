@@ -40,7 +40,9 @@ type SendData = {
 const ChatSettingPage: React.FC= () => {
 
     const [PageIndex, setPageIndex] = useState<number>(0);
-    const [InputGroup,setInputGroup] = useState<InputData>({username: '',title:"",description:"",participants:[]});
+    const [InputGroup,setInputGroup] = useState<InputData>({username: '',title:"薬物依存治療グループセラピー",
+                                                            description:"薬物依存症の人が集まってファシリテータのもと、直近の薬物の使用経験について話し合います。",
+                                                            participants:[]});
 
     const [NumberStr, setNumberStr] =useState<string>('0');
     const [PNumber, setPNumber] = useState<number>(0);
@@ -51,10 +53,10 @@ const ChatSettingPage: React.FC= () => {
         setInputGroup(prevState => ({ ...prevState, username: e.target.value }));
     }
 
-    const handleTimeChange = (minute: string, second: string) => {
-        console.log(minute, second);
-        setInputGroup(prevState => ({ ...prevState, time: {minute: minute, second: second} }));
-    }
+    // const handleTimeChange = (minute: string, second: string) => {
+    //     console.log(minute, second);
+    //     setInputGroup(prevState => ({ ...prevState, time: {minute: minute, second: second} }));
+    // }
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setInputGroup(prevState => ({ ...prevState, title: e.target.value }));
@@ -137,12 +139,9 @@ const ChatSettingPage: React.FC= () => {
         }
     };
 
-    useEffect(() => {
-        setInputGroup(prevState => ({ ...prevState, title: "薬物依存治療グループセラピー", description: "薬物依存症の人が集まってファシリテータのもと、薬物の使用経験について話し合います。"}));
-    },[])
 
     return (
-        <div className={styles["chat-settings-wrapper"]}>
+        <div className={styles["chat-setting-wrapper"]}>
             <div className={styles["form-wrapper"]}>
                 {PageIndex === 0 && (
                     <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
@@ -159,11 +158,11 @@ const ChatSettingPage: React.FC= () => {
                             <div className={styles["input-group"]+" "+styles["column"]}>
                                 {/* <InputLabel htmlFor="title">議題</InputLabel> */}
                                 <InputLabel htmlFor="title">タイトル:</InputLabel>
-                                <Textarea required placeholder="何か議題を設定してください" id="title" minRows={2} className={styles["title"]}  onChange={handleTitleChange} value={InputGroup.title} />
+                                <Textarea required placeholder="何か議題を設定してください" id="title" minRows={2} maxRows={4} className={styles["title"]}  onChange={handleTitleChange} value={InputGroup.title} />
                             </div>
                             <div className={styles["input-group"]+" "+styles["column"]}>
                                 <InputLabel htmlFor="description">詳細:</InputLabel>
-                                <Textarea placeholder="詳細を記入してください" id="description" minRows={2} className={styles["description"]} onChange={handleDescriptionChange} value={InputGroup.description}/>
+                                <Textarea placeholder="詳細を記入してください" id="description" minRows={2}  maxRows={4} className={styles["description"]} onChange={handleDescriptionChange} value={InputGroup.description}/>
                             </div>
                             <div className={styles['participant-number']}>
                                 <div className={styles["input-group"]}>
@@ -183,21 +182,31 @@ const ChatSettingPage: React.FC= () => {
                                 </div>
                             </div>
                         )}
-                        <div className={styles["next-button-wrapper"]}>
-                            <Button disabled={Boolean(PnumberError) || PNumber===0} className={styles["next-button"]} onClick={() => setPageIndex(1)}>次へ</Button>
-                        </div>
+                        <Button disabled={Boolean(PnumberError) || PNumber===0} className={styles["next-button"]} onClick={() => setPageIndex(1)}>次へ</Button>
                     </div>
                 )}
 
                 {PageIndex === 1 && (
                     <div style={{display: "flex", flexDirection: "column", alignItems:"center", width: "100%"}}>
-                        <div className={styles["back-button-wrapper"]}>
-                            <Button className={styles["back-button"]} onClick={() => setPageIndex(0)}>戻る</Button>
+                        <Button className={styles["back-button"]} onClick={() => setPageIndex(0)}>戻る</Button>
+
+                        <div className="">
+                            <InputLabel>あなたの名前:</InputLabel>
+                            <Input type="text" value={InputGroup.username} disabled />
+                            <InputLabel>タイトル:</InputLabel>
+                            <Textarea value={InputGroup.title} disabled minRows={2} maxRows={4} />
+                            <InputLabel>詳細:</InputLabel>
+                            <Textarea value={InputGroup.description} disabled minRows={2} maxRows={4} />
+                            <p>参加者の人数: {PNumber}</p>
+                            <div>
+                                <InputLabel>参加者:</InputLabel>
+                                {InputGroup.participants.map((participant, index) => (
+                                    <p key={index}>名前: {participant.name}, ペルソナ: {participant.persona}</p>
+                                ))}
+                            </div>
                         </div>
                         
-                        <div className={styles["submit-button-wrapper"]}>
-                            <Button disabled={Boolean(PnumberError) || PNumber===0} className={styles["submit-button"]} onClick={handleInitSubmit} >送信</Button>
-                        </div>
+                        <Button disabled={Boolean(PnumberError) || PNumber===0} className={styles["submit-button"]} onClick={handleInitSubmit} >送信</Button>
                     </div>
                 )}
             </div>

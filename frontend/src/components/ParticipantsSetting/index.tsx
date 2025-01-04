@@ -76,7 +76,7 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
                     </div>
                     <div className={`${styles["input-group"]} ${styles["column"]}`}>
                         <InputLabel htmlFor={`persona-${PIndex}`}>性格:</InputLabel>
-                        <Textarea value={InputGroup.participants[PIndex].persona} onChange={(e) => handleParticipantChange(e, PIndex, 'persona')} id={`persona-${PIndex}`} minRows={2} style={{marginBottom:10}}/>
+                        <Textarea value={InputGroup.participants[PIndex].persona} onChange={(e) => handleParticipantChange(e, PIndex, 'persona')} id={`persona-${PIndex}`} minRows={2} maxRows={4} style={{marginBottom:10}}/>
                     </div>
                     <div style={{display: "flex", flexDirection: "column", width: "100%", alignItems: "flex-end"}}>
                         <Button onClick={handleOpenTemplateClick} className={styles["open-default-button"]} id={`open-default-${PIndex}`}>テンプレートを使う</Button>
