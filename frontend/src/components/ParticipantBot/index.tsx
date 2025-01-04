@@ -89,7 +89,7 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
                 {/* <ParticipantTooltip person={p}> */}
                     <div className={styles["participant-info"]}>
                         <img src={Silhoutte} className={styles["siloutte-image"]}/>
-                        <p className={styles["participant-name"]}>{p.name}</p>
+                        <p style={{fontSize: 20}}>{p.name}</p>
                     </div>
                 {/* </ParticipantTooltip> */}
             </div>

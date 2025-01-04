@@ -70,7 +70,7 @@ const ChatSettingPage: React.FC= () => {
         setNumberStr(inputValue);
 
         if (/[^0-9]/.test(inputValue)||inputValue==="") {
-            setPnumberError('自然数のみを入力してください');
+            setPnumberError('1から10の自然数を入力してください');
             setPNumber(0);
         } else {
             setPnumberError(null);
@@ -148,7 +148,7 @@ const ChatSettingPage: React.FC= () => {
                         <div className={styles['conversation-situation']}>
                             <div className={styles["input-group"]}>
                                 <InputLabel htmlFor="your-name">あなたの名前:</InputLabel>
-                                <Input type="text" required placeholder="名前" id="yourname" onChange={handleUserNameChange} value={InputGroup.username}/>
+                                <Input type="text" placeholder="名前" id="yourname" onChange={handleUserNameChange} value={InputGroup.username}/>
                             </div>
                             <Divider/>
                             {/* <div className={styles["input-group"]}>
@@ -191,17 +191,34 @@ const ChatSettingPage: React.FC= () => {
                         <Button className={styles["back-button"]} onClick={() => setPageIndex(0)}>戻る</Button>
 
                         <div className="">
-                            <InputLabel>あなたの名前:</InputLabel>
-                            <Input type="text" value={InputGroup.username} disabled />
-                            <InputLabel>タイトル:</InputLabel>
-                            <Textarea value={InputGroup.title} disabled minRows={2} maxRows={4} />
-                            <InputLabel>詳細:</InputLabel>
-                            <Textarea value={InputGroup.description} disabled minRows={2} maxRows={4} />
-                            <p>参加者の人数: {PNumber}</p>
+                            <dl>
+                                <dt>あなたの名前:</dt>
+                                <dd>{InputGroup.username}</dd>
+                            </dl>
+                            <Divider/>
+                            <dl>
+                                <dt>タイトル:</dt>
+                                <dd>{InputGroup.title}</dd>
+                            </dl>
+                            <Divider/>
+                            <dl>
+                                <dt>詳細:</dt>
+                                <dd>{InputGroup.description}</dd>
+                            </dl>
+                            <Divider/>
                             <div>
-                                <InputLabel>参加者:</InputLabel>
                                 {InputGroup.participants.map((participant, index) => (
-                                    <p key={index}>名前: {participant.name}, ペルソナ: {participant.persona}</p>
+                                    <div key={index}>
+                                        <p>{index+1}人目</p>
+                                        <dl>
+                                            <dt>名前:</dt>
+                                            <dd>{participant.name}</dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>性格:</dt>
+                                            <dd>{participant.persona}</dd>
+                                        </dl>
+                                    </div>
                                 ))}
                             </div>
                         </div>
