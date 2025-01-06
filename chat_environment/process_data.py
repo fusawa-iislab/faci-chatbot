@@ -89,15 +89,30 @@ def participants_raise_hands_to_speak(socket: Union[SocketIO,None], chatroom: Ch
         thread.join()
     return
 
+def participants_review_comment(chatroom: ChatRoom):
+    threads=[]
+    def participant_generate_review_comment(p: ParticipantBot):
+        p.generate_review_comment()
+    for p in chatroom.participantbots:
+        thread=Thread(target=participant_generate_review_comment, args=(p,))
+        threads.append(thread)
+        thread.start()
+    for thread in threads:
+        thread.join()
+    return
+
 def prepare_review_plot_data(chatroom: ChatRoom):
     for person in chatroom.persons:
         person.word_count=0
         person.speak_count=0
+        person.stop_count=0
     chatdatas:ChatData=chatroom.chatlog
     for chatdata in chatdatas:
         person=chatroom.find_person(chatdata.person_id)
         person.word_count+=len(chatdata.content)
         person.speak_count+=1
+        if chatdata.status=="STOPPED":
+            person.stop_count+=1
     return
 
 def prepare_review_data(chatroom: ChatRoom):

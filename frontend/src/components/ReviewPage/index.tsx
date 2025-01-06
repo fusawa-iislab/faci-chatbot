@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import styles from './styles.module.css';
+
 import DataPlots from '../DataPlots';
 import ChatLog from '../ChatLog';
+import ReviewComments from '../ReviewComments';
 import { ChatData } from '../../assets/CommonStructs';
 
 type ReviewPageProps = {
@@ -44,6 +46,10 @@ const ReviewPage: React.FC<ReviewPageProps> = () => {
                 <div style={{display:"flex",flexDirection:"column",alignItems:"center",width: "fit-content"}}>
                     <h3 style={{width: "100%", marginLeft: "auto"}}>Data Plots</h3>
                     <DataPlots/>
+                </div>
+                <div style={{width:800, marginTop:10}}>
+                    <h3>Comments from participants</h3>
+                    <ReviewComments/>
                 </div>
             </div>
         </div>

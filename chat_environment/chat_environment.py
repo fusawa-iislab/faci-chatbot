@@ -37,6 +37,8 @@ class ChatRoom:
         ChatRoom._chatrooms_dict[self.id]=self
 
         self.STOP_COMMENT=False
+        self.situational_prompt=""
+
 
     @classmethod
     def create_chatroom(cls,title: str="",description: str=""):
@@ -92,6 +94,9 @@ class ChatRoom:
         if data.get("chatlog"):
             self.load_chatlog(data["chatlog"])
 
+        self.situational_prompt=self.create_situational_prompt()
+
+
     def load_chatlog(self, data: list):
         for d in data:
             self.add_chatdata(**d)
@@ -137,6 +142,22 @@ class ChatRoom:
             return "".join([f"{chatdata.person.name}: {chatdata.content}\n" for chatdata in self.chatlog[-k:]])
         else:
             return "".join([f"{chatdata.person.name}: {chatdata.content}\n" for chatdata in self.chatlog])
+        
+    def create_situational_prompt(self):
+        output=""
+        output+=f"ここでは{self.title}が行われています\n"
+        if self.description:
+            output+=f"詳細は以下のとおりです\n"
+            output+=f"{self.description}\n"
+        if not self.user:
+            raise ValueError("User is not defined")
+        if not self.participantbots:
+            raise ValueError("ParticipantBots are not defined")
+        
+        output+=f"ここでは{self.user.name}、{'、'.join(p.name for p in self.participantbots)}が参加しています\n"
+        output+=f"{self.user.name}のみが話を回す役割をします\n"
+        output+=f"#################################################\n"
+        return output
 
 
 class ChatData:
@@ -166,6 +187,7 @@ class Person:
         self.chatroom:ChatRoom=chatroom
         self.word_count=0
         self.speak_count=0
+        self.stop_count=0
 
     def append_comment(self, comment):
         self.comments.append(comment)
@@ -182,19 +204,16 @@ class ParticipantBot(Person):
         self.persona=persona
         self.emotion="neutral"
         self.emotions=[]
+        self.review_comment=""
 
     def personal_data_to_str(self):
-        persona_info = f"    属性: {self.persona}\n    直前の感情: {self.emotion}\n"
-        chatroom_info = f"あなたは現在{self.chatroom.title}に参加しています。\n"
-        description_info = f"チャットルームの説明: {self.chatroom.description}\n" if self.chatroom.description else ""
+        persona_info = f"\t属性: {self.persona}\n\t直前の感情: {self.emotion}\n"
 
         return (
-            f"あなたは{self.name}という名前のエージェントです。\n"
-            f"エージェントの特徴:\n"
+            f"あなたは{self.name}です。\n"
+            f"特徴:\n"
             f"{persona_info}"
             f"##########################################\n"
-            f"{chatroom_info}"
-            f"{description_info}"
         )
 
     
@@ -244,8 +263,8 @@ class ParticipantBot(Person):
         
         def create_input_prompt(self):
             system = ""
+            system += self.chatroom.situational_prompt
             system += self.personal_data_to_str()
-            system += response_requirement
 
             system += "これまでの会話の流れ\n"
             system += self.chatroom.chatlog_str
@@ -277,8 +296,9 @@ class ParticipantBot(Person):
     def generate_review_comment(self):
         def create_input_prompt(self):
             system = ""
+            system += self.chatroom.situational_prompt
             system += self.personal_data_to_str()
-            system += "このエージェントによるこれまでの会話の感想を生成してください\n"
+            system += f"{self.name}としてこれまでの会話の感想を生成してください\n"
 
             system += "これまでの会話内容\n"
             system += self.chatroom.chatlog_to_str()
@@ -286,25 +306,25 @@ class ParticipantBot(Person):
         
         system = create_input_prompt(self)
         response = get_gpt("", system, temperature=1, max_tokens=1000)
-        return response
+        self.review_comment = response
+        return
 
 
     def raise_hand_to_speak(self):
 
         def create_input_prompt(self):
             system = ""
-            user = ""
+            system += self.chatroom.situational_prompt
             system += self.personal_data_to_str()
-            system += "あなたは呼びかけに対して発言したいかどうかをTかFのどちらかで答えてください\n"
 
-            user += "直近の会話の流れ\n"
-            user += self.chatroom.chatlog_to_str()
-            user += "######################################\n"
-            user += "これまでの流れにから次の発言を生成してください\n"
-            return user, system
+            system += "直近の会話の流れ\n"
+            system += self.chatroom.chatlog_to_str()
+            system += "######################################\n"
+            system += "あなたは呼びかけに対して発言したいかどうかをTかFのどちらかで答えてください\n"
+            return system
         
-        user, system = create_input_prompt(self)
-        response = get_gpt(user, system, temperature=1, max_tokens=10)
+        system = create_input_prompt(self)
+        response = get_gpt("", system, temperature=1, max_tokens=5)
         if response.lower() == "t":
             return True
         elif response.lower() == "f":

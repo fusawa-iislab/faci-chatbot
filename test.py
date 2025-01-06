@@ -1,17 +1,36 @@
 from chat_environment.chat_environment import ChatRoom
 import json
+import argparse
 
 from utils.gpt_function import get_gpt
-from chat_environment.process_data import participants_raise_hands_to_speak
+from chat_environment.process_data import participants_review_comment
 
 from utils.misc import create_templates_dict_from_json
-# selected_person = test_chatroom.participantbots[-1]
-# selected_person.background = ""
-# selected_person.persona = "少しシャイで自分のことを話すのが苦手な性格"
-# selected_person.other_features={"特徴":"紋切り型の返事をし、少しぶっきらぼうな印象がある"}
-# response = selected_person.generate_response()
 
-print(create_templates_dict_from_json("./data/templates"))
+def parse_args():
+    parser = argparse.ArgumentParser(description='Run the Flask app.')
+    parser.add_argument('-t', '--test', action='store_true', help='Run in test mode')
+    parser.add_argument('-j', '--json-file', type=str, help='Load the specified file')
+    return parser.parse_args()
+args = parse_args()
+
+
+if __name__ == '__main__':
+    chatroom=ChatRoom.create_chatroom()
+    if args.json_file:
+        with open(args.json_file, 'r', encoding="utf-8") as file:
+            data = json.load(file)
+        chatroom.init_setting_from_dict(data)
+
+    participants_review_comment(chatroom)
+
+    for bot in chatroom.participantbots:
+        print(bot.name, bot.review_comment)
+
+    
+
+
+    
 
 
 
