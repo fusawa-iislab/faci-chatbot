@@ -9,3 +9,5 @@ __pycache__
 fcenv/
 env/
 
+# generated images
+static/images/generated/
