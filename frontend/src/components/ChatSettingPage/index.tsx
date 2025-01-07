@@ -5,6 +5,9 @@ import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
 import Textarea from '@mui/joy/Textarea';
 import Divider from '@mui/material/Divider';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+
 
 
 
@@ -47,6 +50,9 @@ const ChatSettingPage: React.FC= () => {
     const [NumberStr, setNumberStr] =useState<string>('0');
     const [PNumber, setPNumber] = useState<number>(0);
     const [PnumberError, setPnumberError] = useState<string | null>("自然数を入力してください");
+
+    const [canSubmit, setCanSubmit] = useState<boolean>(false);
+
 
 
     const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -102,6 +108,20 @@ const ChatSettingPage: React.FC= () => {
             setInputGroup(prevState => ({ ...prevState, participants: InputGroup.participants.slice(0, PNumber) }));
         }
     }, [PNumber]);
+
+    useEffect(() => {
+        if (InputGroup.username === "" || InputGroup.title === "" ) {
+            setCanSubmit(false);
+            return;
+        }
+        for (const participant of InputGroup.participants) {
+            if (participant.name === "" || participant.persona === "") {
+            setCanSubmit(false);
+            return;
+            }
+        }
+        setCanSubmit(true);
+    }, [InputGroup]);
 
 
     const handleInitSubmit = async (e: React.FormEvent) => {
@@ -190,10 +210,13 @@ const ChatSettingPage: React.FC= () => {
                     <div style={{display: "flex", flexDirection: "column", alignItems:"center", width: "100%"}}>
                         <Button className={styles["back-button"]} onClick={() => setPageIndex(0)}>戻る</Button>
 
-                        <div className="">
+                        <div className={styles["setting-confirm-content"]}>
                             <dl>
                                 <dt>あなたの名前:</dt>
-                                <dd>{InputGroup.username}</dd>
+                                {InputGroup.username === "" ?
+                                    <dd style={{color: "red", fontSize: 20}}>未設定</dd> :
+                                    <dd style={{fontSize: 20}}>{InputGroup.username}</dd>
+                                }
                             </dl>
                             <Divider/>
                             <dl>
@@ -201,29 +224,21 @@ const ChatSettingPage: React.FC= () => {
                                 <dd>{InputGroup.title}</dd>
                             </dl>
                             <Divider/>
-                            <dl>
-                                <dt>詳細:</dt>
-                                <dd>{InputGroup.description}</dd>
-                            </dl>
+                            {InputGroup.description !== "" && 
+                                <dl>
+                                    <dt>詳細:</dt>
+                                    <dd>{InputGroup.description}</dd>
+                                </dl>
+                            }
                             <Divider/>
-                            <div>
+                            <div className={styles["participant-card-container"]}>
                                 {InputGroup.participants.map((participant, index) => (
-                                    <div key={index}>
-                                        <p>{index+1}人目</p>
-                                        <dl>
-                                            <dt>名前:</dt>
-                                            <dd>{participant.name}</dd>
-                                        </dl>
-                                        <dl>
-                                            <dt>性格:</dt>
-                                            <dd>{participant.persona}</dd>
-                                        </dl>
-                                    </div>
+                                    <ParticipantCard key={index} participant={participant} index={index}/>
                                 ))}
                             </div>
                         </div>
                         
-                        <Button disabled={Boolean(PnumberError) || PNumber===0} className={styles["submit-button"]} onClick={handleInitSubmit} >送信</Button>
+                        <Button disabled={!canSubmit} className={styles["submit-button"]} onClick={handleInitSubmit} >送信</Button>
                     </div>
                 )}
             </div>
@@ -232,3 +247,26 @@ const ChatSettingPage: React.FC= () => {
 };
 
 export default ChatSettingPage;
+
+const ParticipantCard: React.FC<{participant: PersonDescription, index: number}> = ({participant,index}) => {
+
+    return (
+        <Card style={{backgroundColor:"#F8F8F8"}}>
+            <CardContent>
+                <p style={{fontSize: 12, marginBottom:5}}>{index+1}人目</p>
+                <p style={{fontSize: 12, marginBottom: 2}}>名前:</p>
+                {participant.name === "" ? 
+                    <p style={{fontSize: 16, color: "red", marginBottom: 5}}>未設定</p> : 
+                    <p style={{fontSize: 16, marginBottom: 5}}>{participant.name}</p>
+                }
+                <p style={{fontSize: 12, marginBottom: 2}}>性格:</p>
+                {participant.persona === "" ? 
+                    <p style={{color: "red",fontSize: 12}}>未設定</p> : 
+                    <p style={{fontSize: 12}}>{participant.persona}</p>
+                }
+            </CardContent>
+        </Card>
+    )
+}
+
+
