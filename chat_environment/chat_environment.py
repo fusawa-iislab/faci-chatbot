@@ -203,7 +203,6 @@ class ParticipantBot(Person):
         super().__init__(name,chatroom)
         self.persona=persona
         self.emotion="neutral"
-        self.emotions=[]
         self.review_comment=""
 
     def personal_data_to_str(self):

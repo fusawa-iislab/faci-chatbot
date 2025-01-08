@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react'; 
 import styles from './styles.module.css';
 import Button from '@mui/material/Button';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowDropUpIcon  from '@mui/icons-material/ArrowDropUp';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemButton from '@mui/material/ListItemButton';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import Collapse from '@mui/material/Collapse';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 
 import ParticipantBot from '../ParticipantBot';
 import ChatLog from '../ChatLog';
@@ -21,6 +27,7 @@ const ChatPage: React.FC = () => {
     const [User, setUser] = useState<Person>({name:"",id:-1,persona:""});
     const [AskForComment, setAskForComment] = useState<boolean>(false);
     const [ShowChatlog, setShowChatlog] = useState<boolean>(false);
+    const [ShowDrawer, setShowDrawer] = useState<boolean>(false);
     const socket = useSocket();
 
     useEffect(() => {
@@ -111,6 +118,9 @@ const ChatPage: React.FC = () => {
                     <h1>Chat Page</h1>
                     <CountUpTimer/>
                 </div>
+                <Button onClick={() => setShowDrawer(true)}>
+                    <MenuOpenIcon/>
+                </Button>
                 <div className={styles["participants-container"]}>
                     {participants.map((p, index) =>
                         <div className={styles["participant"]} onClick={() => handleSelectPersonID(p.id)} key={index}>
@@ -142,16 +152,59 @@ const ChatPage: React.FC = () => {
             <div className={styles["chatlog-wrapper"]}>
                 <Button onClick={handleShowChatlog} className={styles["toggle-button"]}>
                     {ShowChatlog ? 
-                        <ArrowDropUpIcon className={styles["toggle-button-icon"]}/> :
-                        <ArrowDropDownIcon className={styles["toggle-button-icon"]}/>
+                        <ExpandLess className={styles["toggle-button-icon"]}/> :
+                        <ExpandMore className={styles["toggle-button-icon"]}/>
                     }
                 </Button>   
                 {ShowChatlog &&
                     <ChatLog chatdatas={ChatDatas} />
                 }
             </div>
+            <Drawer anchor="right" open={ShowDrawer} onClose={() => setShowDrawer(false)} sx={{'& .MuiDrawer-paper': {width: 300},}}>
+                <InfoList title="blah" description="blah" participants={participants}/>
+            </Drawer>
         </div>
     )
 }
 
 export default ChatPage;
+
+
+type InfoListProps = {
+    title: string;
+    description?: string;
+    participants: Person[];
+}
+
+const InfoList: React.FC<InfoListProps> = ({
+    title,
+    description="",
+    participants,
+}) => {
+    const [participantOpen, setParticipantOpen] = useState<boolean>(false);
+
+    const handleParticipantOpen = () => {
+        setParticipantOpen(!participantOpen);
+    }
+
+    return (
+        <List sx={{width:"100%",}}>
+            <ListItemText 
+                primary={title} 
+                secondary={description.trim() ? description : undefined} 
+            />
+            <ListItemButton onClick={handleParticipantOpen}>
+                <ListItemText primary="参加者"/>
+                {participantOpen ? <ExpandLess/> : <ExpandMore/>}
+            </ListItemButton>
+            <Collapse in={participantOpen} timeout="auto" unmountOnExit sx={{ml:3}}>
+                <List>
+                    {participants.map((p,index) => (
+                        <ListItemText primary={p.name} secondary={p.persona} key={index}/>
+                    ))}
+                </List>
+            </Collapse>
+        </List>
+    )
+}
+

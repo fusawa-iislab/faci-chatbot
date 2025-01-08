@@ -4,15 +4,17 @@ import { ChatData } from '../../assets/CommonStructs';
 
 type ChatLogProps = {
     chatdatas?: Array<ChatData>;
+    height?: number|string;
 }
 
 const ChatLog : React.FC<ChatLogProps> = ({
     chatdatas=[],
+    height=300
 }) =>{
 
 
     return (
-        <div className={styles["chatlog-wrapper"]}>
+        <div className={styles["chatlog-wrapper"]} style={{height: height}}>
             <div className={styles["chatlog-container"]}>
                 <div className={styles["chatlog"]}>
                     {chatdatas.map((chatdata,index)=>(

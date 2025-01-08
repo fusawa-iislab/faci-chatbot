@@ -47,7 +47,7 @@ const ReviewPage: React.FC<ReviewPageProps> = () => {
                     <h3 style={{width: "100%", marginLeft: "auto"}}>Data Plots</h3>
                     <DataPlots/>
                 </div>
-                <div style={{width:800, marginTop:10}}>
+                <div style={{width:800, marginTop:10, marginBottom: 10}}>
                     <h3>Comments from participants</h3>
                     <ReviewComments/>
                 </div>

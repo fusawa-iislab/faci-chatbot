@@ -2,6 +2,10 @@ import React, {useState, useEffect} from 'react';
 import Plot from 'react-plotly.js';
 import styles from './styles.module.css';
 
+const Colors = ['lightcoral', 'lightskyblue', 'lightgreen', 'lightsalmon', 'plum', 'paleturquoise', 'orchid', 'khaki', 'lightpink', 'mediumaquamarine'];
+
+
+
 type ParticipantsReviewData = {
     name: string;
     word_count: number;
@@ -34,7 +38,10 @@ const DataPlots: React.FC = () => {
                     x: Names,
                     y: WordCounts,
                     type: 'bar',
-                    name: 'Word Count'
+                    name: 'Word Count',
+                    marker: {
+                        color: Colors.slice(0, Names.length),
+                    }
                 }],
                 layout: { 
                     title: '文字数',
@@ -50,7 +57,10 @@ const DataPlots: React.FC = () => {
                     x: Names,
                     y: SpeakCounts,
                     type: 'bar',
-                    name: 'Speak Count'
+                    name: 'Speak Count',
+                    marker: {
+                        color: Colors.slice(0, Names.length),
+                    }
                 }],
                 layout: { 
                     title: '発言回数',
