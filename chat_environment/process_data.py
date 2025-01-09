@@ -1,12 +1,10 @@
 from flask_socketio import SocketIO
 from threading import Thread
 from typing import Union
-from dotenv import load_dotenv
 from time import sleep
 
 from chat_environment.chat_environment import ChatRoom, ChatData, ParticipantBot
 
-load_dotenv()
 
 # initialize chatroom setting from request
 def set_chatroom(data:Union[list,dict],chatroom: ChatRoom):

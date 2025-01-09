@@ -4,16 +4,14 @@ eventlet.monkey_patch()
 from flask import Flask, send_from_directory, request, jsonify
 from flask_socketio import SocketIO, emit
 import os
-from dotenv import load_dotenv
 from time import sleep
+from dotenv import load_dotenv
+load_dotenv() 
 
 from utils.misc import create_templates_dict_from_json
 from chat_environment.chat_environment import ChatRoom
 from chat_environment.process_data import send_front_chatroom,process_user_input,set_chatroom,participants_emotion,stop_comment,prepare_review_plot_data,prepare_review_data,participants_review_comment
 
-load_dotenv()
-
-FRONTEND_PATH = os.getenv("FRONTEND_PATH")
 
 app = Flask(__name__, static_folder="./frontend/build")
 app_socket = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")

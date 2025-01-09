@@ -2,18 +2,18 @@ from typing import Dict,Union,List
 import random
 from time import sleep
 from openai import OpenAI
-from dotenv import load_dotenv
 import os
 from flask_socketio import SocketIO
+from dotenv import load_dotenv
+load_dotenv() 
 
 from utils.gpt_function import get_gpt
 from chat_environment.prompt import response_requirement
 
-load_dotenv()
 
-OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
-OPENAI_ORGANIZATION_ID=os.getenv("OPENAI_ORGANIZATION_ID")
-OPENAI_PROJECT=os.getenv("OPENAI_PROJECT")
+OPENAI_API_KEY=os.environ.get("OPENAI_API_KEY")
+OPENAI_ORGANIZATION_ID=os.environ.get("OPENAI_ORGANIZATION_ID")
+OPENAI_PROJECT=os.environ.get("OPENAI_PROJECT")
 
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 

@@ -1,6 +1,5 @@
 
 import requests
-from dotenv import load_dotenv
 import ast
 
 from backend.utils.gpt_function import get_gpt

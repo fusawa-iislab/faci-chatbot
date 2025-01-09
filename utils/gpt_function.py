@@ -1,16 +1,15 @@
 import os
-from dotenv import load_dotenv
 import requests
 from openai import OpenAI
 from flask_socketio import SocketIO
 from flask_socketio import emit
+from dotenv import load_dotenv
+load_dotenv() 
 
 
-load_dotenv()
-
-OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
-OPENAI_ORGANIZATION_ID=os.getenv("OPENAI_ORGANIZATION_ID")
-OPENAI_PROJECT=os.getenv("OPENAI_PROJECT")
+OPENAI_API_KEY=os.environ.get("OPENAI_API_KEY")
+OPENAI_ORGANIZATION_ID=os.environ.get("OPENAI_ORGANIZATION_ID")
+OPENAI_PROJECT=os.environ.get("OPENAI_PROJECT")
 url_gpt = 'https://api.openai.com/v1/chat/completions'
 gpt_headers={
     'Content-type': 'application/json',
