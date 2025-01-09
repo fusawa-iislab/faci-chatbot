@@ -24,3 +24,6 @@
 - backend
     - prompt
     - situational_promptでも作る？
+
+- deploy
+    - reactのbuild時にCI=falseにしてる原因を消す
