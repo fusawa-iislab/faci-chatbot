@@ -1,0 +1,11 @@
+{
+    "title": "他人に対して否定的な発言をする人",
+    "type": "difficulty",
+    "content": {
+        "type": "ParticipantBot",
+        "args": {
+            "name": "D",
+            "persona": "他人に対して否定的な発言をする。自分の意見を押し付けることが多い。"
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "title": "暴力的な話をしてしまう人",
+    "type": "difficulty",
+    "content": {
+        "type": "ParticipantBot",
+        "args": {
+            "name": "F",
+            "persona": "暴力的な話をしてしまう。暴力的な行動を取ることについて話す"
+        }
+    }
+}

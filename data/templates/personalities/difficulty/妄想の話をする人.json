@@ -1,0 +1,11 @@
+{
+    "title": "妄想の話をする人",
+    "type": "difficulty",
+    "content": {
+        "type": "ParticipantBot",
+        "args": {
+            "name": "E",
+            "persona": "妄想の話をする。自分の中での妄想を現実のように話す"
+        }
+    }
+}
