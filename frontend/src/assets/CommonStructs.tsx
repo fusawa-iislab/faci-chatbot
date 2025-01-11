@@ -12,7 +12,6 @@ export type Person = {
     name: string;
     persona: string;
     id: number;
-
 }
 
 export type PersonDescription = Omit<Person, 'id'>
@@ -29,7 +28,11 @@ export type SituationTemplate = {
 
 export type PersonTemplate = {
     title: string;
-    content: PersonDescription;
+    type: string;
+    content: {
+        type: string;  
+        args: PersonDescription;
+    }
 }
 
 

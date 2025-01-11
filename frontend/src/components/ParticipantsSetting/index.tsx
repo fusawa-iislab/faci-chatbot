@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider';
 
 import {InputData } from '../ChatSettingPage';
 import {PersonDescription, PersonTemplate} from "../../assets/CommonStructs";
-import { PersonTemplates } from '../../assets/TemplateData';
+import { Person } from '@mui/icons-material';
 
 
 type ParticipantsSettingParops = {
@@ -24,6 +24,18 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
     const [PIndex,setPIndex] = useState<number>(0);
     const [OpenTemplate, setOpenTemplate] = useState<boolean>(false);
     const [SelectedDefaultPerson, setSelectedDefaultPerson] = useState<number|null>(null);
+    const [PersonTemplates,setPersonTemplates] = useState<PersonTemplate[]>([]);
+
+    useEffect(()=>{
+        if (PersonTemplates.length === 0) {
+            fetch(`${process.env.REACT_APP_BACKEND_PATH}/api/load-participantbot-templates`)
+                .then(response => response.json())
+                .then(data => {
+                    setPersonTemplates(data);
+                })
+                .catch(error => console.error(error));
+            }
+    },[])
     
 
     const handleOpenTemplateClick = (e:React.MouseEvent<HTMLButtonElement>) => {
@@ -82,7 +94,7 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
                         <Button onClick={handleOpenTemplateClick} className={styles["open-default-button"]} id={`open-default-${PIndex}`}>テンプレートを使う</Button>
                         <Popper open={OpenTemplate} anchorEl={document.querySelector(`#open-default-${PIndex}`)}
                                 placement={'bottom'} disablePortal={true} style={{zIndex:1}}>
-                            <DefaultPersonsSelector setSelectedDefaultPerson={setSelectedDefaultPerson} setOpenTemplate={setOpenTemplate}/>
+                            <DefaultPersonsSelector setSelectedDefaultPerson={setSelectedDefaultPerson} setOpenTemplate={setOpenTemplate} PersonTemplates={PersonTemplates}/>
                         </Popper>
                     </div>
                 </div>
@@ -98,9 +110,10 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
 
 export default ParticipantsSetting;
 
-export const DefaultPersonsSelector: React.FC<{setSelectedDefaultPerson:React.Dispatch<React.SetStateAction<number | null>>,setOpenTemplate: React.Dispatch<React.SetStateAction<boolean>>}> = ({
+export const DefaultPersonsSelector: React.FC<{setSelectedDefaultPerson:React.Dispatch<React.SetStateAction<number | null>>,setOpenTemplate: React.Dispatch<React.SetStateAction<boolean>>, PersonTemplates: PersonTemplate[]}> = ({
     setSelectedDefaultPerson,
-    setOpenTemplate
+    setOpenTemplate,
+    PersonTemplates
 }) => {
 
     return (
