@@ -6,7 +6,10 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 import os
 from dotenv import load_dotenv
-load_dotenv() 
+load_dotenv()
+import json
+
+
 # from utils.misc import create_templates_dict_from_json
 from chat_environment.chat_environment import ChatRoom
 from chat_environment.process_data import send_front_chatroom, process_user_input,set_chatroom,participants_emotion,stop_comment,prepare_review_plot_data,prepare_review_data,participants_review_comment
@@ -31,10 +34,12 @@ def initialize_setting():
     send_front_chatroom(app_socket_test, new_chatroom)
     return jsonify({"message": "データが正常に処理されました"}), 200
 
-# @app_test.route('/api/load_templates', methods=["GET"])
-# def load_templates():
-#     templates = create_templates_dict_from_json("./data/templates")
-#     return jsonify(templates)
+# デフォルトでのセッティングをロードする
+@app_test.route('/api/load-participantbot-templates', methods=["GET"])
+def load_participantbot_templates():
+    with open('./data/templates/personalities/all.json', 'r', encoding='utf-8') as file:
+        participantbot_templates = json.load(file)
+    return jsonify(participantbot_templates)
 
 @app_test.route('/api/review-plot', methods=["GET"])
 def send_review():
