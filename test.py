@@ -5,7 +5,6 @@ import argparse
 from utils.gpt_function import get_gpt
 from chat_environment.process_data import participants_review_comment
 
-from utils.misc import create_templates_dict_from_json
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Run the Flask app.')
@@ -22,10 +21,8 @@ if __name__ == '__main__':
             data = json.load(file)
         chatroom.init_setting_from_dict(data)
 
-    participants_review_comment(chatroom)
+    print(chatroom.situational_prompt)
 
-    for bot in chatroom.participantbots:
-        print(bot.name, bot.review_comment)
 
     
 

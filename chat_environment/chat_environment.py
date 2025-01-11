@@ -145,16 +145,16 @@ class ChatRoom:
         
     def create_situational_prompt(self):
         output=""
-        output+=f"ここでは{self.title}が行われています\n"
+        output+=f"ここでは以下の内容に関する集団での会話が行われています\n"
+        output+=f"タイトル: {self.title}\n"
         if self.description:
-            output+=f"詳細は以下のとおりです\n"
-            output+=f"{self.description}\n"
+            output+=f"詳細:{self.description}\n"
         if not self.user:
             raise ValueError("User is not defined")
         if not self.participantbots:
             raise ValueError("ParticipantBots are not defined")
         
-        output+=f"ここでは{self.user.name}、{'、'.join(p.name for p in self.participantbots)}が参加しています\n"
+        output+=f"会話には{self.user.name}、{'、'.join(p.name for p in self.participantbots)}が参加しており、"
         output+=f"{self.user.name}のみが話を回す役割をします\n"
         output+=f"#################################################\n"
         return output
