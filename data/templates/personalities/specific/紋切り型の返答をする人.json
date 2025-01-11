@@ -1,6 +1,6 @@
 {
     "title": "紋切り型の返答をする人",
-    "type": "difficulty",
+    "type": "specific",
     "content": {
         "type": "ParticipantBot",
         "args": {

@@ -1,6 +1,6 @@
 {
     "title": "妄想の話をする人",
-    "type": "difficulty",
+    "type": "specific",
     "content": {
         "type": "ParticipantBot",
         "args": {

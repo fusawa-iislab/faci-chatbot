@@ -1,6 +1,6 @@
 {
     "title": "薬物を使ったばかりの人",
-    "type": "difficulty",
+    "type": "specific",
     "content": {
         "type": "ParticipantBot",
         "args": {

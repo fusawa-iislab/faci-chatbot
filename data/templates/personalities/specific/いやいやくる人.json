@@ -1,6 +1,6 @@
 {
     "title": "いやいやくる人",
-    "type": "difficulty",
+    "type": "specific",
     "content": {
         "type": "ParticipantBot",
         "args": {

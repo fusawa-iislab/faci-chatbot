@@ -1,6 +1,6 @@
 {
     "title": "他人に対して否定的な発言をする人",
-    "type": "difficulty",
+    "type": "specific",
     "content": {
         "type": "ParticipantBot",
         "args": {

@@ -7,11 +7,16 @@ test_chatroom = ChatRoom()
 if len(sys.argv) > 1:
     file_path = sys.argv[1]
 else:
-    file_path = './test_data/3/3.json'
+    file_path = './data/test/3/3_test.json'
 
 with open(file_path, 'r') as file:
     data = json.load(file)
 test_chatroom.init_setting_from_dict(data)
+
+with open('./data/templates/personalities/specific/妄想の話をする人.json', 'r') as file:
+    data = json.load(file)
+    test_chatroom.add_person(type=data["content"]["type"],args=data["content"]["args"])
+
 
 while True:
     if test_chatroom.participantbots and test_chatroom.user:
@@ -41,7 +46,7 @@ while True:
         else:
             test_chatroom.add_chatdata(test_chatroom.user.person_id, message)
             print(f"You: {message}")
-            response = selected_person.generate_response(test_chatroom)
+            response = selected_person.generate_response()
             test_chatroom.add_chatdata(selected_person.person_id, response)
             print(f"{selected_person.name}: {response}")
     else:

@@ -218,8 +218,18 @@ class ParticipantBot(Person):
     
             
     def generate_response(self):
-        user, system = self.create_input_prompt()
-        response = get_gpt(user, system, temperature=1, max_tokens=1000)
+        def create_input_prompt(self):
+            system = ""
+            system += self.chatroom.situational_prompt
+            system += self.personal_data_to_str()
+
+            system += "これまでの会話の流れ\n"
+            system += self.chatroom.chatlog_str
+            system += "######################################\n"
+            system += "これまでの流れに沿うように応答を生成してください"
+            return system
+        system = create_input_prompt(self)
+        response = get_gpt("", system, temperature=1, max_tokens=1000)
         return response
     
     def generate_response_streaming(self, socket: Union[SocketIO,None]=None, socket_name: Union[str,None]=None):
