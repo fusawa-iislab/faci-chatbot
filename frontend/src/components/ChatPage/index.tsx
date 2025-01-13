@@ -15,7 +15,7 @@ import ChatLog from '../ChatLog';
 import SocketTextArea from '../SocketTextArea';
 import CountUpTimer from '../CountUpTimer';
 import useSocket from '../../hooks/useSocket';
-import { ChatData, Person} from '../../assets/CommonStructs';
+import { ChatData, Person, SituationDescription} from '../../assets/CommonStructs';
 
 
 const ChatPage: React.FC = () => {
@@ -24,6 +24,7 @@ const ChatPage: React.FC = () => {
     const [ChatDatas, setChatDatas] = useState<ChatData[]>([]);
     const [participants, setParticipants] = useState<Person[]>([]);
     const [SelectedPersonID, setSelectedPersonID] = useState<number|null>(null);
+    const [situation, setSituation] = useState<SituationDescription>({title:"",description:""});
     const [User, setUser] = useState<Person>({name:"",id:-1,persona:""});
     const [AskForComment, setAskForComment] = useState<boolean>(false);
     const [ShowChatlog, setShowChatlog] = useState<boolean>(false);
@@ -48,6 +49,9 @@ const ChatPage: React.FC = () => {
             socket.on('chatdata', (data) => {
                 setChatDatas((prevChatDatas) => [...prevChatDatas, data]);
             });
+            socket.on("situation", (data) => {
+                setSituation(data);
+            });
 
     
             return () => {
@@ -56,6 +60,7 @@ const ChatPage: React.FC = () => {
                 socket.off("persons");
                 socket.off("chatlog");
                 socket.off("user");
+                socket.off("situation");
                 socket.disconnect();
             };
         }
@@ -116,11 +121,13 @@ const ChatPage: React.FC = () => {
             <div className={styles["chatpage-main"]}>
                 <div style={{display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center"}}>
                     <h1>Chat Page</h1>
-                    <CountUpTimer/>
+                    <div style={{display:"flex", flexDirection:"row", alignItems:"center", gap:10}}>
+                        <CountUpTimer/>
+                        <Button onClick={() => setShowDrawer(true)}>
+                            <MenuOpenIcon sx={{color: "gray"}}/>
+                        </Button>
+                    </div>
                 </div>
-                <Button onClick={() => setShowDrawer(true)}>
-                    <MenuOpenIcon/>
-                </Button>
                 <div className={styles["participants-container"]}>
                     {participants.map((p, index) =>
                         <div className={styles["participant"]} onClick={() => handleSelectPersonID(p.id)} key={index}>
@@ -161,7 +168,7 @@ const ChatPage: React.FC = () => {
                 }
             </div>
             <Drawer anchor="right" open={ShowDrawer} onClose={() => setShowDrawer(false)} sx={{'& .MuiDrawer-paper': {width: 300},}}>
-                <InfoList title="blah" description="blah" participants={participants}/>
+                <InfoList title={situation.title} description={situation.description} participants={participants}/>
             </Drawer>
         </div>
     )
@@ -192,6 +199,7 @@ const InfoList: React.FC<InfoListProps> = ({
             <ListItemText 
                 primary={title} 
                 secondary={description.trim() ? description : undefined} 
+                sx={{marginLeft: "0.5em"}}
             />
             <ListItemButton onClick={handleParticipantOpen}>
                 <ListItemText primary="参加者"/>

@@ -4,6 +4,7 @@ from typing import Union
 from time import sleep
 
 from chat_environment.chat_environment import ChatRoom, ChatData, ParticipantBot
+import random
 
 
 # initialize chatroom setting from request
@@ -15,6 +16,7 @@ def set_chatroom(data:Union[list,dict],chatroom: ChatRoom):
 def send_front_chatroom(socket: SocketIO, chatroom: ChatRoom):
     socket.emit("chatlog", [{"name": chatdata.person.name, "content": chatdata.content, "id": chatdata.id, "status": chatdata.status} for chatdata in chatroom.chatlog])
     socket.emit("participants", [{"name": p.name, "persona": p.persona,  "id": p.person_id} for p in chatroom.participantbots])
+    socket.emit("situation", {"title": chatroom.title, "description": chatroom.description})
     if chatroom.user:
         socket.emit("user", {"name": chatroom.user.name, "id": chatroom.user.person_id})
     # socket.emit("limit-time", chatroom.limit_time)
@@ -41,6 +43,7 @@ def process_user_input(data: dict, socket: SocketIO, chatroom: ChatRoom)->None:
         chatroom.add_chatdata(chatroom.user.person_id, input_text, status="SUCCESS")
         socket.emit("chatdata", {"name": chatroom.user.name, "content": input_text})
         participants_raise_hands_to_speak(socket, chatroom)
+        return
     else:
         for p in chatroom.participantbots:
             if socket:
@@ -91,7 +94,10 @@ def participants_review_comment(chatroom: ChatRoom):
     threads=[]
     def participant_generate_review_comment(p: ParticipantBot):
         p.generate_review_comment()
-    for p in chatroom.participantbots:
+    participants = chatroom.participantbots
+    if len(participants) > 4:
+        participants = random.sample(participants, 4)
+    for p in participants:
         thread=Thread(target=participant_generate_review_comment, args=(p,))
         threads.append(thread)
         thread.start()
