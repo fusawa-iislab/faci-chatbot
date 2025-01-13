@@ -2,18 +2,15 @@ import React, { useState, useEffect } from 'react';
 import styles from './styles.module.css';
 import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import Collapse from '@mui/material/Collapse';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 
 import ParticipantBot from '../ParticipantBot';
 import ChatLog from '../ChatLog';
 import SocketTextArea from '../SocketTextArea';
 import CountUpTimer from '../CountUpTimer';
+import InfoList from '../InfoList';
 import useSocket from '../../hooks/useSocket';
 import { ChatData, Person, SituationDescription} from '../../assets/CommonStructs';
 
@@ -65,7 +62,7 @@ const ChatPage: React.FC = () => {
             };
         }
     }, [socket]);
-//-----------------------------------------------------------------------------------------------//
+
     const handleInputSubmit = () => {
         if (inputText === "") {
             alert("テキストを入力してください");
@@ -81,7 +78,7 @@ const ChatPage: React.FC = () => {
         setAskForComment(false)
         return;
     };
-//-----------------------------------------------------------------------------------------------//
+
     const handleSelectPersonID = (id: number) => {
         setAskForComment(false); //participantを選択したら発言を求めるのをやめる
         if (SelectedPersonID === id) setSelectedPersonID(null);
@@ -90,14 +87,14 @@ const ChatPage: React.FC = () => {
 
     const SelectedPerson = participants.find(p => p.id === SelectedPersonID)
 
-//-----------------------------------------------------------------------------------------------//
+
     const handleStopClick = () => {
         if (socket) {
             socket.emit("stop-comment", "a")
         }
     }
 
-//-----------------------------------------------------------------------------------------------//
+
     const handleAskClick = () => {
         if (AskForComment) setAskForComment(false);
         else {
@@ -110,7 +107,7 @@ const ChatPage: React.FC = () => {
         }
     }
 
-//-----------------------------------------------------------------------------------------------//
+
 
     const handleShowChatlog = () => {
         setShowChatlog(!ShowChatlog);
@@ -177,42 +174,5 @@ const ChatPage: React.FC = () => {
 export default ChatPage;
 
 
-type InfoListProps = {
-    title: string;
-    description?: string;
-    participants: Person[];
-}
 
-const InfoList: React.FC<InfoListProps> = ({
-    title,
-    description="",
-    participants,
-}) => {
-    const [participantOpen, setParticipantOpen] = useState<boolean>(false);
-
-    const handleParticipantOpen = () => {
-        setParticipantOpen(!participantOpen);
-    }
-
-    return (
-        <List sx={{width:"100%",}}>
-            <ListItemText 
-                primary={title} 
-                secondary={description.trim() ? description : undefined} 
-                sx={{marginLeft: "0.5em"}}
-            />
-            <ListItemButton onClick={handleParticipantOpen}>
-                <ListItemText primary="参加者"/>
-                {participantOpen ? <ExpandLess/> : <ExpandMore/>}
-            </ListItemButton>
-            <Collapse in={participantOpen} timeout="auto" unmountOnExit sx={{ml:3}}>
-                <List>
-                    {participants.map((p,index) => (
-                        <ListItemText primary={p.name} secondary={p.persona} key={index}/>
-                    ))}
-                </List>
-            </Collapse>
-        </List>
-    )
-}
 

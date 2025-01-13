@@ -120,5 +120,10 @@ def prepare_review_plot_data(chatroom: ChatRoom):
     return
 
 def prepare_review_data(chatroom: ChatRoom):
-    data = {"chatdatas":[{"name":c.person.name,"content":c.content, "id":c.id, "status": c.status} for c in chatroom.chatlog]}
+    data = {
+        "chatdatas":[{"name":c.person.name,"content":c.content, "id":c.id, "status": c.status} for c in chatroom.chatlog],
+        "title": chatroom.title,
+        "description": chatroom.description,
+        "participants": [{"name": p.name, "persona": p.persona, "id": p.person_id} for p in chatroom.participantbots],
+    }
     return data
