@@ -1,6 +1,5 @@
 ### todo
 - setting
-    - chatlogの設定をinteractiveに
     - デフォルトセットを使えるように(使いやすく)
         - うまく見えるようにする
     - デフォルトのデータを増やす
@@ -11,6 +10,7 @@
 
     - low-priority participantbotのスクロールバー
 - review
+    - うまいこと画面切り替え
 
 - all
     - 写真とかありだったり？
