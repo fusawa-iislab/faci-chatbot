@@ -11,7 +11,7 @@ import CardContent from '@mui/material/CardContent';
 
 
 
-import {PersonDescription} from "../../assets/CommonStructs";
+import {PersonDescription,PersonTemplate} from "../../assets/CommonStructs";
 import ParticipantsSetting from '../ParticipantsSetting';
 // import TimeSelector from '../TimeSelector';
 
@@ -46,13 +46,13 @@ const ChatSettingPage: React.FC= () => {
     const [InputGroup,setInputGroup] = useState<InputData>({username: '',title:"薬物依存治療グループセラピー",
                                                             description:"薬物依存症の人が集まってファシリテータのもと、直近の薬物の使用経験について話し合います。",
                                                             participants:[]});
-
     const [NumberStr, setNumberStr] =useState<string>('0');
     const [PNumber, setPNumber] = useState<number>(0);
     const [PnumberError, setPnumberError] = useState<string | null>("自然数を入力してください");
 
     const [canSubmit, setCanSubmit] = useState<boolean>(false);
 
+    const [PersonTemplates,setPersonTemplates] = useState<PersonTemplate[]>([]);
 
 
     const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -63,6 +63,17 @@ const ChatSettingPage: React.FC= () => {
     //     console.log(minute, second);
     //     setInputGroup(prevState => ({ ...prevState, time: {minute: minute, second: second} }));
     // }
+
+    useEffect(()=>{
+        if (PersonTemplates.length === 0) {
+            fetch(`${process.env.REACT_APP_BACKEND_PATH}/api/load-participantbot-templates`)
+                .then(response => response.json())
+                .then(data => {
+                    setPersonTemplates(data);
+                })
+                .catch(error => console.error(error));
+            }
+    },[])
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setInputGroup(prevState => ({ ...prevState, title: e.target.value }));
@@ -94,6 +105,22 @@ const ChatSettingPage: React.FC= () => {
             setPNumber(NumInput);
             return;
         }
+    };
+
+    const handleFillAutoClick = () => {
+        if (PersonTemplates.length === 0) {
+            return;
+        }
+        const NormalPersonsTemplates = PersonTemplates.filter((person) => person.type === "normal");
+        var updatedParticipants: PersonDescription[]  = InputGroup.participants.slice();
+        InputGroup.participants.forEach((participant, index) => {
+            if (participant.name === "" || participant.persona === "") {
+                const randomIndex = Math.floor(Math.random() * NormalPersonsTemplates.length);
+                const randomPerson = NormalPersonsTemplates[randomIndex];
+                updatedParticipants[index] = {...randomPerson.content.args};
+            }
+        });
+        setInputGroup(prevState => ({ ...prevState, participants: updatedParticipants.slice() }));
     };
 
     useEffect(() => {
@@ -198,7 +225,7 @@ const ChatSettingPage: React.FC= () => {
                         {InputGroup.participants.length!==0 && (
                             <div>
                                 <div className={styles['participants-container']}>
-                                    <ParticipantsSetting InputGroup={InputGroup} setInputGroup={setInputGroup}/>
+                                    <ParticipantsSetting InputGroup={InputGroup} setInputGroup={setInputGroup} PersonTemplates={PersonTemplates}/>
                                 </div>
                             </div>
                         )}
@@ -239,6 +266,8 @@ const ChatSettingPage: React.FC= () => {
                                     ))}
                                 </div>
                             </div>
+                            <Button className={styles["fill-auto-button"]} onClick={()=>handleFillAutoClick()}>fill auto</Button>
+                            {/* <Divider/> */}
                         </div>
                         
                         <Button disabled={!canSubmit} className={styles["submit-button"]} onClick={handleInitSubmit} >送信</Button>

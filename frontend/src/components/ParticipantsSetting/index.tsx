@@ -14,29 +14,22 @@ import {PersonDescription, PersonTemplate} from "../../assets/CommonStructs";
 type ParticipantsSettingParops = {
     InputGroup: InputData;
     setInputGroup: React.Dispatch<React.SetStateAction<InputData>>;
+    PersonTemplates: PersonTemplate[];
 }
 
 
 
-const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,setInputGroup}) => {
+const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({
+    InputGroup,
+    setInputGroup,
+    PersonTemplates
+}) => {
 
     const [PIndex,setPIndex] = useState<number>(0);
     const [OpenTemplate, setOpenTemplate] = useState<boolean>(false);
     const [SelectedDefaultPerson, setSelectedDefaultPerson] = useState<PersonTemplate|null>(null);
-    const [PersonTemplates,setPersonTemplates] = useState<PersonTemplate[]>([]);
-
-    useEffect(()=>{
-        if (PersonTemplates.length === 0) {
-            fetch(`${process.env.REACT_APP_BACKEND_PATH}/api/load-participantbot-templates`)
-                .then(response => response.json())
-                .then(data => {
-                    setPersonTemplates(data);
-                })
-                .catch(error => console.error(error));
-            }
-    },[])
     
-
+    
     const handleOpenTemplateClick = (e:React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
         setOpenTemplate(!OpenTemplate);
