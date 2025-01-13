@@ -4,12 +4,11 @@ import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import Textarea from '@mui/joy/Textarea';
 import Button from '@mui/material/Button';
-import Popper from '@mui/material/Popper';
-import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
 
 import {InputData } from '../ChatSettingPage';
 import {PersonDescription, PersonTemplate} from "../../assets/CommonStructs";
-import { Person } from '@mui/icons-material';
+
 
 
 type ParticipantsSettingParops = {
@@ -23,7 +22,7 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
 
     const [PIndex,setPIndex] = useState<number>(0);
     const [OpenTemplate, setOpenTemplate] = useState<boolean>(false);
-    const [SelectedDefaultPerson, setSelectedDefaultPerson] = useState<number|null>(null);
+    const [SelectedDefaultPerson, setSelectedDefaultPerson] = useState<PersonTemplate|null>(null);
     const [PersonTemplates,setPersonTemplates] = useState<PersonTemplate[]>([]);
 
     useEffect(()=>{
@@ -59,12 +58,12 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
 
     
 
-    const handleDefaultPersonChange = (PIndex:number,SelectedDefaultPerson:number|null) => {
+    const handleDefaultPersonChange = (PIndex:number,SelectedDefaultPerson:PersonTemplate|null) => {
         if (SelectedDefaultPerson !== null) {
-            const defaultPerson = PersonTemplates[SelectedDefaultPerson];
+            const defaultPerson = SelectedDefaultPerson;
             const updatedParticipants = InputGroup.participants.map((participant, i) => {
                 if (i === PIndex) {
-                    return { ...participant, ...defaultPerson.content };
+                    return { ...participant, ...defaultPerson.content.args };
                 }
                 return participant;
             });
@@ -90,13 +89,7 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
                         <InputLabel htmlFor={`persona-${PIndex}`}>性格:</InputLabel>
                         <Textarea value={InputGroup.participants[PIndex].persona} onChange={(e) => handleParticipantChange(e, PIndex, 'persona')} id={`persona-${PIndex}`} minRows={2} maxRows={4} style={{marginBottom:10}}/>
                     </div>
-                    <div style={{display: "flex", flexDirection: "column", width: "100%", alignItems: "flex-end"}}>
-                        <Button onClick={handleOpenTemplateClick} className={styles["open-default-button"]} id={`open-default-${PIndex}`}>テンプレートを使う</Button>
-                        <Popper open={OpenTemplate} anchorEl={document.querySelector(`#open-default-${PIndex}`)}
-                                placement={'bottom'} disablePortal={true} style={{zIndex:1}}>
-                            <DefaultPersonsSelector setSelectedDefaultPerson={setSelectedDefaultPerson} setOpenTemplate={setOpenTemplate} PersonTemplates={PersonTemplates}/>
-                        </Popper>
-                    </div>
+                    <Button onClick={handleOpenTemplateClick} className={styles["open-default-button"]} id={`open-default-${PIndex}`} sx={{alignSelf: "flex-end"}}>テンプレートを使う</Button>
                 </div>
             </div>
             <div className={styles["participant-scroll"]}>
@@ -104,29 +97,47 @@ const ParticipantsSetting: React.FC<ParticipantsSettingParops> = ({InputGroup,se
                 <span>{PIndex+1}/{InputGroup.participants.length}</span>
                 <Button onClick={() => {setPIndex(PIndex+1); setSelectedDefaultPerson(null)}} disabled={PIndex >= InputGroup.participants.length-1}>次の人</Button>
             </div>
+            <Drawer anchor="right" open={OpenTemplate} onClose={() => setOpenTemplate(false)} sx={{'& .MuiDrawer-paper': {width: 300},}}>
+                <DefaultPersonsSelector setSelectedDefaultPerson={setSelectedDefaultPerson} setOpenTemplate={setOpenTemplate} PersonTemplates={PersonTemplates}/>
+            </Drawer>
         </div>
     )
 }
 
 export default ParticipantsSetting;
 
-export const DefaultPersonsSelector: React.FC<{setSelectedDefaultPerson:React.Dispatch<React.SetStateAction<number | null>>,setOpenTemplate: React.Dispatch<React.SetStateAction<boolean>>, PersonTemplates: PersonTemplate[]}> = ({
+export const DefaultPersonsSelector: React.FC<{setSelectedDefaultPerson:React.Dispatch<React.SetStateAction<PersonTemplate | null>>,setOpenTemplate: React.Dispatch<React.SetStateAction<boolean>>, PersonTemplates: PersonTemplate[]}> = ({
     setSelectedDefaultPerson,
     setOpenTemplate,
     PersonTemplates
 }) => {
 
+    const SpecificPersonsTemplates = PersonTemplates.filter((person) => person.type === "specific");
+    const NormalPersonsTemplates = PersonTemplates.filter((person) => person.type === "normal");
+
     return (
-        <div className={styles["participant-selector"]}>
-            {PersonTemplates.map((person,i) => (
-                <div onClick={()=>{
-                    setSelectedDefaultPerson(i);
-                    setOpenTemplate(false);
-                }} key={i}>
-                    <DefaultPersonOption {...person} />
-                    <Divider/>
-                </div>
-            ))}
+        <div className={styles["participant-selector-wrapper"]}>
+            <h3>Specific</h3>
+            <div className={styles["participant-selector-list"]}>
+                {SpecificPersonsTemplates.map((person,i) => (
+                    <div key={i} onClick={()=>{
+                        setSelectedDefaultPerson(person);
+                        setOpenTemplate(false);}}>
+                        <DefaultPersonOption {...person} />
+                    </div>
+                ))}
+            </div>
+
+            <h3 style={{marginTop: 10}}>Normal</h3>
+            <div className={styles["participant-selector-list"]}>
+                {NormalPersonsTemplates.map((person,i) => (
+                    <div key={i} onClick={()=>{
+                        setSelectedDefaultPerson(person);
+                        setOpenTemplate(false);}}>
+                        <DefaultPersonOption {...person} />
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }

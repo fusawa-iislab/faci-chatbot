@@ -212,7 +212,7 @@ const ChatSettingPage: React.FC= () => {
 
                         <div className={styles["setting-confirm-content"]}>
                             <dl>
-                                <dt>あなたの名前:</dt>
+                                <dt><h4>あなたの名前:</h4></dt>
                                 {InputGroup.username === "" ?
                                     <dd style={{color: "red", fontSize: 20}}>未設定</dd> :
                                     <dd style={{fontSize: 20}}>{InputGroup.username}</dd>
@@ -220,21 +220,24 @@ const ChatSettingPage: React.FC= () => {
                             </dl>
                             <Divider/>
                             <dl>
-                                <dt>タイトル:</dt>
+                                <dt><h4>タイトル:</h4></dt>
                                 <dd>{InputGroup.title}</dd>
                             </dl>
                             <Divider/>
                             {InputGroup.description !== "" && 
                                 <dl>
-                                    <dt>詳細:</dt>
+                                    <dt><h4>詳細:</h4></dt>
                                     <dd>{InputGroup.description}</dd>
                                 </dl>
                             }
                             <Divider/>
-                            <div className={styles["participant-card-container"]}>
-                                {InputGroup.participants.map((participant, index) => (
-                                    <ParticipantCard key={index} participant={participant} index={index}/>
-                                ))}
+                            <div className={styles["participant-card-outer"]}>
+                                <h3 style={{alignSelf: "start"}}>参加者の情報</h3>
+                                <div className={styles["participant-card-container"]}>
+                                    {InputGroup.participants.map((participant, index) => (
+                                        <ParticipantCard key={index} participant={participant} index={index}/>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                         

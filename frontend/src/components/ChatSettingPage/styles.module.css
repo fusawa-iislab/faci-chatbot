@@ -113,6 +113,15 @@
     font-size: 14px;
 }
 
+.participant-card-outer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+
+
 .participant-card-container {
     display: grid;
     flex-direction: row;
