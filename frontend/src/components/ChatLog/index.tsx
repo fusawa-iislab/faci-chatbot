@@ -14,8 +14,8 @@ const ChatLog : React.FC<ChatLogProps> = ({
 
 
     return (
-        <div className={styles["chatlog-wrapper"]} style={{maxHeight: maxHeight}}>
-            <div className={styles["chatlog-container"]}>
+        <div className={styles["chatlog-wrapper"]} style={{height: "fit-content"}}>
+            <div className={styles["chatlog-container"]} style={{maxHeight: maxHeight}}>
                 <div className={styles["chatlog"]}>
                     {chatdatas.map((chatdata,index)=>(
                         <div className={styles["chatdata"]} key={index}>
