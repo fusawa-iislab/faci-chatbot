@@ -4,6 +4,7 @@
         - うまく見えるようにする
     - デフォルトのデータを増やす
         - 他の依存症の人
+    - 名前が同じ人の処理
 
 - chatpage
     - chatlogは見えてた方がいいのではないか by koji
@@ -20,6 +21,8 @@
 
 - backend
     - prompt
+    - 初めの感情もうまく生成した方がいい
+    - 感情生成のprompt短くてもいいかも
 
 - deploy
     - reactのbuild時にCI=falseにしてる原因を消す

@@ -59,7 +59,6 @@ class ChatRoom:
 
     def reset(self):
         self.chatlog = []
-        # self.summerylog = []
         self.user = None 
         self.participantbots = []
         self.persons = []
@@ -206,12 +205,10 @@ class ParticipantBot(Person):
         self.review_comment=""
 
     def personal_data_to_str(self):
-        persona_info = f"\t属性: {self.persona}\n\t直前の感情: {self.emotion}\n"
 
         return (
-            f"あなたは{self.name}です。\n"
-            f"特徴:\n"
-            f"{persona_info}"
+            f"{self.name}の特徴:\n"
+            f"{self.persona}\n"
             f"##########################################\n"
         )
 
@@ -221,12 +218,14 @@ class ParticipantBot(Person):
         def create_input_prompt(self):
             system = ""
             system += self.chatroom.situational_prompt
-            system += self.personal_data_to_str()
 
             system += "これまでの会話の流れ\n"
             system += self.chatroom.chatlog_str
             system += "######################################\n"
-            system += "これまでの流れに沿うように応答を生成してください"
+
+            system += self.personal_data_to_str()
+            system += f"{self.name}は、{self.chatroom.user.name}に話をふられました\n"
+            system += f"{self.name}としてこれまでの流れに沿うように応答を生成してください"
             return system
         system = create_input_prompt(self)
         response = get_gpt("", system, temperature=1, max_tokens=1000)
@@ -273,12 +272,14 @@ class ParticipantBot(Person):
         def create_input_prompt(self):
             system = ""
             system += self.chatroom.situational_prompt
-            system += self.personal_data_to_str()
 
             system += "これまでの会話の流れ\n"
             system += self.chatroom.chatlog_str
             system += "######################################\n"
-            system += "これまでの流れに沿うように応答を生成してください"
+
+            system += self.personal_data_to_str()
+            system += f"{self.name}は、{self.chatroom.user.name}に話をふられました\n"
+            system += f"{self.name}としてこれまでの流れに沿うように応答を生成してください"
             return system
         
         system = create_input_prompt(self)
@@ -286,15 +287,20 @@ class ParticipantBot(Person):
         return response
     
     def generate_emotion(self):
+
         def create_input_prompt(self):
             system = ""
-            system += self.personal_data_to_str()
-            system +=f"感情の選択肢: {str(self.emotions)}\n"
-            system +=f"直近の流れを踏まえてこのエージェントの次の感情を選択肢の中から選択し、感情の名前のみ文字列で返してください\n"
+            system += self.chatroom.situational_prompt
 
-            system += "直近の会話の流れ\n"
-            system += self.chatroom.chatlog_to_str(5)
+            system += "これまでの会話の流れ\n"
+            system += self.chatroom.chatlog_str
+            system += "######################################\n"
+
+            system += self.personal_data_to_str()
+            system += f"{self.name}として現在の感情を{self.emotions}から選び、その文字列のみを返してください\n"
             return system
+        
+
         system = create_input_prompt(self)
         # emotion= get_gpt("", system, temperature=0.5, max_tokens=100)
         emotion = random.choice(self.emotions)
@@ -306,11 +312,13 @@ class ParticipantBot(Person):
         def create_input_prompt(self):
             system = ""
             system += self.chatroom.situational_prompt
+
+            system += "これまでの会話の流れ\n"
+            system += self.chatroom.chatlog_str
+            system += "######################################\n"
+
             system += self.personal_data_to_str()
             system += f"{self.name}としてこれまでの会話の感想を生成してください\n"
-
-            system += "これまでの会話内容\n"
-            system += self.chatroom.chatlog_to_str()
             return system
         
         system = create_input_prompt(self)
@@ -324,12 +332,13 @@ class ParticipantBot(Person):
         def create_input_prompt(self):
             system = ""
             system += self.chatroom.situational_prompt
-            system += self.personal_data_to_str()
 
-            system += "直近の会話の流れ\n"
-            system += self.chatroom.chatlog_to_str()
+            system += "これまでの会話の流れ\n"
+            system += self.chatroom.chatlog_str
             system += "######################################\n"
-            system += "あなたは呼びかけに対して発言したいかどうかをTかFのどちらかで答えてください\n"
+
+            system += self.personal_data_to_str()
+            system += f"{self.name}として、{self.chatroom.user.name}の呼びかけに対して発言したいかどうかをTかFのどちらかで答えてください\n"
             return system
         
         system = create_input_prompt(self)

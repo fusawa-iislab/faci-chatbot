@@ -13,10 +13,15 @@ with open(file_path, 'r') as file:
     data = json.load(file)
 test_chatroom.init_setting_from_dict(data)
 
-with open('./data/templates/personalities/specific/妄想の話をする人.json', 'r') as file:
-    data = json.load(file)
-    test_chatroom.add_person(type=data["content"]["type"],args=data["content"]["args"])
 
+
+with open('./data/templates/personalities/all.json', 'r') as file:
+    data = json.load(file)
+    template_participants = [d["content"] for d in data]
+
+# print(template_participants)
+
+test_chatroom.add_person(template_participants[0]["type"], template_participants[0]["args"])
 
 while True:
     if test_chatroom.participantbots and test_chatroom.user:
