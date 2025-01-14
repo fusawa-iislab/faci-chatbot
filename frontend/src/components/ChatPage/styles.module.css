@@ -96,3 +96,7 @@ button.review-button {
     align-self: flex-end;
 }
 
+.drawer-close-button {
+    width: fit-content;
+    height: fit-content;
+}

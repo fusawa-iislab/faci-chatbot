@@ -5,6 +5,7 @@ import Drawer from '@mui/material/Drawer';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import ClearIcon from '@mui/icons-material/Clear';
 
 import ParticipantBot from '../ParticipantBot';
 import ChatLog from '../ChatLog';
@@ -120,7 +121,7 @@ const ChatPage: React.FC = () => {
                     <h1>Chat Page</h1>
                     <div style={{display:"flex", flexDirection:"row", alignItems:"center", gap:10}}>
                         <CountUpTimer/>
-                        <Button onClick={() => setShowDrawer(true)}>
+                        <Button onClick={() => setShowDrawer(!ShowDrawer)}>
                             <MenuOpenIcon sx={{color: "gray"}}/>
                         </Button>
                     </div>
@@ -164,7 +165,10 @@ const ChatPage: React.FC = () => {
                     <ChatLog chatdatas={ChatDatas} />
                 }
             </div>
-            <Drawer anchor="right" open={ShowDrawer} onClose={() => setShowDrawer(false)} sx={{'& .MuiDrawer-paper': {width: 300},}}>
+            <Drawer anchor="right" open={ShowDrawer} variant="persistent" onClose={() => setShowDrawer(false)} sx={{'& .MuiDrawer-paper': {width: 300, pt: 1},}}>
+                <Button onClick={() => setShowDrawer(false)} className={styles["drawer-close-button"]}>
+                    <ClearIcon sx={{color: "gray", alignSelf: "start"}}/>
+                </Button>
                 <InfoList title={situation.title} description={situation.description} participants={participants}/>
             </Drawer>
         </div>
