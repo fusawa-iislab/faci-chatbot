@@ -12,9 +12,13 @@ export type Person = {
     name: string;
     persona: string;
     id: number;
+    imagePath: string|null;
 }
 
-export type PersonDescription = Omit<Person, 'id'>
+export type PersonDescription = {
+    name: string;
+    persona: string;
+}
 
 export type SituationDescription = {
     title: string;

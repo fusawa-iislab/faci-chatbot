@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from 'react';
-import Silhoutte from '../../assets/images/person- silhouette.svg';
+import Silhoutte from '../../assets/images/person-silhouette.svg';
 import styles from './styles.module.css';
 import Popper from '@mui/material/Popper';
 
@@ -88,7 +88,7 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
                 </div>
                 {/* <ParticipantTooltip person={p}> */}
                     <div className={styles["participant-info"]}>
-                        <img src={Silhoutte} className={styles["siloutte-image"]}/>
+                        <img src={p.imagePath ? `${process.env.REACT_APP_BACKEND_PATH}${p.imagePath}` : Silhoutte} alt={`${p.name} image`} className={styles["participant-icon"]}/>
                         <p style={{fontSize: 20}}>{p.name}</p>
                     </div>
                 {/* </ParticipantTooltip> */}

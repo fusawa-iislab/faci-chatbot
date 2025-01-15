@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv() 
 
 from utils.gpt_function import get_gpt
-from chat_environment.prompt import response_requirement
+from utils.search_files import get_template_image_paths
 
 
 OPENAI_API_KEY=os.environ.get("OPENAI_API_KEY")
@@ -93,6 +93,14 @@ class ChatRoom:
         if data.get("chatlog"):
             self.load_chatlog(data["chatlog"])
 
+        # ここは直すこと
+        template_images=get_template_image_paths()
+        print(template_images)
+        selected_template_images = random.sample(template_images, len(self.participantbots))
+        for p, image_path in zip(self.participantbots, selected_template_images):
+            p.image_path = image_path
+
+
         self.situational_prompt=self.create_situational_prompt()
 
 
@@ -122,7 +130,8 @@ class ChatRoom:
             if "name" not in args:
                 raise ValueError("Missing required argument: 'name'")
             persona = args.get("persona", "")
-            participant = ParticipantBot(name=args["name"], persona=persona, chatroom=self)
+            image_path = args.get("image_path", None)
+            participant = ParticipantBot(name=args["name"], persona=persona, image_path=image_path, chatroom=self)
             self.persons.append(participant)
             self.participantbots.append(participant)
         else:
@@ -198,9 +207,10 @@ class User(Person):
 
 class ParticipantBot(Person):
     emotions = ["happy", "sad", "angry", "surprised", "fearful", "neutral"]
-    def __init__(self, name, chatroom:ChatRoom,persona:str=""):
+    def __init__(self, name, chatroom:ChatRoom,persona:str="",image_path:str=None):
         super().__init__(name,chatroom)
         self.persona=persona
+        self.image_path=image_path
         self.emotion="neutral"
         self.review_comment=""
 

@@ -52,7 +52,7 @@ def send_review():
 def review_comments():
     cur_chatroom=ChatRoom.current_chatroom()
     participants_review_comment(cur_chatroom)
-    send_data=[{"name": p.name, "comment": p.review_comment, "id": p.person_id} for p in cur_chatroom.participantbots]
+    send_data=[{"name": p.name, "comment": p.review_comment, "id": p.person_id, "imagePath": p.image_path} for p in cur_chatroom.participantbots]
     return jsonify(send_data)
 
 @app_test.route('/api/review-data', methods=["GET"])

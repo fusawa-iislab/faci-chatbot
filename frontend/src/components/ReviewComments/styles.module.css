@@ -40,6 +40,11 @@
     max-width: 100px;
 }
 
+.participant-icon {
+    width: 100%;
+    height: auto;
+}
+
 .comment {
     width: auto;
     box-sizing: border-box;

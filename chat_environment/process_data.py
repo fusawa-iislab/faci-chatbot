@@ -15,7 +15,7 @@ def set_chatroom(data:Union[list,dict],chatroom: ChatRoom):
 # send chatroom-envrionment data to frontend
 def send_front_chatroom(socket: SocketIO, chatroom: ChatRoom):
     socket.emit("chatlog", [{"name": chatdata.person.name, "content": chatdata.content, "id": chatdata.id, "status": chatdata.status} for chatdata in chatroom.chatlog])
-    socket.emit("participants", [{"name": p.name, "persona": p.persona,  "id": p.person_id} for p in chatroom.participantbots])
+    socket.emit("participants", [{"name": p.name, "persona": p.persona,  "id": p.person_id, "imagePath": p.image_path} for p in chatroom.participantbots])
     socket.emit("situation", {"title": chatroom.title, "description": chatroom.description})
     if chatroom.user:
         socket.emit("user", {"name": chatroom.user.name, "id": chatroom.user.person_id})
@@ -124,6 +124,6 @@ def prepare_review_data(chatroom: ChatRoom):
         "chatdatas":[{"name":c.person.name,"content":c.content, "id":c.id, "status": c.status} for c in chatroom.chatlog],
         "title": chatroom.title,
         "description": chatroom.description,
-        "participants": [{"name": p.name, "persona": p.persona, "id": p.person_id} for p in chatroom.participantbots],
+        "participants": [{"name": p.name, "persona": p.persona, "id": p.person_id, "imagePath": p.image_path} for p in chatroom.participantbots],
     }
     return data

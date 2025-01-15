@@ -23,7 +23,7 @@ const ChatPage: React.FC = () => {
     const [participants, setParticipants] = useState<Person[]>([]);
     const [SelectedPersonID, setSelectedPersonID] = useState<number|null>(null);
     const [situation, setSituation] = useState<SituationDescription>({title:"",description:""});
-    const [User, setUser] = useState<Person>({name:"",id:-1,persona:""});
+    const [User, setUser] = useState<Person>({name:"",id:-1,persona:"",imagePath:null});
     const [AskForComment, setAskForComment] = useState<boolean>(false);
     const [ShowChatlog, setShowChatlog] = useState<boolean>(false);
     const [ShowDrawer, setShowDrawer] = useState<boolean>(false);
