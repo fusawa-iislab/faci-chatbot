@@ -94,8 +94,9 @@ class ChatRoom:
             self.load_chatlog(data["chatlog"])
 
         # ここは直すこと
-        template_images=get_template_image_paths()
-        print(template_images)
+        # template_images=get_template_image_paths()
+        # print(template_images)
+        template_images=['/static/images/default/participants/template-9.png', '/static/images/default/participants/template-8.png', '/static/images/default/participants/template-3.png', '/static/images/default/participants/template-2.png', '/static/images/default/participants/template-0.png', '/static/images/default/participants/template-1.png', '/static/images/default/participants/template-5.png', '/static/images/default/participants/template-4.png', '/static/images/default/participants/template-6.png', '/static/images/default/participants/template-7.png']
         selected_template_images = random.sample(template_images, len(self.participantbots))
         for p, image_path in zip(self.participantbots, selected_template_images):
             p.image_path = image_path

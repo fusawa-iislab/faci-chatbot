@@ -4,6 +4,7 @@ import argparse
 
 from utils.gpt_function import get_gpt
 from chat_environment.process_data import participants_review_comment
+from utils.search_files import get_template_image_paths
 
 
 def parse_args():
@@ -15,13 +16,15 @@ args = parse_args()
 
 
 if __name__ == '__main__':
-    chatroom=ChatRoom.create_chatroom()
-    if args.json_file:
-        with open(args.json_file, 'r', encoding="utf-8") as file:
-            data = json.load(file)
-        chatroom.init_setting_from_dict(data)
+    # chatroom=ChatRoom.create_chatroom()
+    # if args.json_file:
+    #     with open(args.json_file, 'r', encoding="utf-8") as file:
+    #         data = json.load(file)
+    #     chatroom.init_setting_from_dict(data)
 
-    print(chatroom.situational_prompt)
+    # print(chatroom.situational_prompt)
+    print(get_template_image_paths())
+
 
 
     

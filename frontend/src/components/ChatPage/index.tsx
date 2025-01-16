@@ -14,7 +14,6 @@ import CountUpTimer from '../CountUpTimer';
 import InfoList from '../InfoList';
 import useSocket from '../../hooks/useSocket';
 import { ChatData, Person, SituationDescription} from '../../assets/CommonStructs';
-import { Chat } from '@mui/icons-material';
 
 type ChatPageInitDataProps = {
     participants: Person[];
