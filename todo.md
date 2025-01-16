@@ -24,6 +24,9 @@
         - 参考
             - https://zenn.dev/takuya77088/articles/a9211670da7c2d
 
+- front
+    - 型管理
+
 - backend
     - prompt
     - 初めの感情もうまく生成した方がいい

@@ -43,7 +43,7 @@ type SendData = {
 const ChatSettingPage: React.FC= () => {
 
     const [PageIndex, setPageIndex] = useState<number>(0);
-    const [InputGroup,setInputGroup] = useState<InputData>({username: '',title:"薬物依存治療グループセラピー",
+    const [InputGroup,setInputGroup] = useState<InputData>({username: 'ファシリテータ',title:"薬物依存治療グループセラピー",
                                                             description:"薬物依存症の人が集まってファシリテータのもと、直近の薬物の使用経験について話し合います。",
                                                             participants:[]});
     const [NumberStr, setNumberStr] =useState<string>('0');
@@ -286,11 +286,12 @@ const ParticipantCard: React.FC<{participant: PersonDescription, index: number}>
         <Card style={{backgroundColor:"#F8F8F8"}}>
             <CardContent>
                 <p style={{fontSize: 12, marginBottom:5}}>{index+1}人目</p>
-                <p style={{fontSize: 12, marginBottom: 2}}>名前:</p>
+                <p style={{fontSize: 12, marginBottom: 2}}>名前:　
                 {participant.name === "" ? 
-                    <p style={{fontSize: 16, color: "red", marginBottom: 5}}>未設定</p> : 
-                    <p style={{fontSize: 16, marginBottom: 5}}>{participant.name}</p>
+                    <span style={{fontSize: 16, color: "red", marginBottom: 5}}>未設定</span> : 
+                    <span style={{fontSize: 16, marginBottom: 5}}>{participant.name}</span>
                 }
+                </p>
                 <p style={{fontSize: 12, marginBottom: 2}}>性格:</p>
                 {participant.persona === "" ? 
                     <p style={{color: "red",fontSize: 12}}>未設定</p> : 

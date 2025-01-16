@@ -2,33 +2,15 @@ import React, {useEffect,useState} from 'react';
 import styles from './styles.module.css';
 
 import Silhoutte from '../../assets/images/person-silhouette.svg';
-
+import { ReviewCommentDataProps } from "../ReviewPage"
 type ReviewCommentsProps = {
+    ReviewComments: ReviewCommentDataProps[];
 };
 
-type CommentDataProps = {
-    name: string;
-    comment: string;
-    id: number;
-    imagePath: string|null;
-}
 
-const ReviewComments: React.FC<ReviewCommentsProps> = () => {
-    const [ReviewComments, setReviewComments] = useState<CommentDataProps[]>([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const response=await fetch(`${process.env.REACT_APP_BACKEND_PATH}/api/review-comments`)
-            const data: CommentDataProps[] = await response.json();
-            return data
-        };
-        const ReviewData=fetchData();
-
-        ReviewData.then((data)=>{
-            setReviewComments(data);
-        });
-    },[]);
-
+const ReviewComments: React.FC<ReviewCommentsProps> = ({
+    ReviewComments
+}) => {
 
     return (
         <div className={styles["outer-wrapper"]}>
@@ -53,7 +35,7 @@ const ReviewComments: React.FC<ReviewCommentsProps> = () => {
 
 export default ReviewComments;
 
-const ReviewComment: React.FC<CommentDataProps> = ({
+const ReviewComment: React.FC<ReviewCommentDataProps> = ({
     name,
     comment,
     id,
