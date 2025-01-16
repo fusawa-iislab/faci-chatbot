@@ -16,7 +16,16 @@ import json
 app = Flask(__name__, static_folder="./frontend/build")
 app_socket = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 
+######## settingpage ########
 
+@app.route('/api/load-participantbot-templates', methods=["GET"])
+def load_participantbot_templates():
+    with open('./data/templates/personalities/all.json', 'r', encoding='utf-8') as file:
+        participantbot_templates = json.load(file)
+    return jsonify(participantbot_templates)
+
+
+######## chatpage ########
 @app.route('/api/init_setting', methods=["POST"])
 def initialize_setting():
     new_chatroom = ChatRoom.create_chatroom()
@@ -30,13 +39,8 @@ def chatpage_init():
     send_data=send_front_chatroom(chatroom)
     return jsonify(send_data)
 
-# デフォルトでのセッティングをロードする
-@app.route('/api/load-participantbot-templates', methods=["GET"])
-def load_participantbot_templates():
-    with open('./data/templates/personalities/all.json', 'r', encoding='utf-8') as file:
-        participantbot_templates = json.load(file)
-    return jsonify(participantbot_templates)
 
+######## reviewpage ########
 @app.route('/api/review-plot', methods=["GET"])
 def send_review():
     cur_chatroom=ChatRoom.current_chatroom()

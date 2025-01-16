@@ -20,10 +20,20 @@ app_test = Flask(__name__)
 CORS(app_test, resources={r"/*": {"origins": FRONTEND_PATH}})
 app_socket_test = SocketIO(app_test, cors_allowed_origins=FRONTEND_PATH, async_mode="eventlet")
 
-
 @app_test.route('/')
 def home():
     return "test"
+
+######## settingpage ########
+
+@app_test.route('/api/load-participantbot-templates', methods=["GET"])
+def load_participantbot_templates():
+    with open('./data/templates/personalities/all.json', 'r', encoding='utf-8') as file:
+        participantbot_templates = json.load(file)
+    return jsonify(participantbot_templates)
+
+
+######## chatpage ########
 
 @app_test.route('/api/init_setting', methods=["POST"])
 def initialize_setting():
@@ -39,13 +49,8 @@ def chatpage_init():
     send_data=send_front_chatroom(chatroom)
     return jsonify(send_data)
 
-# デフォルトでのセッティングをロードする
-@app_test.route('/api/load-participantbot-templates', methods=["GET"])
-def load_participantbot_templates():
-    with open('./data/templates/personalities/all.json', 'r', encoding='utf-8') as file:
-        participantbot_templates = json.load(file)
-    return jsonify(participantbot_templates)
 
+######## reviewpage ########
 @app_test.route('/api/review-plot', methods=["GET"])
 def send_review():
     cur_chatroom=ChatRoom.current_chatroom()
