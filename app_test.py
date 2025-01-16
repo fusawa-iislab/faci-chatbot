@@ -31,8 +31,13 @@ def initialize_setting():
     data=request.get_json()
     # app_socket_test.start_background_task(set_chatroom, data, new_chatroom)
     set_chatroom(data,new_chatroom)
-    send_front_chatroom(app_socket_test, new_chatroom)
     return jsonify({"message": "データが正常に処理されました"}), 200
+
+@app_test.route('/api/chatpage-init', methods=["GET"])
+def chatpage_init():
+    chatroom=ChatRoom.current_chatroom()
+    send_data=send_front_chatroom(chatroom)
+    return jsonify(send_data)
 
 # デフォルトでのセッティングをロードする
 @app_test.route('/api/load-participantbot-templates', methods=["GET"])

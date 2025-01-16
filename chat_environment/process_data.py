@@ -18,14 +18,15 @@ def set_chatroom(data:Union[list,dict],chatroom: ChatRoom):
     return
 
 # send chatroom-envrionment data to frontend
-def send_front_chatroom(socket: SocketIO, chatroom: ChatRoom):
-    socket.emit("chatlog", [{"name": chatdata.person.name, "content": chatdata.content, "id": chatdata.id, "status": chatdata.status} for chatdata in chatroom.chatlog])
-    socket.emit("participants", [{"name": p.name, "persona": p.persona,  "id": p.person_id, "imagePath": p.image_path} for p in chatroom.participantbots])
-    socket.emit("situation", {"title": chatroom.title, "description": chatroom.description})
-    if chatroom.user:
-        socket.emit("user", {"name": chatroom.user.name, "id": chatroom.user.person_id})
-    # socket.emit("limit-time", chatroom.limit_time)
-    return
+def send_front_chatroom(chatroom: ChatRoom):
+    send_data={
+        "chatlog": [{"name": chatdata.person.name, "content": chatdata.content, "id": chatdata.id, "status": chatdata.status} for chatdata in chatroom.chatlog],
+        "participants": [{"name": p.name, "persona": p.persona,  "id": p.person_id, "imagePath": p.image_path} for p in chatroom.participantbots],
+        "situation": {"title": chatroom.title, "description": chatroom.description},
+        "user": {"name": chatroom.user.name, "id": chatroom.user.person_id} if chatroom.user else None,
+    }
+    return send_data
+
 
 def stop_comment(chatroom: ChatRoom):
     chatroom.STOP_COMMENT=True

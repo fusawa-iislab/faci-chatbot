@@ -7,28 +7,28 @@
     - デフォルトセットを使えるように(使いやすく)
         - うまく見えるようにする
     - デフォルトのデータを増やす
-    - 名前が同じ人の処理
     - 性格はbig5を参考にしてもいいかも
 
 - chatpage
     - chatlogは見えてた方がいいのではないか by koji
     - 最初の感情をneutralにしない方がいいかも
+    - 人数が増えたら横に広げた方がいいかも
 
     - low-priority participantbotのスクロールバー
-- review
-    - うまいこと画面切り替え
 
 - all
-    - 写真とかありだったり？
     - socketの認証
         - 参考
             - https://zenn.dev/takuya77088/articles/a9211670da7c2d
+    - socketを使わなくていい場面は使わない
 
 - front
     - 型管理
+    - fetch類もまとめる
 
 - backend
     - prompt
+        - まだたまに動かない
     - 初めの感情もうまく生成した方がいい
     - 感情生成のprompt短くてもいいかも
 

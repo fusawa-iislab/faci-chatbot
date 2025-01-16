@@ -15,6 +15,16 @@ import InfoList from '../InfoList';
 import useSocket from '../../hooks/useSocket';
 import { ChatData, Person, SituationDescription} from '../../assets/CommonStructs';
 
+type ChatPageInitDataProps = {
+    participants: Person[];
+    situation: SituationDescription;
+    user: {
+        name: string;
+        id: number;
+    };
+    chatdatas: ChatData[];
+}
+
 
 const ChatPage: React.FC = () => {
 
@@ -23,7 +33,7 @@ const ChatPage: React.FC = () => {
     const [participants, setParticipants] = useState<Person[]>([]);
     const [SelectedPersonID, setSelectedPersonID] = useState<number|null>(null);
     const [situation, setSituation] = useState<SituationDescription>({title:"",description:""});
-    const [User, setUser] = useState<Person>({name:"",id:-1,persona:"",imagePath:null});
+    const [User, setUser] = useState<{name: string; id: number}>({name:"",id:-1});
     const [AskForComment, setAskForComment] = useState<boolean>(false);
     const [ShowChatlog, setShowChatlog] = useState<boolean>(false);
     const [ShowDrawer, setShowDrawer] = useState<boolean>(false);
@@ -34,35 +44,33 @@ const ChatPage: React.FC = () => {
             socket.on('log', (data) => {
                 console.log(data.content);
             });
-            socket.on("participants", (data) => {
-                setParticipants(data);
-            });
-            socket.on("chatlog",(data)=>{
-                setChatDatas(data)
-            })
-            socket.on("user",(data)=>{
-                setUser(data)
-            })
             //chatdataの受け取り(リアルタイム)
             socket.on('chatdata', (data) => {
                 setChatDatas((prevChatDatas) => [...prevChatDatas, data]);
-            });
-            socket.on("situation", (data) => {
-                setSituation(data);
-            });
-
-    
+            });    
             return () => {
                 socket.off('chatdata');
                 socket.off('log');
-                socket.off("persons");
-                socket.off("chatlog");
-                socket.off("user");
-                socket.off("situation");
                 socket.disconnect();
             };
         }
     }, [socket]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response=await fetch(`${process.env.REACT_APP_BACKEND_PATH}/api/chatpage-init`)
+            const data: ChatPageInitDataProps = await response.json();
+            return data
+        };
+        const ChatPageInitData=fetchData();
+
+        ChatPageInitData.then((data)=>{
+            setParticipants(data.participants);
+            setSituation(data.situation);
+            setUser({name:data.user.name,id:data.user.id});
+            setChatDatas(data.chatdatas);
+        });
+    }, []);
 
     const handleInputSubmit = () => {
         if (inputText === "") {
