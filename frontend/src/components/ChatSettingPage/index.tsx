@@ -153,6 +153,22 @@ const ChatSettingPage: React.FC= () => {
 
     const handleInitSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const uniqueNames = new Set();
+        const updatedParticipants = InputGroup.participants.slice();
+        InputGroup.participants.forEach((participant, index) => {
+            let originalName = participant.name;
+            let newName = originalName;
+            let counter = 1;
+            while (uniqueNames.has(newName) && newName !== "") {
+                newName = `${originalName}_${counter}`;
+                counter++;
+            }
+            if (newName !== originalName) {
+                updatedParticipants[index].name = newName;
+            }
+            uniqueNames.add(newName);
+        });
+        setInputGroup(prevState => ({ ...prevState, participants: updatedParticipants}));
         const PersonsData: PersonData[] = InputGroup.participants.map(participant => ({
             type: 'ParticipantBot',
             args: participant

@@ -10,6 +10,18 @@ import random
 # initialize chatroom setting from request
 def set_chatroom(data:Union[list,dict],chatroom: ChatRoom):
     chatroom.init_setting_from_dict(data)
+
+    # temporary erroer handling
+    participant_names=[p.name for p in chatroom.participantbots]
+    name_count = {}
+    for i, name in enumerate(participant_names):
+        if name in name_count:
+            print(f"Name {name} is duplicated. Change to {name}_{name_count[name]}")
+            name_count[name] += 1
+            new_name = f"{name}_{name_count[name]}"
+            data["participants"][i]["name"] = new_name
+        else:
+            name_count[name] = 0
     return
 
 # send chatroom-envrionment data to frontend
