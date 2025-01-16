@@ -74,7 +74,7 @@ def url_access(path=""):
 def on_connect():
     print("クライアントが接続しました")
     emit('log', {"content": "connected to backend"})
-    send_front_chatroom(app_socket, ChatRoom.current_chatroom())
+    send_front_chatroom(ChatRoom.current_chatroom())
     return
 
 

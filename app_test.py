@@ -76,7 +76,7 @@ def review_data():
 def on_connect():
     print("クライアントが接続しました")
     emit('log', {"content": "connected to backend"})
-    send_front_chatroom(app_socket_test, ChatRoom.current_chatroom())
+    send_front_chatroom(ChatRoom.current_chatroom())
     return
 
 @app_socket_test.on("user-input")

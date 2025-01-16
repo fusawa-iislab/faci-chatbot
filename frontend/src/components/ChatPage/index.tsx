@@ -14,6 +14,7 @@ import CountUpTimer from '../CountUpTimer';
 import InfoList from '../InfoList';
 import useSocket from '../../hooks/useSocket';
 import { ChatData, Person, SituationDescription} from '../../assets/CommonStructs';
+import { Chat } from '@mui/icons-material';
 
 type ChatPageInitDataProps = {
     participants: Person[];
@@ -22,7 +23,7 @@ type ChatPageInitDataProps = {
         name: string;
         id: number;
     };
-    chatdatas: ChatData[];
+    chatlog: ChatData[];
 }
 
 
@@ -45,8 +46,8 @@ const ChatPage: React.FC = () => {
                 console.log(data.content);
             });
             //chatdataの受け取り(リアルタイム)
-            socket.on('chatdata', (data) => {
-                setChatDatas((prevChatDatas) => [...prevChatDatas, data]);
+            socket.on('chatdata', (data: ChatData) => {
+            setChatDatas((prevChatDatas) => [...prevChatDatas, data]);
             });    
             return () => {
                 socket.off('chatdata');
@@ -68,7 +69,7 @@ const ChatPage: React.FC = () => {
             setParticipants(data.participants);
             setSituation(data.situation);
             setUser({name:data.user.name,id:data.user.id});
-            setChatDatas(data.chatdatas);
+            setChatDatas(data.chatlog);
         });
     }, []);
 
