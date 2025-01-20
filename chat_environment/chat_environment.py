@@ -94,14 +94,10 @@ class ChatRoom:
             self.load_chatlog(data["chatlog"])
 
         # ここは直すこと
-        # template_images=get_template_image_paths()
-        # print(template_images)
-        template_images=['/static/images/default/participants/template-9.png', '/static/images/default/participants/template-8.png', '/static/images/default/participants/template-3.png', '/static/images/default/participants/template-2.png', '/static/images/default/participants/template-0.png', '/static/images/default/participants/template-1.png', '/static/images/default/participants/template-5.png', '/static/images/default/participants/template-4.png', '/static/images/default/participants/template-6.png', '/static/images/default/participants/template-7.png']
+        template_images=get_template_image_paths()
         selected_template_images = random.sample(template_images, len(self.participantbots))
         for p, image_path in zip(self.participantbots, selected_template_images):
             p.image_path = image_path
-
-
         self.situational_prompt=self.create_situational_prompt()
 
 
@@ -165,7 +161,7 @@ class ChatRoom:
         
         output+=f"会話には{self.user.name}、{'、'.join(p.name for p in self.participantbots)}が参加しており、"
         output+=f"{self.user.name}のみが話を回す役割をします\n"
-        output+=f"#################################################\n"
+        output+=f"\n"
         return output
 
 
@@ -219,8 +215,7 @@ class ParticipantBot(Person):
 
         return (
             f"{self.name}の特徴:\n"
-            f"{self.persona}\n"
-            f"##########################################\n"
+            f"{self.persona}\n\n"
         )
 
     
@@ -232,7 +227,7 @@ class ParticipantBot(Person):
 
             system += "これまでの会話の流れ\n"
             system += self.chatroom.chatlog_str
-            system += "######################################\n"
+            system += "\n"
 
             system += self.personal_data_to_str()
             system += f"{self.name}は、{self.chatroom.user.name}に話をふられました\n"
@@ -286,11 +281,11 @@ class ParticipantBot(Person):
 
             system += "これまでの会話の流れ\n"
             system += self.chatroom.chatlog_str
-            system += "######################################\n"
+            system += "\n"
 
             system += self.personal_data_to_str()
-            system += f"{self.name}は、{self.chatroom.user.name}に話をふられました\n"
-            system += f"{self.name}としてこれまでの流れに沿うように応答を生成してください"
+            system += f"{self.name}は、{self.chatroom.user.name}に話をふられました。\n"
+            system += f"{self.name}としてこれまでの流れに沿うように応答を生成してください。"
             return system
         
         system = create_input_prompt(self)
@@ -305,7 +300,7 @@ class ParticipantBot(Person):
 
             system += "これまでの会話の流れ\n"
             system += self.chatroom.chatlog_str
-            system += "######################################\n"
+            system += "\n"
 
             system += self.personal_data_to_str()
             system += f"{self.name}として現在の感情を{self.emotions}から選び、その文字列のみを返してください\n"
@@ -326,7 +321,7 @@ class ParticipantBot(Person):
 
             system += "これまでの会話の流れ\n"
             system += self.chatroom.chatlog_str
-            system += "######################################\n"
+            system += "\n"
 
             system += self.personal_data_to_str()
             system += f"{self.name}としてこれまでの会話の感想を生成してください\n"
@@ -346,7 +341,7 @@ class ParticipantBot(Person):
 
             system += "これまでの会話の流れ\n"
             system += self.chatroom.chatlog_str
-            system += "######################################\n"
+            system += "\n"
 
             system += self.personal_data_to_str()
             system += f"{self.name}として、{self.chatroom.user.name}の呼びかけに対して発言したいかどうかをTかFのどちらかで答えてください\n"

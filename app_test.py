@@ -1,7 +1,7 @@
 import eventlet
 eventlet.monkey_patch() 
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 import os
@@ -70,6 +70,12 @@ def review_data():
     cur_chatroom=ChatRoom.current_chatroom()
     send_data=prepare_review_data(cur_chatroom)
     return jsonify(send_data)
+
+@app_test.route('/<path:path>')
+def url_access(path=""):
+    if path.startswith("images"):
+        return send_from_directory("",path)
+    raise Exception("path not found")
 
 
 @app_socket_test.on('connect')

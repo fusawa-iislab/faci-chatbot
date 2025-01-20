@@ -65,8 +65,10 @@ def review_data():
 @app.route("/")
 @app.route("/<path:path>")
 def url_access(path=""):
+    if path.startswith("images"):
+        return send_from_directory("",path)
     if path.startswith("static"):
-        return send_from_directory(path)
+        return send_from_directory(app.static_folder, path)
     return send_from_directory(app.static_folder, "index.html")
 
 
