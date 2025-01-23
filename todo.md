@@ -3,6 +3,7 @@
     - デフォルトセットを使えるように(使いやすく)
         - うまく見えるようにする
     - デフォルトのデータを増やす
+        - 従順な人
     - 性格はbig5を参考にしてもいいかも
 
 - chatpage
@@ -11,6 +12,10 @@
     - 人数が増えたら横に広げた方がいいかも
 
     - low-priority participantbotのスクロールバー
+
+- review
+    - 感情の遷移のplotがあってもいい
+    - reviewcommentを主にファシリテータの発言に沿って
 
 - all
     - socketの認証
@@ -31,3 +36,7 @@
 
 - deploy
     - reactのbuild時にCI=falseにしてる原因を消す
+
+- what did after feedback
+    - 1/20デプロイの不具合修正
+    - 1/23todoの更新
