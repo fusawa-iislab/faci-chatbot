@@ -5,6 +5,7 @@
     - デフォルトのデータを増やす
         - 従順な人
     - 性格はbig5を参考にしてもいいかも
+    - participantsの人数変更壊れてるかも
 
 - chatpage
     - chatlogは見えてた方がいいのではないか by koji
