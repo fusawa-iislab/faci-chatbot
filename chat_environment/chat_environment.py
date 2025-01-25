@@ -223,6 +223,7 @@ class ParticipantBot(Person):
     def generate_response(self):
         def create_input_prompt(self):
             system = ""
+            user = ""
             system += self.chatroom.situational_prompt
 
             system += "これまでの会話の流れ\n"
@@ -230,11 +231,11 @@ class ParticipantBot(Person):
             system += "\n"
 
             system += self.personal_data_to_str()
-            system += f"{self.name}は、{self.chatroom.user.name}に話をふられました\n"
-            system += f"{self.name}としてこれまでの流れに沿うように応答を生成してください"
-            return system
-        system = create_input_prompt(self)
-        response = get_gpt("", system, temperature=1, max_tokens=1000)
+            user += f"{self.name}は、{self.chatroom.user.name}に話をふられました\n"
+            user += f"{self.name}としてこれまでの流れに沿うように応答してください"
+            return user, system
+        user, system = create_input_prompt(self)
+        response = get_gpt(user, system, temperature=1, max_tokens=1000)
         return response
     
     def generate_response_streaming(self, socket: Union[SocketIO,None]=None, socket_name: Union[str,None]=None):
@@ -277,6 +278,7 @@ class ParticipantBot(Person):
         
         def create_input_prompt(self):
             system = ""
+            user = ""
             system += self.chatroom.situational_prompt
 
             system += "これまでの会話の流れ\n"
@@ -284,9 +286,9 @@ class ParticipantBot(Person):
             system += "\n"
 
             system += self.personal_data_to_str()
-            system += f"{self.name}は、{self.chatroom.user.name}に話をふられました。\n"
-            system += f"{self.name}としてこれまでの流れに沿うように応答を生成してください。"
-            return system
+            user += f"{self.name}は、{self.chatroom.user.name}に話をふられました。\n"
+            user += f"{self.name}としてこれまでの流れに沿うように応答してください。"
+            return user, system
         
         system = create_input_prompt(self)
         response = openai_streaming("", system, temperature=1, max_tokens=1000, socket=socket,socket_name=socket_name)
@@ -295,6 +297,7 @@ class ParticipantBot(Person):
     def generate_emotion(self):
 
         def create_input_prompt(self):
+            user = ""
             system = ""
             system += self.chatroom.situational_prompt
 
@@ -303,13 +306,13 @@ class ParticipantBot(Person):
             system += "\n"
 
             system += self.personal_data_to_str()
-            system += f"{self.name}として現在の感情を{self.emotions}から選び、その文字列のみを返してください\n"
-            return system
+            user += f"{self.name}として現在の感情を{self.emotions}から選び、その文字列のみを返してください\n"
+            return user, system
         
 
-        system = create_input_prompt(self)
-        # emotion= get_gpt("", system, temperature=0.5, max_tokens=100)
-        emotion = random.choice(self.emotions)
+        user, system = create_input_prompt(self)
+        emotion= get_gpt(user, system, temperature=0.5, max_tokens=100)
+        # emotion = random.choice(self.emotions)
         self.emotion=emotion
         self.emotions.append(emotion)
         return
@@ -317,6 +320,7 @@ class ParticipantBot(Person):
     def generate_review_comment(self):
         def create_input_prompt(self):
             system = ""
+            user = ""
             system += self.chatroom.situational_prompt
 
             system += "これまでの会話の流れ\n"
@@ -324,11 +328,11 @@ class ParticipantBot(Person):
             system += "\n"
 
             system += self.personal_data_to_str()
-            system += f"{self.name}としてこれまでの会話の感想を生成してください\n"
-            return system
+            user += f"{self.name}としてこれまでの会話の感想を生成してください\n"
+            return user,system
         
-        system = create_input_prompt(self)
-        response = get_gpt("", system, temperature=1, max_tokens=1000)
+        user,system = create_input_prompt(self)
+        response = get_gpt(user, system, temperature=1, max_tokens=1000)
         self.review_comment = response
         return
 
@@ -336,6 +340,7 @@ class ParticipantBot(Person):
     def raise_hand_to_speak(self):
 
         def create_input_prompt(self):
+            user = ""
             system = ""
             system += self.chatroom.situational_prompt
 
@@ -344,11 +349,11 @@ class ParticipantBot(Person):
             system += "\n"
 
             system += self.personal_data_to_str()
-            system += f"{self.name}として、{self.chatroom.user.name}の呼びかけに対して発言したいかどうかをTかFのどちらかで答えてください\n"
-            return system
+            user += f"{self.name}として、{self.chatroom.user.name}の呼びかけに対して発言したいかどうかをTかFのどちらかで答えてください\n"
+            return user, system
         
-        system = create_input_prompt(self)
-        response = get_gpt("", system, temperature=1, max_tokens=5)
+        user,system = create_input_prompt(self)
+        response = get_gpt(user, system, temperature=1, max_tokens=5)
         if response.lower() == "t":
             return True
         elif response.lower() == "f":
