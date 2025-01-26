@@ -23,6 +23,7 @@
         - 参考
             - https://zenn.dev/takuya77088/articles/a9211670da7c2d
     - socketを使わなくていい場面は使わない
+    - promptをuserに全部入れてみてもいいかも
 
 - front
     - 型管理
