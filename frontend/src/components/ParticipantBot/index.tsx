@@ -24,7 +24,7 @@ const ParticipantBot : React.FC<ParticipantBotProps> = ({
 
     const emotionsMap: Map<string,string> = new Map([
         ["angry","😡"],
-        ["fearful","🫢"],
+        ["fearful","😨"],
         ["happy","😊"],
         ["sad","😢"],
         ["surprised","😲"],
